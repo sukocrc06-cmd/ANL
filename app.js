@@ -2978,6 +2978,9 @@ function renderVIP() {
         <span class="perk-tag">Free Concierge</span>
         <span class="perk-tag">${tier.cashback} Cashback</span>
         <span class="perk-tag">Priority Access</span>
+      </div>
+      <div style="margin-top: 1rem; text-align: center;">
+        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="sendVIPEmail(${c.id}, '${tier.name}', '${tier.cashback}')">✉️ Send VIP Welcome Email</button>
       </div>`;
     grid.appendChild(card);
   });
@@ -3051,6 +3054,9 @@ function renderBudget() {
       <div class="bc-alert ${scheme.urgent ? 'bc-alert-urgent' : 'bc-alert-soft'}">
         <span class="bc-alert-icon">📢</span>
         <p>${alertMsg}</p>
+      </div>
+      <div style="margin-top: 1rem; text-align: center;">
+        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="sendBudgetEmail(${c.id}, '${scheme.disc}', '${scheme.name}')">✉️ Send Restructuring Notice</button>
       </div>`;
     grid.appendChild(card);
   });
@@ -3061,6 +3067,50 @@ function renderBudget() {
     el.textContent = `${budget.length} customers enrolled · ${highRisk} High-Risk customers in dataset`;
   }
 }
+
+window.sendVIPEmail = function(id, tierName, cashback) {
+  if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
+  try {
+    const recipient = `client_${id}@institutional-portfolio.com`;
+    const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
+    const bodyText = `Dear Valued Client #${id},\n\nWe are pleased to inform you that your institutional portfolio has been upgraded to the elite ${tierName} Tier.\n\nYou have unlocked exclusive B2B perks including ${cashback} Cashback, priority access, and complimentary concierge advisory services.\n\nBest regards,\nANL Analytics Enterprise Team`;
+    const body = encodeURIComponent(bodyText);
+    const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+    if (typeof window.logSystemAudit === 'function') {
+      window.logSystemAudit('VIP_EMAIL_DISPATCH', `Dispatched VIP welcome email to Client #${id} (${tierName} Tier)`, 'SUCCESS');
+    }
+    if (typeof showToast === 'function') {
+      showToast({ type: 'success', icon: '✉️', title: 'Email Dispatched', msg: `VIP welcome email link generated for Client #${id}.` });
+    } else if (typeof toast === 'function') {
+      toast('success', '✉️', 'Email Dispatched', `VIP welcome email link generated for Client #${id}.`);
+    }
+  } catch (err) {
+    console.error('VIP Email Dispatch Error:', err);
+  }
+};
+
+window.sendBudgetEmail = function(id, disc, schemeName) {
+  if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
+  try {
+    const recipient = `client_${id}@institutional-portfolio.com`;
+    const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
+    const bodyText = `Dear Valued Client #${id},\n\nAs part of our proactive risk mitigation and portfolio debt restructuring protocols, your account has been enrolled in the ${schemeName} program.\n\nThis tailored package entitles you to a ${disc} discount scheme to assist in optimizing your financial utilization.\n\nBest regards,\nANL Analytics Enterprise Team`;
+    const body = encodeURIComponent(bodyText);
+    const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+    if (typeof window.logSystemAudit === 'function') {
+      window.logSystemAudit('BUDGET_EMAIL_DISPATCH', `Dispatched debt restructuring notice to Client #${id} (${schemeName})`, 'SUCCESS');
+    }
+    if (typeof showToast === 'function') {
+      showToast({ type: 'success', icon: '✉️', title: 'Email Dispatched', msg: `Restructuring notice link generated for Client #${id}.` });
+    } else if (typeof toast === 'function') {
+      toast('success', '✉️', 'Email Dispatched', `Restructuring notice link generated for Client #${id}.`);
+    }
+  } catch (err) {
+    console.error('Budget Email Dispatch Error:', err);
+  }
+};
 
 /* ── Business Insights ─────────────────────────────────────── */
 function renderBusinessInsights() {
