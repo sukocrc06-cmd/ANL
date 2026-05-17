@@ -6072,3 +6072,26 @@ body:has(.budget-section:hover) .cyber-security-hub {
     text-align: left;
   }
 }
+
+/* ── LAYOUT SIMULATION OVERLAY MODULE OBLITERATION ── */
+.b2b-login-overlay, 
+[class*='modal'], 
+[id*='modal'], 
+div[style*='display'] {
+    /* If a dynamic campaign complete text or tick animation is triggered, strictly hide it */
+    has(:contains('Campaign Complete')),
+    has(:contains('emails delivered')) {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+}
+
+/* Direct target override for the popup container */
+.b2b-login-overlay:has(h1:contains('Campaign Complete')),
+.b2b-login-overlay:has(p:contains('delivered successfully')) {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
