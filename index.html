@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ANL Analytics — Customer Risk Analytics Platform</title>
+  <meta name="description"
+    content="ANL is an advanced customer analytics platform that segments mall customers by risk level using credit scoring, spending behaviour, and income data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('b2b-login-overlay');
+      if (overlay && overlay.style.display !== 'none') {
+        document.body.style.overflow = 'hidden';
+      }
+    });
+
+    window.updateSlider = function(type) {
+      const el = document.getElementById(`p-${type}`);
+      const valEl = document.getElementById(`${type}-val`);
+      if (el && valEl) { valEl.textContent = el.value; }
+      if (typeof syncWhatIfToPredict === 'function' && (type === 'income' || type === 'spending')) {
+        syncWhatIfToPredict();
+      }
+    };
+  </script>
+</head>
+
+<body>
+
+  <!-- ===== HIGH-END CORPORATE LANDING PAGE ===== -->
+  <div id="anl-landing-page" class="anl-landing-page">
+    <header class="landing-navbar">
+      <div class="landing-nav-left">
+        <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none">
+          <defs>
+            <linearGradient id="logo-grad-landing" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#logo-grad-landing)" stroke-width="6" fill="none" />
+          <circle cx="50" cy="50" r="10" fill="url(#logo-grad-landing)" />
+        </svg>
+        <span class="landing-brand-name">ANL Analytics</span>
+      </div>
+      <div class="landing-nav-right">
+        <button class="landing-btn-glass" onclick="showSignupModal()">Sign Up</button>
+        <button class="landing-btn-glass landing-btn-primary" onclick="showLoginModal()">Login</button>
+      </div>
+    </header>
+    <main class="landing-hero">
+      <div class="landing-hero-content">
+        <div class="landing-badge">Next-Generation Fintech Analytics</div>
+        <h1 class="landing-hero-title">Institutional Credit Risk Intelligence Platform</h1>
+        <p class="landing-hero-description">
+          Empowering enterprise financial institutions with real-time risk assessment, automated credit policy enforcement, and predictive multi-industry default modeling across high-density client portfolios.
+        </p>
+        <div class="landing-cta-box">
+          <button class="hero-access-btn" onclick="showSignupModal()">💳 Get Access Card</button>
+          <button id="btn-try-demo" class="hero-demo-btn" onclick="startDemoSample()">📊 Try 1,000 Client Simulation Sample</button>
+        </div>
+      </div>
+
+      <!-- AURA AI SPOKESMAN CORE -->
+      <div class="landing-hero-aura-core" id="landing-aura-core">
+        <div class="aura-core-node" onclick="window.triggerLandingAuraSpeak()">
+          <div class="aura-core-ring ring-1"></div>
+          <div class="aura-core-ring ring-2"></div>
+          <div class="aura-core-center">AURA</div>
+        </div>
+        <div class="aura-core-bubble" id="aura-core-bubble">
+          <div class="aura-bubble-header">
+            <span class="aura-bubble-title">✨ Aura AI Copilot</span>
+            <span class="aura-bubble-status" id="aura-bubble-status">Active</span>
+          </div>
+          <div class="aura-bubble-text" id="aura-bubble-text">Initializing AI Copilot...</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== CORPORATE FEATURES SECTION ===== -->
+    <section class="anl-landing-features">
+      <div class="features-layout-wrapper">
+        <div class="features-grid">
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title">Algorithmic Credit Scoring</h3>
+            <p class="feature-desc">Our advanced mathematical clustering engine processes multi-variable client metrics to dynamically compute institutional Probability of Default (PD) with high-stability precision.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">💥</div>
+            <h3 class="feature-title">Macro Stress Simulation</h3>
+            <p class="feature-desc">Instantly evaluate portfolio resilience through one-click crisis displacement vectors, modeling industry-specific shocks like fuel cost surges and raw material stress.</p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">✨</div>
+            <h3 class="feature-title">Bilingual AI Intelligence</h3>
+            <p class="feature-desc">Aura AI delivers real-time generative risk reporting, automated policy compliance audits, and toxic asset identification in both English and Turkish seamlessly.</p>
+          </div>
+        </div>
+        <div class="feature-illustration-side">
+          <div class="neon-mockup-box credit-radar-mockup">
+            <div class="mockup-header">
+              <span class="mockup-dot red"></span>
+              <span class="mockup-dot yellow"></span>
+              <span class="mockup-dot green"></span>
+              <span class="mockup-title">CREDIT RADAR // PD ENGINE</span>
+            </div>
+            <div class="mockup-body radar-body">
+              <div class="radar-ring outer"></div>
+              <div class="radar-ring middle"></div>
+              <div class="radar-ring inner"></div>
+              <div class="radar-sweep"></div>
+              <div class="radar-target target-1"></div>
+              <div class="radar-target target-2"></div>
+              <div class="radar-target target-3"></div>
+              <div class="radar-center-val">784<span class="radar-lbl">EXCELLENT</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HORIZONTAL TRACKING RIBBON ===== -->
+    <div class="anl-audit-stats-banner">
+      <div class="stats-ribbon-container">
+        <div class="stats-ribbon-item">⚡ &lt; 12ms Real-Time Risk Calculation Speed</div>
+        <div class="stats-ribbon-item">🛡️ 100% Automated Credit Policy Compliance</div>
+        <div class="stats-ribbon-item">📊 K-Means Dynamic Portfolio Partitioning</div>
+      </div>
+    </div>
+
+    <!-- ===== SECURITY VAULT SECTION ===== -->
+    <section class="anl-landing-security-vault">
+      <div class="security-vault-container">
+        <div class="security-vault-left">
+          <h2 class="security-vault-title">Fintech-Grade Security Infrastructure</h2>
+          <div class="neon-mockup-box firewall-matrix-mockup">
+            <div class="mockup-header">
+              <span class="mockup-dot purple"></span>
+              <span class="mockup-dot blue"></span>
+              <span class="mockup-title">SEC_VAULT // ISO-27001</span>
+            </div>
+            <div class="mockup-body firewall-body">
+              <div class="firewall-grid-bg">
+                <div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div>
+                <div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div>
+                <div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div>
+                <div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div><div class="fw-cell active"></div>
+              </div>
+              <div class="firewall-shield">🛡️ SECURE MATRIX</div>
+              <div class="firewall-scan-line"></div>
+            </div>
+          </div>
+        </div>
+        <div class="security-vault-right">
+          <ul class="security-compliance-list">
+            <li class="compliance-item">
+              <span class="compliance-icon">🛡️</span>
+              <span class="compliance-text">BDDK Regulatory Framework Ready</span>
+            </li>
+            <li class="compliance-item">
+              <span class="compliance-icon">🔐</span>
+              <span class="compliance-text">ISO 27001 Enterprise Architecture Compliance</span>
+            </li>
+            <li class="compliance-item">
+              <span class="compliance-icon">⛓️</span>
+              <span class="compliance-text">Automated Audit Trail Cryptographic Ledger</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="landing-bg-glows">
+      <div class="landing-glow glow-1"></div>
+      <div class="landing-glow glow-2"></div>
+    </div>
+    <div class="b2b-matrix-streams">
+      <div class="matrix-streak streak-1"></div>
+      <div class="matrix-streak streak-2"></div>
+      <div class="matrix-streak streak-3"></div>
+      <div class="matrix-streak streak-4"></div>
+      <div class="matrix-streak streak-5"></div>
+    </div>
+    <!-- Cyber Security Security Hub -->
+    <div class="cyber-security-hub">
+      <div class="cyber-hub-header">
+        <span class="cyber-pulse-dot"></span>
+        <span class="cyber-hub-title">Cyber Security Security Hub</span>
+      </div>
+      <div class="cyber-hub-body">
+        <div class="cyber-meta-item">System Security: <span class="cyber-meta-val-green">Operational</span></div>
+        <div class="cyber-meta-item">Data Protection: <span class="cyber-meta-val">AES-256 Bit Encrypted</span></div>
+        <div class="cyber-meta-item">Institutional Gateway: <span class="cyber-meta-val">Connected</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== B2B CORPORATE LOGIN OVERLAY ===== -->
+  <div id="b2b-login-overlay" class="b2b-login-overlay" style="display:none;">
+    <div class="b2b-matrix-streams">
+      <div class="matrix-streak streak-1"></div>
+      <div class="matrix-streak streak-2"></div>
+      <div class="matrix-streak streak-3"></div>
+      <div class="matrix-streak streak-4"></div>
+      <div class="matrix-streak streak-5"></div>
+    </div>
+    <div class="b2b-login-modal">
+      <div class="b2b-login-header">
+        <svg class="brand-logo" width="56" height="56" viewBox="0 0 100 100" fill="none" style="margin-bottom:0.5rem">
+          <defs>
+            <linearGradient id="logo-grad-login" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+          <path class="login-logo-path" d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#logo-grad-login)" stroke-width="4" fill="none" />
+          <circle cx="50" cy="50" r="8" fill="url(#logo-grad-login)" />
+          <circle cx="25" cy="50" r="4" fill="url(#logo-grad-login)" />
+          <circle cx="75" cy="50" r="4" fill="url(#logo-grad-login)" />
+          <line x1="25" y1="50" x2="75" y2="50" stroke="url(#logo-grad-login)" stroke-width="2" opacity="0.5" />
+        </svg>
+        <h1 class="b2b-login-title">ANL Analytics</h1>
+        <p class="b2b-login-subtitle">Institutional Access Portal</p>
+      </div>
+      <div class="b2b-login-body">
+        <div class="b2b-form-group">
+          <label class="b2b-label">Company Name</label>
+          <div class="b2b-input-wrapper">
+            <span class="b2b-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M8 10h.01"></path><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 14h.01"></path><path d="M16 14h.01"></path><path d="M12 14h.01"></path></svg>
+            </span>
+            <input type="text" id="login-company-name" class="b2b-input" placeholder="e.g. Akbank" />
+          </div>
+        </div>
+        <div class="b2b-form-group">
+          <label class="b2b-label">Corporate Username</label>
+          <div class="b2b-input-wrapper">
+            <span class="b2b-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </span>
+            <input type="text" id="login-username" class="b2b-input" placeholder="e.g. anl_akbank_admin" />
+          </div>
+        </div>
+        <div class="b2b-form-group">
+          <label class="b2b-label">Security Password</label>
+          <div class="b2b-input-wrapper">
+            <span class="b2b-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </span>
+            <input type="password" id="login-password" class="b2b-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') handleCorporateLogin(event)" />
+          </div>
+        </div>
+        <button id="login-btn" class="btn-b2b-login" onclick="handleCorporateLogin(event)">Authenticate Secure Session</button>
+        <p class="b2b-login-error" id="login-error" style="display:none;">Authentication failed. Please verify credentials.</p>
+      </div>
+      <div class="b2b-login-footer">
+        © 2026 ANL Institutional Analytics Engine. Strict confidential access.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== B2B CORPORATE SIGN UP / ACCESS CARD GENERATOR OVERLAY ===== -->
+  <div id="b2b-signup-overlay" class="b2b-login-overlay" style="display:none;">
+    <div class="b2b-matrix-streams">
+      <div class="matrix-streak streak-1"></div>
+      <div class="matrix-streak streak-2"></div>
+      <div class="matrix-streak streak-3"></div>
+      <div class="matrix-streak streak-4"></div>
+      <div class="matrix-streak streak-5"></div>
+    </div>
+    <div class="b2b-login-modal">
+      <div class="b2b-login-header">
+        <svg class="brand-logo" width="56" height="56" viewBox="0 0 100 100" fill="none" style="margin-bottom:0.5rem">
+          <defs>
+            <linearGradient id="logo-grad-signup" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
+          <path class="login-logo-path" d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#logo-grad-signup)" stroke-width="4" fill="none" />
+          <circle cx="50" cy="50" r="8" fill="url(#logo-grad-signup)" />
+        </svg>
+        <h1 class="b2b-login-title">ANL Access Card Generator</h1>
+        <p class="b2b-login-subtitle">Institutional Access Card Creation</p>
+      </div>
+      <div class="b2b-login-body">
+        <div id="signup-form-container">
+          <div class="b2b-form-group">
+            <label class="b2b-label">Corporate Entity Name</label>
+            <div class="b2b-input-wrapper">
+              <span class="b2b-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path></svg>
+              </span>
+              <input type="text" id="signup-institution" class="b2b-input" placeholder="e.g. Akbank" onkeydown="if(event.key==='Enter') handleCorporateSignup(event)" />
+            </div>
+          </div>
+          <button id="signup-btn" class="btn-b2b-login" onclick="handleCorporateSignup(event)">Generate Institutional Access Card</button>
+          <p class="b2b-login-error" id="signup-error" style="display:none;">Generation failed. Corporate Entity Name cannot be blank.</p>
+        </div>
+
+        <div id="generated-card-container" style="display:none; margin-top: 1.5rem; animation: modalFadeIn 0.5s ease-out;">
+          <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(59, 130, 246, 0.2)); border: 1px solid rgba(124, 58, 237, 0.5); border-radius: 16px; padding: 1.75rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(124, 58, 237, 0.3); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: -50px; right: -50px; width: 120px; height: 120px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; filter: blur(20px);"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.1em; text-transform: uppercase;">💳 Institutional Access Card</span>
+              <span style="background: rgba(52, 211, 153, 0.2); color: #34d399; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(52, 211, 153, 0.4);">ACTIVE KIOSK</span>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.25rem;">Corporate Entity</div>
+              <div id="card-company-val" style="font-size: 1.4rem; font-weight: 800; color: #f8fafc;">Akbank</div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.25rem;">Assigned Username</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(15,23,42,0.6); padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3);">
+                <span id="card-username-val" style="font-size: 1.1rem; font-family: monospace; color: #38bdf8;">anl_akbank_admin</span>
+                <button class="copy-btn" onclick="window.copyCardToken('username')" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; border-radius: 6px; padding: 0.25rem 0.5rem; cursor: pointer; transition: all 0.2s; font-size: 0.9rem;" title="Copy Username">📋</button>
+              </div>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+              <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.25rem;">Secure Access Code / Password</div>
+              <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(15,23,42,0.6); padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                <span id="card-password-val" style="font-size: 1.1rem; font-family: monospace; color: #34d399;">ANL-78X9A-9X!</span>
+                <button class="copy-btn" onclick="window.copyCardToken('password')" style="background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.3); color: #34d399; border-radius: 6px; padding: 0.25rem 0.5rem; cursor: pointer; transition: all 0.2s; font-size: 0.9rem;" title="Copy Password">📋</button>
+              </div>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+              <button class="btn-b2b-login" onclick="proceedToLoginFromCard()" style="flex: 1; background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); margin: 0; font-size: 0.95rem; padding: 0.75rem 1rem;">Proceed to Login</button>
+              <button class="btn-b2b-login" onclick="closeCardModalToLanding()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: #cbd5e1; margin: 0; font-size: 0.95rem; padding: 0.75rem 1rem;">Close / Return</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="b2b-login-footer">
+        © 2026 ANL Institutional Analytics Engine. Strict confidential access kiosk.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RISK ALERT BANNER ===== -->
+  <div class="risk-alert-banner" id="risk-alert-banner" style="display:none;">
+    <span class="rab-icon">⚠️</span>
+    <span class="rab-text" id="rab-text">High Risk Customers Increasing — Immediate action required</span>
+    <button class="rab-close" id="rab-close"
+      onclick="document.getElementById('risk-alert-banner').style.display='none'">✕</button>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <svg class="brand-logo" width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ANL Analytics Logo">
+        <defs>
+          <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#3b82f6"/>
+          </linearGradient>
+        </defs>
+        <!-- Outer diamond -->
+        <path class="logo-diamond" d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#logo-grad)" stroke-width="3" fill="none" />
+        <!-- Inner rotating paths -->
+        <g class="logo-inner">
+          <circle cx="50" cy="28" r="6" fill="url(#logo-grad)" />
+          <circle cx="28" cy="65" r="6" fill="url(#logo-grad)" />
+          <circle cx="72" cy="65" r="6" fill="url(#logo-grad)" />
+          <!-- Connections -->
+          <line x1="50" y1="34" x2="28" y2="59" stroke="url(#logo-grad)" stroke-width="1.8" opacity=".5" />
+          <line x1="50" y1="34" x2="72" y2="59" stroke="url(#logo-grad)" stroke-width="1.8" opacity=".5" />
+          <line x1="34" y1="65" x2="66" y2="65" stroke="url(#logo-grad)" stroke-width="1.8" opacity=".5" />
+        </g>
+        <!-- Center pulse node -->
+        <circle class="logo-pulse-node" cx="50" cy="52" r="4" fill="url(#logo-grad)" />
+      </svg>
+      <div class="brand-text-group">
+        <span class="brand-text">ANL</span>
+        <span class="brand-sub">Analytics</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#dashboard" class="nav-link active" id="nav-dashboard">Dashboard</a>
+      <a href="#customers" class="nav-link" id="nav-customers">Customers</a>
+      <a href="#insights" class="nav-link" id="nav-insights">Insights</a>
+      <a href="#personas" class="nav-link" id="nav-personas">Personas</a>
+      <a href="#predict" class="nav-link" id="nav-predict">Predict</a>
+      <a href="#vip" class="nav-link" id="nav-vip">💎 VIP</a>
+      <a href="#budget" class="nav-link" id="nav-budget">🏷️ Budget</a>
+      <select id="industry-selector" class="industry-selector" title="Select Industry Domain" onchange="window.setIndustry(this.value)">
+        <option value="bank">🏦 Banking & Finance</option>
+        <option value="logistics">🚛 Logistics & Supply Chain</option>
+        <option value="tech">💻 Tech & SaaS Startups</option>
+        <option value="retail">🛒 Retail & E-Commerce</option>
+        <option value="manufacturing">🏭 Manufacturing & Heavy Industry</option>
+      </select>
+    </div>
+    <div class="nav-badge">
+      <span class="pulse-dot"></span>
+      <span>Live</span>
+    </div>
+  </nav>
+
+  <!-- ===== B2B CLIENT RISK ASSESSMENT ===== -->
+  <section class="predict-section" id="predict">
+    <div class="section-header">
+      <h2 class="section-title">B2B Client Financial Risk Assessment Form</h2>
+      <p class="section-subtitle">Enter corporate audit metrics to instantly calculate their Institutional Risk Segment</p>
+    </div>
+
+    <div class="predict-layout">
+      <div class="predict-form-card" id="predict-form-card">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">Credit Card Payment Status</label>
+          <div class="payment-status-toggle" style="display:flex; gap:0.5rem; background:rgba(15,23,42,0.4); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="regular" checked style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Regular</div>
+            </label>
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="minimum" style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Minimum Only</div>
+            </label>
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="delinquent" style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Delinquent</div>
+            </label>
+          </div>
+          <style>
+            input[type="radio"]:checked + .toggle-btn { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+            .toggle-btn { border: 1px solid transparent; color: var(--text-400); }
+            input[type="radio"]:hover + .toggle-btn { background: rgba(255,255,255,0.05); }
+            input[value="delinquent"]:checked + .toggle-btn { background: rgba(239,68,68,0.2) !important; color: #f87171 !important; border-color: rgba(239,68,68,0.3) !important; }
+            input[value="minimum"]:checked + .toggle-btn { background: rgba(245,158,11,0.2) !important; color: #fbbf24 !important; border-color: rgba(245,158,11,0.3) !important; }
+          </style>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-income">Client Annual Income (k$) <span class="form-val"
+              id="income-val">60</span></label>
+          <input type="range" id="p-income" class="range-input" min="15" max="1000" value="60"
+            oninput="updateSlider('income')" />
+          <div class="range-labels"><span>$15k</span><span>$1,000k</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-spending">Client Spending Score <span class="form-val"
+              id="spending-val">50</span></label>
+          <input type="range" id="p-spending" class="range-input" min="1" max="100" value="50"
+            oninput="updateSlider('spending')" />
+          <div class="range-labels"><span>1</span><span>100</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-credit">Client Baseline Credit Score <span class="form-val" id="credit-val">650</span></label>
+          <input type="range" id="p-credit" class="range-input" min="300" max="900" value="650"
+            oninput="updateSlider('credit')" />
+          <div class="range-labels"><span>300</span><span>900</span></div>
+        </div>
+        
+        <!-- Dynamic Sector Specific Fields Container -->
+        <div id="sector-specific-fields-wrapper" class="sector-specific-fields-wrapper" style="margin-bottom: 1.5rem;">
+          <!-- Custom numeric inputs and label tags will be programmatically injected here -->
+        </div>
+
+        <div class="predict-btn-row" style="display:flex;gap:.75rem;flex-wrap:wrap;">
+          <button class="btn-ai" id="btn-ai-analyze" onclick="analyzeCustomer(); getAIAnalysis();">
+            <span class="btn-analyze-icon"><svg class="aura-icon" width="20" height="20" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-btn" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-btn)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-btn)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/></svg></span> Get Aura Analysis Report
+          </button>
+          <button class="btn-ai btn-save-email" id="btn-save-email" onclick="addAuditedClientToLedger()" disabled
+            style="opacity:.5;cursor:not-allowed;">
+            <span class="btn-analyze-icon">➕</span> Add to Monitored Client Ledger
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Panel -->
+      <div class="predict-result-card" id="predict-result-card">
+        <div class="result-placeholder" id="result-placeholder">
+          <div class="placeholder-icon">🔍</div>
+          <p>Fill in the form and click <strong>Analyze Customer</strong> to see results</p>
+        </div>
+        <div class="result-content" id="result-content" style="display:none;">
+          <div class="result-risk-badge" id="result-risk-badge">—</div>
+          <div class="result-score-ring" id="result-score-ring">
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle class="ring-bg" cx="60" cy="60" r="50" />
+              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314"
+                stroke-dashoffset="314" />
+            </svg>
+            <div class="ring-label">
+              <div class="ring-score" id="ring-score">0</div>
+              <div class="ring-sub">Credit Score</div>
+            </div>
+          </div>
+          <div class="result-metrics" id="result-metrics">
+            <div class="result-metric">
+              <span class="metric-label">Cluster</span>
+              <span class="metric-val" id="res-cluster">—</span>
+            </div>
+            <div class="result-metric">
+              <span class="metric-label">Profile</span>
+              <span class="metric-val" id="res-profile">—</span>
+            </div>
+            <div class="result-metric">
+              <span class="metric-label">Recommendation</span>
+              <span class="metric-val" id="res-recommend">—</span>
+            </div>
+          </div>
+          <div class="result-breakdown" id="result-breakdown">
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Income Weight (50%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-income" id="bar-income"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-income">—</span>
+            </div>
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Spending Weight (30%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-spending" id="bar-spending"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-spending">—</span>
+            </div>
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Baseline Credit Weight (20%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-credit" id="bar-credit"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-credit">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Report Panel -->
+    <div class="ai-report-panel" id="ai-report-panel" style="display:none;">
+      <div class="ai-report-header">
+        <span class="ai-report-icon"><svg class="aura-icon" width="32" height="32" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-rpt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-rpt)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-rpt)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/></svg></span>
+        <div>
+          <div class="ai-report-title">Aura Risk Intelligence</div>
+          <div class="ai-report-sub">Powered by Aura Analytics Engine &bull; Rule-Based AI Model</div>
+        </div>
+        <div class="ai-report-status" id="ai-status">
+          <span class="ai-dot"></span> Analysing…
+        </div>
+      </div>
+      <div class="ai-report-body" id="ai-report-body"></div>
+    </div>
+
+    <!-- What-If Simulation Panel -->
+    <div class="whatif-panel" id="whatif-panel">
+      <div class="whatif-header">
+        <span class="whatif-icon">🔮</span>
+        <div>
+          <div class="whatif-title">What-If Simulation</div>
+          <div class="whatif-sub">Adjust sliders to see how risk changes — updates in real-time</div>
+        </div>
+      </div>
+      <div class="whatif-layout">
+        <div class="whatif-controls">
+          <div class="whatif-group">
+            <label class="whatif-label">If income increases to <span class="whatif-val"
+                id="wi-income-val">60</span>k$</label>
+            <input type="range" id="wi-income" class="range-input" min="15" max="140" value="60"
+              oninput="updateWhatIf()" />
+            <div class="range-labels"><span>$15k</span><span>$140k</span></div>
+          </div>
+          <div class="whatif-group">
+            <label class="whatif-label">If spending changes to <span class="whatif-val"
+                id="wi-spending-val">50</span>/100</label>
+            <input type="range" id="wi-spending" class="range-input" min="1" max="100" value="50"
+              oninput="updateWhatIf()" />
+            <div class="range-labels"><span>1</span><span>100</span></div>
+          </div>
+        </div>
+        <div class="whatif-compare">
+          <div class="wic-card wic-before" id="wic-before">
+            <div class="wic-label">Current</div>
+            <div class="wic-score" id="wi-score-before">—</div>
+            <div class="wic-risk" id="wi-risk-before">—</div>
+          </div>
+          <div class="wic-arrow">→</div>
+          <div class="wic-card wic-after" id="wic-after">
+            <div class="wic-label">After Change</div>
+            <div class="wic-score" id="wi-score-after">—</div>
+            <div class="wic-risk" id="wi-risk-after">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="whatif-chart-wrap">
+        <canvas id="whatifChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HERO / DASHBOARD ===== -->
+  <section class="hero" id="dashboard">
+    <div class="hero-bg" id="hero-bg-container">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+    <div class="hero-content" id="hero-content">
+      <div class="hero-badge">Mall Customer Segmentation · 1,000 Records</div>
+      <h1 class="hero-title">Customer Risk<br /><span class="gradient-text">Intelligence</span></h1>
+      <p class="hero-subtitle">Real-time risk segmentation powered by K-Means clustering and credit scoring algorithms.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="btn-explore" onclick="scrollToSection('customers')">Explore Customers</button>
+        <button class="btn-ghost" id="btn-predict-hero" onclick="scrollToSection('predict')">Predict New
+          Customer</button>
+        <button class="btn-upload-hero" id="btn-upload-csv" onclick="document.getElementById('csv-file-input').click()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload CSV
+        </button>
+        <button class="btn-ghost" id="btn-download-template" onclick="downloadCSVTemplate()" style="border-color: rgba(255,255,255,0.2); color: #cbd5e1;">
+          📥 Download CSV Template
+        </button>
+        <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none" />
+      </div>
+    </div>
+
+    <!-- Corporate Data Upload Hub (Revealed after verified login) -->
+    <div id="corporate-upload-hub" class="corporate-upload-hub" style="display:none; max-width: 1200px; margin: 2rem auto; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 16px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 25px rgba(56, 189, 248, 0.15);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+        <div>
+          <h3 style="font-size: 1.5rem; font-weight: 800; color: #f8fafc; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🏢</span> Corporate Data Upload Hub
+          </h3>
+          <p style="color: var(--text-400); font-size: 0.9rem; margin: 0.25rem 0 0 0;">
+            Securely import institutional client portfolios (.csv) to dynamically overwrite synthetic records and synchronize AI audit models.
+          </p>
+        </div>
+        <span style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(56, 189, 248, 0.3);">
+          SECURE HUB ACTIVE
+        </span>
+      </div>
+      <div class="upload-drop-zone" onclick="document.getElementById('corporate-csv-uploader').click()" style="border: 2px dashed rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 3rem 2rem; text-align: center; cursor: pointer; background: rgba(56, 189, 248, 0.05); transition: all 0.3s;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📥</div>
+        <div style="font-size: 1.1rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.25rem;">Drag & Drop Institutional CSV File Here</div>
+        <div style="font-size: 0.85rem; color: var(--text-400);">or click to browse local filesystem (Income, SpendingScore, Age, CreditScore, CompanyType)</div>
+        <input type="file" id="corporate-csv-uploader" accept=".csv" style="display:none;" onchange="handleCorporateCSVUpload(event)" />
+      </div>
+      <!-- Data Integrity Loading Animation Wrapper -->
+      <div id="data-integrity-loader" style="display: none; margin-top: 1rem; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 3rem 2rem; text-align: center; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px);">
+        <div class="loader-spinner" style="font-size: 2.5rem; margin-bottom: 1rem; display: inline-block;">🔄</div>
+        <div style="font-size: 1.2rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.5rem;" id="loader-title">Scanning data layers for compliance...</div>
+        <div style="font-size: 0.85rem; color: var(--text-400); margin-bottom: 1.5rem;" id="loader-sub">Verifying K-Means cluster boundaries & credit scores...</div>
+        <div class="progress-bar-container" style="max-width: 400px; margin: 0 auto; height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.15);">
+          <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7c3aed, #3b82f6); border-radius: 10px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-strip" id="kpi-strip">
+      <div class="kpi-card kpi-total" id="kpi-total">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-value" id="kpi-val-total">1,000</div>
+        <div class="kpi-label">Total Customers</div>
+      </div>
+      <div class="kpi-card kpi-high" id="kpi-high">
+        <div class="kpi-icon">🔴</div>
+        <div class="kpi-value" id="kpi-val-high">—</div>
+        <div class="kpi-label">High Risk</div>
+      </div>
+      <div class="kpi-card kpi-medium" id="kpi-medium">
+        <div class="kpi-icon">🟡</div>
+        <div class="kpi-value" id="kpi-val-medium">—</div>
+        <div class="kpi-label">Medium Risk</div>
+      </div>
+      <div class="kpi-card kpi-low" id="kpi-low">
+        <div class="kpi-icon">🟢</div>
+        <div class="kpi-value" id="kpi-val-low">—</div>
+        <div class="kpi-label">Low Risk</div>
+      </div>
+      <div class="kpi-card kpi-avg" id="kpi-avg">
+        <div class="kpi-icon">💳</div>
+        <div class="kpi-value" id="kpi-val-avg">—</div>
+        <div class="kpi-label">Avg Credit Score</div>
+      </div>
+    </div>
+    <!-- Corporate Risk Tolerance Settings -->
+    <div class="risk-tolerance-wrapper" style="max-width: 1200px; margin: 2rem auto; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08);">
+      <button class="btn-primary" onclick="toggleRiskSettings()" style="width: 100%; text-align: left; padding: 1.25rem 1.75rem; background: rgba(30,41,59,0.9); border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-weight: 600; display: flex; justify-content: space-between; align-items: center; border-radius: 0;">
+        <span style="font-size: 1.1rem; color: #f8fafc;">⚙️ Corporate Risk Tolerance Settings</span>
+        <span id="risk-settings-icon" style="transition: transform 0.3s; color: #94a3b8;">▼</span>
+      </button>
+      <div id="risk-settings-panel" style="display: none; padding: 1.75rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);">
+        <p style="color: var(--text-400); font-size: 0.9rem; margin-bottom: 1.5rem;">Adjust the numerical thresholds used by the algorithmic scoring engine to classify institutional risk.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="setting-high-spend">High Risk Spending Threshold (>=) <span class="form-val" id="val-high-spend">58</span></label>
+            <input type="range" id="setting-high-spend" class="range-input" min="1" max="100" value="58" oninput="updateRiskSettings()" />
+            <div class="range-labels"><span>1</span><span>100</span></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="setting-high-income">High Risk Income Threshold (<) <span class="form-val" id="val-high-income">45</span>k$</label>
+            <input type="range" id="setting-high-income" class="range-input" min="15" max="140" value="45" oninput="updateRiskSettings()" />
+            <div class="range-labels"><span>$15k</span><span>$140k</span></div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="setting-high-credit">High Risk Credit Score (<) <span class="form-val" id="val-high-credit">400</span></label>
+            <input type="range" id="setting-high-credit" class="range-input" min="300" max="900" value="400" oninput="updateRiskSettings()" />
+            <div class="range-labels"><span>300</span><span>900</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Credit Policy Settings (Credit Policy Editor) -->
+    <div class="credit-policy-wrapper" style="max-width: 1200px; margin: 2rem auto; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08);">
+      <button class="btn-primary" onclick="toggleCreditPolicy()" style="width: 100%; text-align: left; padding: 1.25rem 1.75rem; background: rgba(30,41,59,0.9); border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-weight: 600; display: flex; justify-content: space-between; align-items: center; border-radius: 0;">
+        <span style="font-size: 1.1rem; color: #f8fafc;" id="lbl-policy-title">📋 Dynamic Credit Policy Settings (Credit Policy Editor)</span>
+        <span id="credit-policy-icon" style="transition: transform 0.3s; color: #94a3b8;">▼</span>
+      </button>
+      <div id="credit-policy-panel" style="display: none; padding: 1.75rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px);">
+        <p style="color: var(--text-400); font-size: 0.9rem; margin-bottom: 1.5rem;" id="lbl-policy-sub">Configure institutional credit terms, maximum exposure limits, and automated audit actions for each risk tier.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem;">
+          
+          <!-- Low Risk Policy -->
+          <div style="background: rgba(52, 211, 153, 0.05); border: 1px solid rgba(52, 211, 153, 0.3); padding: 1.5rem; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+              <span style="font-size: 1.2rem;">🟢</span>
+              <h4 style="color: #34d399; font-size: 1.1rem; margin: 0;" id="lbl-pol-low">Low Risk Tier Policy</h4>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-rate-low" style="font-size: 0.85rem;" id="lbl-rate-low">Base APR Markup (%) <span class="form-val" id="val-rate-low">14%</span></label>
+              <input type="range" id="pol-rate-low" class="range-input" min="5" max="40" value="14" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-limit-low" style="font-size: 0.85rem;" id="lbl-limit-low">Max Credit Cap ($k) <span class="form-val" id="val-limit-low">$150k</span></label>
+              <input type="range" id="pol-limit-low" class="range-input" min="10" max="500" value="150" step="10" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.85rem; margin-bottom: 0.3rem;" id="lbl-action-low">Automated Action</label>
+              <select id="pol-action-low" onchange="updateCreditPolicy()" style="width: 100%; background: rgba(15,23,42,0.9); border: 1px solid rgba(52, 211, 153, 0.4); color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none; cursor: pointer;">
+                <option value="auto_approve">⚡ Auto-Approve Credit Line</option>
+                <option value="manual_review">🔍 Manual Officer Audit</option>
+                <option value="restrict_terms">⚠️ Restrict Payment Terms</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Medium Risk Policy -->
+          <div style="background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.3); padding: 1.5rem; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+              <span style="font-size: 1.2rem;">🟡</span>
+              <h4 style="color: #fbbf24; font-size: 1.1rem; margin: 0;" id="lbl-pol-med">Medium Risk Tier Policy</h4>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-rate-med" style="font-size: 0.85rem;" id="lbl-rate-med">Base APR Markup (%) <span class="form-val" id="val-rate-med">22%</span></label>
+              <input type="range" id="pol-rate-med" class="range-input" min="5" max="40" value="22" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-limit-med" style="font-size: 0.85rem;" id="lbl-limit-med">Max Credit Cap ($k) <span class="form-val" id="val-limit-med">$50k</span></label>
+              <input type="range" id="pol-limit-med" class="range-input" min="10" max="500" value="50" step="10" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.85rem; margin-bottom: 0.3rem;" id="lbl-action-med">Automated Action</label>
+              <select id="pol-action-med" onchange="updateCreditPolicy()" style="width: 100%; background: rgba(15,23,42,0.9); border: 1px solid rgba(251, 191, 36, 0.4); color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none; cursor: pointer;">
+                <option value="manual_review" selected>🔍 Manual Officer Audit</option>
+                <option value="auto_approve">⚡ Auto-Approve Credit Line</option>
+                <option value="restrict_terms">⚠️ Restrict Payment Terms</option>
+                <option value="freeze_account">🛑 Instant Account Freeze</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- High Risk Policy -->
+          <div style="background: rgba(248, 113, 113, 0.05); border: 1px solid rgba(248, 113, 113, 0.3); padding: 1.5rem; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+              <span style="font-size: 1.2rem;">🔴</span>
+              <h4 style="color: #f87171; font-size: 1.1rem; margin: 0;" id="lbl-pol-high">High Risk Tier Policy</h4>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-rate-high" style="font-size: 0.85rem;" id="lbl-rate-high">Base APR Markup (%) <span class="form-val" id="val-rate-high">34%</span></label>
+              <input type="range" id="pol-rate-high" class="range-input" min="5" max="40" value="34" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label" for="pol-limit-high" style="font-size: 0.85rem;" id="lbl-limit-high">Max Credit Cap ($k) <span class="form-val" id="val-limit-high">$15k</span></label>
+              <input type="range" id="pol-limit-high" class="range-input" min="10" max="500" value="15" step="5" oninput="updateCreditPolicy()" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.85rem; margin-bottom: 0.3rem;" id="lbl-action-high">Automated Action</label>
+              <select id="pol-action-high" onchange="updateCreditPolicy()" style="width: 100%; background: rgba(15,23,42,0.9); border: 1px solid rgba(248, 113, 113, 0.4); color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.85rem; outline: none; cursor: pointer;">
+                <option value="freeze_account" selected>🛑 Instant Account Freeze</option>
+                <option value="restrict_terms">⚠️ Restrict Payment Terms</option>
+                <option value="manual_review">🔍 Manual Officer Audit</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Macroeconomic Stress Testing -->
+    <div class="macro-stress-panel" id="macro-stress-panel" style="max-width: 1200px; margin: 2rem auto; padding: 1.75rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-lg); text-align: center;">
+      <h3 style="color: #f8fafc; margin-bottom: 0.5rem; font-size: 1.3rem; letter-spacing: -0.02em;">Macroeconomic Stress Testing</h3>
+      <p style="color: var(--text-400); font-size: 0.9rem; margin-bottom: 1.5rem;">Simulate macroeconomic shifts to evaluate portfolio resilience and risk matrix displacement.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-macro active" id="btn-macro-base" onclick="applyMacroScenario('base')" style="padding: 0.85rem 1.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(59,130,246,0.2); color: #fff; cursor: pointer; transition: all 0.3s; font-weight: 600;">Baseline State</button>
+        <button class="btn-macro" id="btn-macro-down" onclick="applyMacroScenario('downturn')" style="padding: 0.85rem 1.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(30,41,59,0.8); color: #fff; cursor: pointer; transition: all 0.3s; font-weight: 600;">Economic Downturn (-20% Income)</button>
+        <button class="btn-macro" id="btn-macro-inf" onclick="applyMacroScenario('inflation')" style="padding: 0.85rem 1.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(30,41,59,0.8); color: #fff; cursor: pointer; transition: all 0.3s; font-weight: 600;">Severe Inflation (+30% Spending Score)</button>
+      </div>
+    </div>
+
+    <!-- Financial Dashboard -->
+    <div class="fin-dashboard" id="fin-dashboard">
+      <div class="fin-dashboard-label"><span>💹</span><span>Financial Intelligence</span></div>
+      <div class="fin-grid">
+
+        <div class="fin-card fin-revenue" id="fin-card-revenue">
+          <div class="fin-card-header">
+            <span class="fin-card-icon">💰</span>
+            <div>
+              <div class="fin-card-title">Est. Total Revenue</div>
+              <div class="fin-card-sub">avg spend × income proxy per segment</div>
+            </div>
+            <span class="fin-trend fin-trend-up">↑</span>
+          </div>
+          <div class="fin-card-value" id="fin-val-revenue">—</div>
+          <div class="fin-seg-bars" id="fin-seg-revenue"></div>
+        </div>
+
+        <div class="fin-card fin-loss" id="fin-card-loss">
+          <div class="fin-card-header">
+            <span class="fin-card-icon">📉</span>
+            <div>
+              <div class="fin-card-title">Est. Risk Loss Exposure</div>
+              <div class="fin-card-sub">high-risk portfolio at default probability</div>
+            </div>
+            <span class="fin-trend fin-trend-down">⚠️</span>
+          </div>
+          <div class="fin-card-value fin-value-red" id="fin-val-loss">—</div>
+          <div class="fin-loss-rows" id="fin-loss-breakdown"></div>
+        </div>
+
+        <div class="fin-card fin-profit" id="fin-card-profit">
+          <div class="fin-card-header">
+            <span class="fin-card-icon">🚀</span>
+            <div>
+              <div class="fin-card-title">Profit Potential</div>
+              <div class="fin-card-sub">low-risk segment lifetime value</div>
+            </div>
+            <span class="fin-trend fin-trend-up">↑</span>
+          </div>
+          <div class="fin-card-value fin-value-green" id="fin-val-profit">—</div>
+          <div class="fin-profit-rows" id="fin-profit-metrics"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CHARTS SECTION ===== -->
+  <section class="charts-section" id="charts">
+    <div class="section-header">
+      <h2 class="section-title">Analytics Overview</h2>
+      <p class="section-subtitle">Distribution insights across the full customer dataset</p>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card" id="chart-risk-dist">
+        <div class="chart-card-header">
+          <span class="chart-title">Risk Distribution</span>
+          <span class="chart-badge">Donut</span>
+        </div>
+        <canvas id="riskDonutChart"></canvas>
+      </div>
+      <div class="chart-card" id="chart-income-spend">
+        <div class="chart-card-header">
+          <span class="chart-title">Income vs Spending Score</span>
+          <span class="chart-badge">Scatter</span>
+        </div>
+        <canvas id="scatterChart"></canvas>
+      </div>
+      <div class="chart-card" id="chart-credit-hist">
+        <div class="chart-card-header">
+          <span class="chart-title">Credit Score Distribution</span>
+          <span class="chart-badge">Histogram</span>
+        </div>
+        <canvas id="histogramChart"></canvas>
+      </div>
+      <div class="chart-card" id="chart-age-risk">
+        <div class="chart-card-header">
+          <span class="chart-title">Age by Risk Group</span>
+          <span class="chart-badge">Box Plot</span>
+        </div>
+        <canvas id="ageRiskChart"></canvas>
+      </div>
+    <div class="chart-card" id="chart-sector-risk" style="grid-column: 1 / -1;">
+        <div class="chart-card-header">
+          <span class="chart-title">Risk Concentration by Business Sector</span>
+          <span class="chart-badge">Horizontal Bar</span>
+        </div>
+        <canvas id="sectorRiskChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BUSINESS INSIGHTS ===== -->
+  <section class="insights-section" id="insights">
+    <div class="section-header">
+      <div class="section-badge section-badge-insights">📊 Business Intelligence</div>
+      <h2 class="section-title">Business Insights</h2>
+      <p class="section-subtitle">Automatic findings derived from your 1,000 customer dataset</p>
+      <button class="btn-export" id="btn-export-pdf" onclick="exportInsightsPDF()">📄 Download as PDF</button>
+    </div>
+
+    <!-- Key Findings Row -->
+    <div class="insights-block">
+      <div class="insights-block-label">
+        <span class="ibl-icon">🔍</span>
+        <span>Top 3 Key Findings</span>
+      </div>
+      <div class="findings-grid" id="findings-grid">
+        <!-- JS populated -->
+      </div>
+    </div>
+
+    <!-- Risk Distribution Interpretation -->
+    <div class="insights-block">
+      <div class="insights-block-label">
+        <span class="ibl-icon">📈</span>
+        <span>Risk Distribution Interpretation</span>
+      </div>
+      <div class="risk-interp-grid" id="risk-interp-grid">
+        <!-- JS populated -->
+      </div>
+    </div>
+
+    <!-- Cluster Meanings -->
+    <div class="insights-block">
+      <div class="insights-block-label">
+        <span class="ibl-icon">🗂️</span>
+        <span>What Each Customer Segment Means</span>
+      </div>
+      <div class="cluster-meaning-grid" id="cluster-meaning-grid">
+        <!-- JS populated -->
+      </div>
+    </div>
+
+    <!-- Segment Recommendations -->
+    <div class="insights-block">
+      <div class="insights-block-label">
+        <span class="ibl-icon">🎯</span>
+        <span>Recommendations by Risk Segment</span>
+      </div>
+      <div class="seg-reco-grid" id="seg-reco-grid">
+        <!-- JS populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CUSTOMER PERSONAS ===== -->
+  <section class="personas-section" id="personas">
+    <div class="section-header">
+      <div class="section-badge section-badge-personas">🧑‍🤝‍🧑 Customer Personas</div>
+      <h2 class="section-title">Meet Your Customers</h2>
+      <p class="section-subtitle">Real-world archetypes derived from K-Means clustering — who they are, how they behave,
+        and how to engage them</p>
+    </div>
+    <div class="personas-grid" id="personas-grid">
+      <!-- JS populated -->
+    </div>
+  </section>
+
+  <!-- ===== CUSTOMERS TABLE ===== -->
+  <section class="customers-section" id="customers">
+    <div class="section-header">
+      <h2 class="section-title">Customer Database</h2>
+      <p class="section-subtitle">Browse, search, and filter all 1,000 customers by risk segment</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="filter-bar">
+      <div class="search-wrapper">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Search by ID, genre, risk level..." />
+      </div>
+      <div class="filter-chips" id="filter-chips">
+        <button class="chip chip-all active" id="chip-all" onclick="setFilter('all')">All</button>
+        <button class="chip chip-high" id="chip-high" onclick="setFilter('High Risk')">🔴 High Risk</button>
+        <button class="chip chip-medium" id="chip-medium" onclick="setFilter('Medium Risk')">🟡 Medium Risk</button>
+        <button class="chip chip-low" id="chip-low" onclick="setFilter('Low Risk')">🟢 Low Risk</button>
+      </div>
+      <div class="sort-wrapper">
+        <select id="sort-select" class="sort-select" onchange="applySort()">
+          <option value="id-asc">ID ↑</option>
+          <option value="id-desc">ID ↓</option>
+          <option value="credit-desc">Credit Score ↓</option>
+          <option value="credit-asc">Credit Score ↑</option>
+          <option value="income-desc">Income ↓</option>
+          <option value="spending-desc">Spending ↓</option>
+        </select>
+        <button class="btn-export-csv" onclick="exportCustomersCSV()">📥 Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Currency Toggle -->
+    <div class="currency-toggle" id="currency-toggle">
+      <span class="currency-label">Income Currency:</span>
+      <div class="currency-btn-group">
+        <button class="currency-btn active" id="cur-usd" onclick="setCurrency('USD')" title="US Dollar">$ USD</button>
+        <button class="currency-btn" id="cur-try" onclick="setCurrency('TRY')" title="Turkish Lira">₺ TRY</button>
+        <button class="currency-btn" id="cur-eur" onclick="setCurrency('EUR')" title="Euro">€ EUR</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper" id="table-wrapper">
+      <table class="data-table" id="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Company Type</th>
+            <th>Age</th>
+            <th id="th-income">Income (k$)</th>
+            <th>Spending Score</th>
+            <th>Credit Score</th>
+            <th>Cluster</th>
+            <th>Risk Level</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <!-- JS populated -->
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination" id="pagination">
+      <!-- JS populated -->
+    </div>
+    <div class="table-footer" id="table-footer">Showing — customers</div>
+  </section>
+
+
+
+  <!-- ===== VIP LOYALTY ===== -->
+  <section class="vip-section" id="vip">
+    <div class="section-header">
+      <div class="section-badge section-badge-vip">💎 VIP Loyalty Programme</div>
+      <h2 class="section-title">Top Performing Customers</h2>
+      <p class="section-subtitle">Premium and Careful segment customers eligible for exclusive rewards</p>
+      <p class="vip-summary-bar" id="vip-summary">Loading…</p>
+    </div>
+    <div class="vip-tiers-legend">
+      <span class="tier-pill tier-platinum">💎 Platinum — Credit ≥ 820</span>
+      <span class="tier-pill tier-gold">🥇 Gold — Credit 770-819</span>
+      <span class="tier-pill tier-silver">🥈 Silver — Credit 720-769</span>
+    </div>
+    <div class="vip-grid" id="vip-grid"></div>
+  </section>
+
+  <!-- ===== BUDGET DISCOUNT ===== -->
+  <section class="budget-section" id="budget">
+    <div class="section-header">
+      <div class="section-badge section-badge-budget">🏷️ Budget Discount Scheme</div>
+      <h2 class="section-title">Budget Assistance Customers</h2>
+      <p class="section-subtitle">High-risk and low-income customers enrolled in tailored discount programmes</p>
+      <p class="budget-summary-bar" id="budget-summary">Loading…</p>
+    </div>
+    <div class="budget-schemes-legend">
+      <span class="scheme-pill disc-high">🎯 Smart Saver Plus — 25% Off</span>
+      <span class="scheme-pill disc-mid">🏷️ Smart Saver — 15% Off</span>
+      <span class="scheme-pill disc-low">💡 Budget Starter — 10% Off</span>
+    </div>
+    <div class="budget-grid" id="budget-grid"></div>
+  </section>
+
+  <!-- ===== SYSTEM AUDIT LOG ===== -->
+  <section class="audit-log-section" id="audit-log" style="max-width: 1200px; margin: 3rem auto 2rem auto; padding: 1.75rem; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-lg);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.2rem;">🛡️</span>
+          <h3 style="color: #f8fafc; margin: 0; font-size: 1.25rem; letter-spacing: -0.02em;" id="lbl-audit-log-title">System Audit Log</h3>
+        </div>
+        <p style="color: var(--text-400); font-size: 0.85rem; margin: 0.25rem 0 0 0;" id="lbl-audit-log-sub">Secure operational ledger tracking administrative queries, threshold adjustments, and macro stress tests.</p>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <button onclick="if(window.auditLogs){ window.auditLogs=[]; window.renderSystemAuditLog(); }" style="background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); color: #f87171; padding: 0.4rem 0.85rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-family: monospace; font-weight: 600;">[CLEAR_LEDGER]</button>
+      </div>
+    </div>
+    <div style="overflow-x: auto; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; background: rgba(30,41,59,0.4);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+        <thead>
+          <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(30, 41, 59, 0.8); color: #cbd5e1; font-family: monospace;">
+            <th style="padding: 0.85rem 1rem;" id="th-audit-time">TIMESTAMP</th>
+            <th style="padding: 0.85rem 1rem;" id="th-audit-user">USER ID</th>
+            <th style="padding: 0.85rem 1rem;" id="th-audit-action">ACTION TYPE</th>
+            <th style="padding: 0.85rem 1rem;" id="th-audit-details">DETAILS / PARAMETERS</th>
+            <th style="padding: 0.85rem 1rem;" id="th-audit-status">STATUS</th>
+          </tr>
+        </thead>
+        <tbody id="audit-log-tbody">
+          <!-- JS populated -->
+        </tbody>
+      </table>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 1rem;">
+      <div id="audit-log-footer" style="color: var(--text-400); font-size: 0.85rem; font-family: monospace;">Showing 0 of 0 entries</div>
+      <div id="audit-log-pagination" style="display: flex; gap: 0.5rem; align-items: center;">
+        <!-- JS populated -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PREMIUM TEASER HERO ===== -->
+  <section class="anl-landing-teaser-hero">
+    <div class="teaser-hero-container">
+      <h2 class="teaser-neon-headline">Don't just monitor data. Command your institutional portfolio risk.</h2>
+      <div class="anl-tech-stack-badges">ARCHITECTURE CORE: HTML5 • CSS3 GRID • ASYNC JAVASCRIPT • CHART.JS GRAPH ENGINE</div>
+      <div class="teaser-tracking-array">Credit Risk Indices • Spending Velocity Loops • Corporate Revenue Projections</div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" id="footer">
+    <div class="footer-brand">
+      <svg class="brand-logo brand-logo-sm" width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ANL Analytics">
+        <defs>
+          <linearGradient id="logo-grad-f" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7c3aed"/>
+            <stop offset="100%" stop-color="#3b82f6"/>
+          </linearGradient>
+        </defs>
+        <path d="M50 5 L95 50 L50 95 L5 50 Z" stroke="url(#logo-grad-f)" stroke-width="3" fill="none" />
+        <g class="logo-inner">
+          <circle cx="50" cy="28" r="6" fill="url(#logo-grad-f)" />
+          <circle cx="28" cy="65" r="6" fill="url(#logo-grad-f)" />
+          <circle cx="72" cy="65" r="6" fill="url(#logo-grad-f)" />
+          <line x1="50" y1="34" x2="28" y2="59" stroke="url(#logo-grad-f)" stroke-width="1.8" opacity=".5" />
+          <line x1="50" y1="34" x2="72" y2="59" stroke="url(#logo-grad-f)" stroke-width="1.8" opacity=".5" />
+          <line x1="34" y1="65" x2="66" y2="65" stroke="url(#logo-grad-f)" stroke-width="1.8" opacity=".5" />
+        </g>
+        <circle class="logo-pulse-node" cx="50" cy="52" r="4" fill="url(#logo-grad-f)" />
+      </svg>
+      <span class="brand-text">ANL Analytics</span>
+    </div>
+    <p class="footer-text">Mall Customer Segmentation Analytics · 1,000 customer dataset · K-Means + Credit Scoring</p>
+    <p class="footer-copy">© 2026 ANL Analytics Platform</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <!-- ===== AI CHAT ASSISTANT (COPILOT) ===== -->
+  <div id="chat-bubble" class="chat-bubble" onclick="toggleChat()" title="Aura Risk Intelligence">
+    <span class="chat-bubble-icon" id="chat-bubble-icon"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-bub" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-bub)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-bub)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/></svg></span>
+    <span class="chat-unread" id="chat-unread" style="display:none;">1</span>
+  </div>
+  <div id="chat-panel" class="chat-panel copilot-glass" style="display:none;">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <span class="chat-avatar"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-chat" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-chat)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-chat)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/></svg></span>
+        <div>
+          <div class="chat-name">Aura Risk Intelligence</div>
+          <div class="chat-status"><span class="chat-online-dot"></span> Generative AI Analytics</div>
+        </div>
+      </div>
+      <div class='aura-lang-selector' style='display:flex; gap:4px; margin-left:auto; background:rgba(255,255,255,0.05); padding:2px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);'><button id='btn-lang-tr' style='background:rgba(124,58,237,0.3); color:#c084fc; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer; font-weight:600;'>TR</button><button id='btn-lang-en' style='background:transparent; color:#94a3b8; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer;'>EN</button></div>
+      <button class="chat-close-btn" onclick="requestCloseChat()" style="margin-left:8px;">✕</button>
+    </div>
+    <!-- Bilingual Close Confirmation Overlay -->
+    <div id="aura-confirm-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); backdrop-filter:blur(12px); z-index:100; flex-direction:column; justify-content:center; align-items:center; padding:2rem; text-align:center; border-radius:inherit; border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 30px rgba(0,0,0,0.5);">
+      <p id="aura-confirm-text" style="color:#f8fafc; font-size:1.1rem; font-weight:600; margin-bottom:1.5rem;"></p>
+      <div style="display:flex; gap:1rem;">
+        <button id="aura-confirm-yes" onclick="confirmCloseChat(true)" style="background:rgba(248,113,113,0.2); border:1px solid rgba(248,113,113,0.4); color:#f87171; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
+        <button id="aura-confirm-no" onclick="confirmCloseChat(false)" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <!-- initial welcome message will be injected by JS -->
+    </div>
+    <div class="chat-suggestions" id="chat-suggestions">
+      <!-- dynamic suggestions -->
+    </div>
+    <div class="aura-quick-actions">
+      <button id="btn-audit-concentration">📊 Risk Konsantrasyonu / Risk Concentration</button>
+      <button id="btn-audit-toxic">⚠️ Toksik Varlık Listesi / Toxic Asset List</button>
+      <button id="btn-audit-policy">📜 Politika Uyumluluğu / Policy Compliance</button>
+      <button id="btn-audit-stresstest">💥 Stres Testi Analizi / Stress Test Impact</button>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" class="chat-input" placeholder="Ask Aura about your data…"
+        onkeydown="if(event.key==='Enter') sendChat()" />
+      <!-- Animated Voice Visualizer Equalizer -->
+      <div id="voice-visualizer" style="display: none; align-items: center; gap: 3px; padding: 0 8px; height: 36px; background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.4); border-radius: 18px; box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);">
+        <span class="eq-bar" style="width: 3px; height: 12px; background: #c084fc; border-radius: 2px; animation: eqPulse 0.6s infinite ease-in-out alternate;"></span>
+        <span class="eq-bar" style="width: 3px; height: 22px; background: #a855f7; border-radius: 2px; animation: eqPulse 0.4s infinite ease-in-out alternate; animation-delay: 0.1s;"></span>
+        <span class="eq-bar" style="width: 3px; height: 16px; background: #38bdf8; border-radius: 2px; animation: eqPulse 0.5s infinite ease-in-out alternate; animation-delay: 0.2s;"></span>
+        <span class="eq-bar" style="width: 3px; height: 26px; background: #818cf8; border-radius: 2px; animation: eqPulse 0.3s infinite ease-in-out alternate; animation-delay: 0.15s;"></span>
+        <span class="eq-bar" style="width: 3px; height: 14px; background: #34d399; border-radius: 2px; animation: eqPulse 0.55s infinite ease-in-out alternate; animation-delay: 0.05s;"></span>
+        <style>
+          @keyframes eqPulse {
+            0% { transform: scaleY(0.4); opacity: 0.6; }
+            100% { transform: scaleY(1.1); opacity: 1; box-shadow: 0 0 8px currentColor; }
+          }
+        </style>
+      </div>
+      <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleVoiceInput()" title="Voice Command">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </button>
+      <button class="chat-send-btn" id="chat-send-btn" onclick="sendChat()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+  
+  <!-- ===== AUDIT REPORT MODAL (GLASSMORPHISM) ===== -->
+  <div class="modal-overlay" id="audit-modal-overlay" style="display:none;" onclick="if(event.target===this) closeAuditModal()">
+    <div class="glass-modal audit-modal">
+      <button class="modal-close-btn" onclick="closeAuditModal()">✕</button>
+      <div class="audit-modal-header">
+        <h2 class="audit-title">Institutional Credit Risk Intelligence Sheet</h2>
+        <span class="audit-subtitle" id="audit-id-badge">Client #--</span>
+      </div>
+      <div class="audit-modal-body">
+        <div class="audit-grid">
+          <div class="audit-card">
+            <div class="audit-label">Probability of Default</div>
+            <div class="audit-value" id="audit-pd">--%</div>
+          </div>
+          <div class="audit-card">
+            <div class="audit-label">Financial Stress Indicator (Spending / Income)</div>
+            <div class="audit-value" id="audit-stress">--</div>
+          </div>
+          <div class="audit-card" style="grid-column: 1 / -1;">
+            <div class="audit-label">Corporate Engagement</div>
+            <div class="audit-value" id="audit-flag">--</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
