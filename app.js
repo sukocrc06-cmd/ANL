@@ -3069,29 +3069,17 @@ function renderBudget() {
 }
 
 window.sendVIPEmail = function(id, tierName, cashback) {
-  try {
     const recipient = `client_${id}@institutional-portfolio.com`;
     const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
-    const bodyText = `Dear Valued Client #${id},\n\nWe are pleased to inform you that your institutional portfolio has been upgraded to the elite ${tierName} Tier.\n\nYou have unlocked exclusive B2B perks including ${cashback} Cashback, priority access, and complimentary concierge advisory services.\n\nBest regards,\nANL Analytics Enterprise Team`;
-    const body = encodeURIComponent(bodyText);
-    const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-  } catch (err) {
-    console.error('VIP Email Dispatch Error:', err);
-  }
+    const body = encodeURIComponent(`Dear Valued Client #${id},\n\nWe are pleased to inform you that your portfolio has been upgraded to ${tierName} tier.\n\nBest regards,\nANL Analytics Team`);
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 };
 
-window.sendBudgetEmail = function(id, disc, schemeName) {
-  try {
+window.sendBudgetEmail = function(id, discount, schemeName) {
     const recipient = `client_${id}@institutional-portfolio.com`;
     const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
-    const bodyText = `Dear Valued Client #${id},\n\nAs part of our proactive risk mitigation and portfolio debt restructuring protocols, your account has been enrolled in the ${schemeName} program.\n\nThis tailored package entitles you to a ${disc} discount scheme to assist in optimizing your financial utilization.\n\nBest regards,\nANL Analytics Enterprise Team`;
-    const body = encodeURIComponent(bodyText);
-    const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
-    window.location.href = mailtoLink;
-  } catch (err) {
-    console.error('Budget Email Dispatch Error:', err);
-  }
+    const body = encodeURIComponent(`Dear Client #${id},\n\nBased on our risk analysis, your restructuring package under ${schemeName} is ready with a ${discount} discount.\n\nBest regards,\nANL Analytics Team`);
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 };
 
 /* ── Business Insights ─────────────────────────────────────── */
