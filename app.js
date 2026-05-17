@@ -3069,7 +3069,6 @@ function renderBudget() {
 }
 
 window.sendVIPEmail = function(id, tierName, cashback) {
-  if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
   try {
     const recipient = `client_${id}@institutional-portfolio.com`;
     const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
@@ -3077,21 +3076,12 @@ window.sendVIPEmail = function(id, tierName, cashback) {
     const body = encodeURIComponent(bodyText);
     const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
-    if (typeof window.logSystemAudit === 'function') {
-      window.logSystemAudit('VIP_EMAIL_DISPATCH', `Dispatched VIP welcome email to Client #${id} (${tierName} Tier)`, 'SUCCESS');
-    }
-    if (typeof showToast === 'function') {
-      showToast({ type: 'success', icon: '✉️', title: 'Email Dispatched', msg: `VIP welcome email link generated for Client #${id}.` });
-    } else if (typeof toast === 'function') {
-      toast('success', '✉️', 'Email Dispatched', `VIP welcome email link generated for Client #${id}.`);
-    }
   } catch (err) {
     console.error('VIP Email Dispatch Error:', err);
   }
 };
 
 window.sendBudgetEmail = function(id, disc, schemeName) {
-  if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
   try {
     const recipient = `client_${id}@institutional-portfolio.com`;
     const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
@@ -3099,14 +3089,6 @@ window.sendBudgetEmail = function(id, disc, schemeName) {
     const body = encodeURIComponent(bodyText);
     const mailtoLink = `mailto:${recipient}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
-    if (typeof window.logSystemAudit === 'function') {
-      window.logSystemAudit('BUDGET_EMAIL_DISPATCH', `Dispatched debt restructuring notice to Client #${id} (${schemeName})`, 'SUCCESS');
-    }
-    if (typeof showToast === 'function') {
-      showToast({ type: 'success', icon: '✉️', title: 'Email Dispatched', msg: `Restructuring notice link generated for Client #${id}.` });
-    } else if (typeof toast === 'function') {
-      toast('success', '✉️', 'Email Dispatched', `Restructuring notice link generated for Client #${id}.`);
-    }
   } catch (err) {
     console.error('Budget Email Dispatch Error:', err);
   }
