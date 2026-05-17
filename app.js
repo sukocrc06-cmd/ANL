@@ -2980,7 +2980,7 @@ function renderVIP() {
         <span class="perk-tag">Priority Access</span>
       </div>
       <div style="margin-top: 1rem; text-align: center;">
-        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="sendVIPEmail(${c.id}, '${tier.name}', '${tier.cashback}')">✉️ Send VIP Welcome Email</button>
+        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="triggerRealVipMail(${c.id}, '${tier.name}', '${tier.cashback}')">✉️ Send VIP Welcome Email</button>
       </div>`;
     grid.appendChild(card);
   });
@@ -3056,7 +3056,7 @@ function renderBudget() {
         <p>${alertMsg}</p>
       </div>
       <div style="margin-top: 1rem; text-align: center;">
-        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="sendBudgetEmail(${c.id}, '${scheme.disc}', '${scheme.name}')">✉️ Send Restructuring Notice</button>
+        <button class="action-btn action-btn-monitor" style="width: 100%; justify-content: center;" onclick="triggerRealBudgetMail(${c.id}, '${scheme.disc}', '${scheme.name}')">✉️ Send Restructuring Notice</button>
       </div>`;
     grid.appendChild(card);
   });
@@ -6462,3 +6462,17 @@ function fireConfettiCelebration() {
     }
   });
 })();
+
+window.triggerRealVipMail = function(id, tierName, cashback) {
+    const recipient = `client_${id}@institutional-portfolio.com`;
+    const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
+    const body = encodeURIComponent(`Dear Valued Client #${id},\n\nWe are pleased to inform you that your portfolio has been upgraded to ${tierName} tier.\n\nBest regards,\nANL Analytics Team`);
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+};
+
+window.triggerRealBudgetMail = function(id, discount, schemeName) {
+    const recipient = `client_${id}@institutional-portfolio.com`;
+    const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
+    const body = encodeURIComponent(`Dear Client #${id},\n\nBased on our risk analysis, your restructuring package under ${schemeName} is ready with a ${discount} discount.\n\nBest regards,\nANL Analytics Team`);
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+};
