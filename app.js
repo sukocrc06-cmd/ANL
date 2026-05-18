@@ -1295,6 +1295,10 @@ window.handleCorporateSignup = function (event) {
   if (passwordVal) passwordVal.textContent = generatedPass;
   if (cardContainer) cardContainer.style.display = 'block';
 
+  if (typeof window.startCardExpirationTimer === 'function') {
+    window.startCardExpirationTimer();
+  }
+
   if (typeof window.toast === 'function') {
     window.toast('success', '💳', 'Access Card Generated', `Institutional Access Card created for ${institution}.`);
   } else if (typeof showToast === 'function') {
@@ -1304,6 +1308,30 @@ window.handleCorporateSignup = function (event) {
   if (typeof window.logSystemAudit === 'function') {
     window.logSystemAudit('SECURE_CARD_GENERATION', `Generated kiosk access card for entity (${institution})`, 'SUCCESS');
   }
+};
+
+window.startCardExpirationTimer = function() {
+    let duration = 15 * 60; // 15 minutes lease duration in seconds
+    window.isCardSessionActive = true;
+    
+    if (window.cardExpiryInterval) clearInterval(window.cardExpiryInterval);
+    
+    window.cardExpiryInterval = setInterval(() => {
+        let minutes = Math.floor(duration / 60);
+        let seconds = duration % 60;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        
+        const timerEl = document.getElementById('card-timer-val');
+        if (timerEl) timerEl.textContent = `${minutes}:${seconds}`;
+        
+        if (--duration < 0) {
+            clearInterval(window.cardExpiryInterval);
+            window.isCardSessionActive = false;
+            if (timerEl) timerEl.textContent = 'EXPIRED / RE-GENERATE';
+            const loginProceedBtn = document.querySelector("button[onclick='proceedToLoginFromCard()']");
+            if (loginProceedBtn) { loginProceedBtn.disabled = true; loginProceedBtn.style.opacity = '0.4'; }
+        }
+    }, 1000);
 };
 
 window.proceedToLoginFromCard = function () {
@@ -1407,6 +1435,16 @@ window.handleCorporateLogin = function (event) {
   if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
   if (event && typeof event.preventDefault === 'function') {
     event.preventDefault();
+  }
+
+  if (window.isCardSessionActive === false) {
+    const errorEl = document.getElementById('login-error');
+    if (errorEl) {
+      errorEl.style.display = 'block';
+      errorEl.style.color = '#f87171';
+      errorEl.textContent = 'Authentication blocked. Security lease expired. Please re-generate an Institutional Access Card.';
+    }
+    return;
   }
 
   const companyInp = document.getElementById('login-company-name');
@@ -3114,14 +3152,16 @@ function renderBudget() {
 }
 
 window.sendVIPEmail = function(id, tierName, cashback) {
-    const recipient = `client_${id}@institutional-portfolio.com`;
+    const companyDomain = window.authenticatedCompanyName ? window.authenticatedCompanyName.replace(/\s+/g, '').toLowerCase() + '.com' : 'institutional-portfolio.com';
+    const recipient = `client_${id}@${companyDomain}`;
     const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
     const body = encodeURIComponent(`Dear Valued Client #${id},\n\nWe are pleased to inform you that your portfolio has been upgraded to ${tierName} tier.\n\nBest regards,\nANL Analytics Team`);
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 };
 
 window.sendBudgetEmail = function(id, discount, schemeName) {
-    const recipient = `client_${id}@institutional-portfolio.com`;
+    const companyDomain = window.authenticatedCompanyName ? window.authenticatedCompanyName.replace(/\s+/g, '').toLowerCase() + '.com' : 'institutional-portfolio.com';
+    const recipient = `client_${id}@${companyDomain}`;
     const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
     const body = encodeURIComponent(`Dear Client #${id},\n\nBased on our risk analysis, your restructuring package under ${schemeName} is ready with a ${discount} discount.\n\nBest regards,\nANL Analytics Team`);
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
@@ -6381,14 +6421,16 @@ function fireConfettiCelebration() {
 })();
 
 window.triggerRealVipMail = function(id, tierName, cashback) {
-    const recipient = `client_${id}@institutional-portfolio.com`;
+    const companyDomain = window.authenticatedCompanyName ? window.authenticatedCompanyName.replace(/\s+/g, '').toLowerCase() + '.com' : 'institutional-portfolio.com';
+    const recipient = `client_${id}@${companyDomain}`;
     const subject = encodeURIComponent('[ANL Analytics] Premium Institutional VIP Rewards Activated');
     const body = encodeURIComponent(`Dear Valued Client #${id},\n\nWe are pleased to inform you that your portfolio has been upgraded to ${tierName} tier.\n\nBest regards,\nANL Analytics Team`);
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 };
 
 window.triggerRealBudgetMail = function(id, discount, schemeName) {
-    const recipient = `client_${id}@institutional-portfolio.com`;
+    const companyDomain = window.authenticatedCompanyName ? window.authenticatedCompanyName.replace(/\s+/g, '').toLowerCase() + '.com' : 'institutional-portfolio.com';
+    const recipient = `client_${id}@${companyDomain}`;
     const subject = encodeURIComponent('[ANL Analytics] Automated Portfolio Debt Restructuring Notice');
     const body = encodeURIComponent(`Dear Client #${id},\n\nBased on our risk analysis, your restructuring package under ${schemeName} is ready with a ${discount} discount.\n\nBest regards,\nANL Analytics Team`);
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
