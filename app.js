@@ -1559,8 +1559,46 @@ window.adaptPredictiveFormLabels = function() {
     }
 };
 
+window.ENTERPRISE_INDUSTRY_REGISTRY = {
+    bank: {
+        title: "Banking & Financial Services",
+        icon: "🏦",
+        badge: "SECURE TIER 1 CAPITAL CORE",
+        metrics: { kpi1: "Capital Adequacy (CAR)", kpi2: "Liquidity Coverage", kpi3: "Non-Performing Loans (NPL)" }
+    },
+    logistics: {
+        title: "Logistics & Fleet Supply Chain",
+        icon: "🚛",
+        badge: "GLOBAL CARRIER INTEGRITY MATRIX",
+        metrics: { kpi1: "Fleet Load Capacity Optimization", kpi2: "Fuel Price Exposure Index", kpi3: "Route Latency Congestion" }
+    },
+    tech: {
+        title: "Technology & Enterprise SaaS",
+        icon: "💻",
+        badge: "CLOUD ARR GROWTH & RETENTION ENGINE",
+        metrics: { kpi1: "Annual Recurring Revenue", kpi2: "Net Dollar Retention (NDR)", kpi3: "Customer Churn Velocity" }
+    },
+    retail: {
+        title: "Retail & Omnichannel E-Commerce",
+        icon: "🛒",
+        badge: "HIGH-TURNOVER CONSUMER VALUE LAYER",
+        metrics: { kpi1: "Inventory Turnover Speed", kpi2: "Gross Margin Return on Investment", kpi3: "Supply Chain Lead Lag" }
+    },
+    manufacturing: {
+        title: "Manufacturing & Heavy Industry",
+        icon: "🏭",
+        badge: "RAW MATERIAL RESILIENCE DEPLOYMENT",
+        metrics: { kpi1: "Capacity Utilization Rate", kpi2: "Material Shock Inflation Index", kpi3: "Asset Depletion Score" }
+    },
+    telecom: {
+        title: "Telecommunications & Grid Operators",
+        icon: "📡",
+        badge: "HIGH-DENSITY NETWORK INFRASTRUCTURE",
+        metrics: { kpi1: "Average Revenue Per User (ARPU)", kpi2: "Network Bandwidth Stress Factor", kpi3: "Subscriber Attrition Velocity" }
+    }
+};
+
 window.initializeAuthenticatedCorporateSession = function(companyName) {
-    // Set global runtime state to commercial mode
     window.isCommercialPremiumSession = true;
     window.authenticatedCompanyName = companyName;
     window.adaptPredictiveFormLabels();
@@ -1575,14 +1613,22 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     window.corporateCSVUploaded = false;
     window.pendingCorporateUpload = true;
     
-    // Dynamically shift the hero dashboard labels to match their premium corporate branding
+    // Read the selected dropdown identifier value
+    const selectedKey = document.getElementById('signup-sector-select')?.value || window.currentCorporateSector || 'bank';
+    const activeSector = window.ENTERPRISE_INDUSTRY_REGISTRY[selectedKey] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
+    
+    // Update active corporate branding labels dynamically across headers
     const heroBadge = document.querySelector('.hero-badge');
-    if (heroBadge) heroBadge.innerHTML = `🏢 Secure Enterprise Environment · ${companyName}`;
+    if (heroBadge) heroBadge.innerHTML = `${activeSector.icon} ${activeSector.badge} · ${companyName}`;
     
     const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) heroTitle.innerHTML = `${companyName}<br><span class="gradient-text">Risk Core Terminal</span>`;
+    if (heroTitle) heroTitle.innerHTML = `${companyName}<br><span class="gradient-text">${activeSector.title} Terminal</span>`;
     
-    // Automatically trigger visual resets to show clean state (0 records) waiting for their upload
+    // Dynamically override core data table column header text strings based on registry configuration map
+    const thIncome = document.getElementById('th-income');
+    if (thIncome) thIncome.textContent = activeSector.metrics.kpi1;
+    
+    // Refresh visual pipelines cleanly
     if (typeof window.calculateKPIs === 'function') window.calculateKPIs();
     if (typeof window.renderCharts === 'function') window.renderCharts();
     if (typeof window.updateTable === 'function') window.updateTable(1);
@@ -1597,7 +1643,6 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     if (typeof updateWhatIf === 'function') updateWhatIf();
     if (typeof applyFilters === 'function') applyFilters();
     
-    // Force reveal the secure Corporate Data Upload Hub instantly
     const uploadHub = document.getElementById('corporate-upload-hub');
     if (uploadHub) uploadHub.style.display = 'block';
 };
