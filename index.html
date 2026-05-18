@@ -306,13 +306,15 @@
               <input type="text" id="signup-institution" class="b2b-input" placeholder="e.g. Akbank" onkeydown="if(event.key==='Enter') handleCorporateSignup(event)" />
             </div>
           </div>
-          <div class="form-group" style="margin-top: 1rem; margin-bottom: 1rem;">
-              <label class="form-label" style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Select Business Sector</label>
-              <select id="signup-sector-select" class="form-input" style="background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.75rem; border-radius: 8px; width: 100%; font-family: sans-serif;">
-                  <option value="bank">🏦 Banking & Finance</option>
-                  <option value="logistics">🚛 Logistics & Supply Chain</option>
-                  <option value="tech">💻 Technology & SaaS Startups</option>
-                  <option value="retail">🛒 Retail & E-Commerce</option>
+          <div class="form-group" style="margin-top: 1rem; text-align: left;">
+              <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.85rem; color: #94a3b8; font-family: monospace;">[ENTERPRISE_SYSTEM_VERTICAL]</label>
+              <select id="signup-sector-select" class="form-input" style="background: rgba(15, 23, 42, 0.7); color: #fff; border: 1px solid rgba(56, 189, 248, 0.2); padding: 0.75rem; border-radius: 8px; width: 100%; font-size: 0.9rem; outline: none;">
+                  <option value="bank">🏦 Banking & Financial Services</option>
+                  <option value="logistics">🚛 Logistics & Fleet Supply Chain</option>
+                  <option value="tech">💻 Technology & Enterprise SaaS</option>
+                  <option value="retail">🛒 Retail & Omnichannel E-Commerce</option>
+                  <option value="manufacturing">🏭 Manufacturing & Heavy Industry</option>
+                  <option value="telecom">📡 Telecommunications & Grid Operators</option>
               </select>
           </div>
           <div class='card-color-picker' style='margin-bottom: 1rem;'><label class='b2b-label'>Select Institutional Branding Color Theme</label><div style='display:flex; gap:1rem; margin-top:0.5rem;'><span class='color-dot dot-purple' onclick="window.tuneCardTheme('#7c3aed', '#3b82f6')" style='width:24px; height:24px; border-radius:50%; background:#7c3aed; cursor:pointer; border:2px solid #fff;'></span><span class='color-dot dot-red' onclick="window.tuneCardTheme('#ef4444', '#b91c1c')" style='width:24px; height:24px; border-radius:50%; background:#ef4444; cursor:pointer;'></span><span class='color-dot dot-green' onclick="window.tuneCardTheme('#10b981', '#047857')" style='width:24px; height:24px; border-radius:50%; background:#10b981; cursor:pointer;'></span></div></div>
@@ -412,6 +414,7 @@
         <option value="tech">💻 Tech & SaaS Startups</option>
         <option value="retail">🛒 Retail & E-Commerce</option>
         <option value="manufacturing">🏭 Manufacturing & Heavy Industry</option>
+        <option value="telecom">📡 Telecommunications & Grid Operators</option>
       </select>
     </div>
     <div class="nav-badge">
@@ -420,200 +423,8 @@
     </div>
   </nav>
 
-  <!-- ===== B2B CLIENT RISK ASSESSMENT ===== -->
-  <section class="predict-section" id="predict" style="display: none !important;">
-    <div class="section-header">
-      <h2 class="section-title">B2B Client Financial Risk Assessment Form</h2>
-      <p class="section-subtitle">Enter corporate audit metrics to instantly calculate their Institutional Risk Segment</p>
-    </div>
 
-    <div class="predict-layout">
-      <div class="predict-form-card" id="predict-form-card">
-        <div class="form-group" style="margin-bottom: 1.5rem;">
-          <label class="form-label">Credit Card Payment Status</label>
-          <div class="payment-status-toggle" style="display:flex; gap:0.5rem; background:rgba(15,23,42,0.4); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
-            <label style="flex:1; cursor:pointer; position:relative;">
-              <input type="radio" name="payment-status" value="regular" checked style="position:absolute; opacity:0;">
-              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Regular</div>
-            </label>
-            <label style="flex:1; cursor:pointer; position:relative;">
-              <input type="radio" name="payment-status" value="minimum" style="position:absolute; opacity:0;">
-              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Minimum Only</div>
-            </label>
-            <label style="flex:1; cursor:pointer; position:relative;">
-              <input type="radio" name="payment-status" value="delinquent" style="position:absolute; opacity:0;">
-              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Delinquent</div>
-            </label>
-          </div>
-          <style>
-            input[type="radio"]:checked + .toggle-btn { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
-            .toggle-btn { border: 1px solid transparent; color: var(--text-400); }
-            input[type="radio"]:hover + .toggle-btn { background: rgba(255,255,255,0.05); }
-            input[value="delinquent"]:checked + .toggle-btn { background: rgba(239,68,68,0.2) !important; color: #f87171 !important; border-color: rgba(239,68,68,0.3) !important; }
-            input[value="minimum"]:checked + .toggle-btn { background: rgba(245,158,11,0.2) !important; color: #fbbf24 !important; border-color: rgba(245,158,11,0.3) !important; }
-          </style>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="p-income">Client Annual Income (k$) <span class="form-val"
-              id="income-val">60</span></label>
-          <input type="range" id="p-income" class="range-input" min="15" max="1000" value="60"
-            oninput="updateSlider('income')" />
-          <div class="range-labels"><span>$15k</span><span>$1,000k</span></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="p-spending">Client Spending Score <span class="form-val"
-              id="spending-val">50</span></label>
-          <input type="range" id="p-spending" class="range-input" min="1" max="100" value="50"
-            oninput="updateSlider('spending')" />
-          <div class="range-labels"><span>1</span><span>100</span></div>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="p-credit">Client Baseline Credit Score <span class="form-val" id="credit-val">650</span></label>
-          <input type="range" id="p-credit" class="range-input" min="300" max="900" value="650"
-            oninput="updateSlider('credit')" />
-          <div class="range-labels"><span>300</span><span>900</span></div>
-        </div>
-        
-        <!-- Dynamic Sector Specific Fields Container -->
-        <div id="sector-specific-fields-wrapper" class="sector-specific-fields-wrapper" style="margin-bottom: 1.5rem;">
-          <!-- Custom numeric inputs and label tags will be programmatically injected here -->
-        </div>
 
-        <div class="predict-btn-row" style="display:flex;gap:.75rem;flex-wrap:wrap;">
-          <button class="btn-ai" id="btn-ai-analyze" onclick="analyzeCustomer(); getAIAnalysis();">
-            <span class="btn-analyze-icon"><svg class="aura-icon" width="20" height="20" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-btn" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-btn)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-btn)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/></svg></span> Get Aura Analysis Report
-          </button>
-          <button class="btn-ai btn-save-email" id="btn-save-email" onclick="addAuditedClientToLedger()" disabled
-            style="opacity:.5;cursor:not-allowed;">
-            <span class="btn-analyze-icon">➕</span> Add to Monitored Client Ledger
-          </button>
-        </div>
-      </div>
-
-      <!-- Result Panel -->
-      <div class="predict-result-card" id="predict-result-card">
-        <div class="result-placeholder" id="result-placeholder">
-          <div class="placeholder-icon">🔍</div>
-          <p>Fill in the form and click <strong>Analyze Customer</strong> to see results</p>
-        </div>
-        <div class="result-content" id="result-content" style="display:none;">
-          <div class="result-risk-badge" id="result-risk-badge">—</div>
-          <div class="result-score-ring" id="result-score-ring">
-            <svg viewBox="0 0 120 120" class="ring-svg">
-              <circle class="ring-bg" cx="60" cy="60" r="50" />
-              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314"
-                stroke-dashoffset="314" />
-            </svg>
-            <div class="ring-label">
-              <div class="ring-score" id="ring-score">0</div>
-              <div class="ring-sub">Credit Score</div>
-            </div>
-          </div>
-          <div class="result-metrics" id="result-metrics">
-            <div class="result-metric">
-              <span class="metric-label">Cluster</span>
-              <span class="metric-val" id="res-cluster">—</span>
-            </div>
-            <div class="result-metric">
-              <span class="metric-label">Profile</span>
-              <span class="metric-val" id="res-profile">—</span>
-            </div>
-            <div class="result-metric">
-              <span class="metric-label">Recommendation</span>
-              <span class="metric-val" id="res-recommend">—</span>
-            </div>
-            <div class="result-metric" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center;">
-              <span class="metric-label" style="color: #38bdf8;">🏦 Operational Banking Policy</span>
-              <span class="metric-val" id="res-banking-policy" style="font-family: monospace; font-size: 0.85rem; color: #f8fafc;">—</span>
-            </div>
-          </div>
-          <div class="result-breakdown" id="result-breakdown">
-            <div class="breakdown-bar">
-              <span class="breakdown-label">Income Weight (50%)</span>
-              <div class="bar-track">
-                <div class="bar-fill bar-income" id="bar-income"></div>
-              </div>
-              <span class="breakdown-pct" id="pct-income">—</span>
-            </div>
-            <div class="breakdown-bar">
-              <span class="breakdown-label">Spending Weight (30%)</span>
-              <div class="bar-track">
-                <div class="bar-fill bar-spending" id="bar-spending"></div>
-              </div>
-              <span class="breakdown-pct" id="pct-spending">—</span>
-            </div>
-            <div class="breakdown-bar">
-              <span class="breakdown-label">Baseline Credit Weight (20%)</span>
-              <div class="bar-track">
-                <div class="bar-fill bar-credit" id="bar-credit"></div>
-              </div>
-              <span class="breakdown-pct" id="pct-credit">—</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI Report Panel -->
-    <div class="ai-report-panel" id="ai-report-panel" style="display:none;">
-      <div class="ai-report-header">
-        <span class="ai-report-icon"><svg class="aura-icon" width="32" height="32" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-rpt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-rpt)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-rpt)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/></svg></span>
-        <div>
-          <div class="ai-report-title">Aura Risk Intelligence</div>
-          <div class="ai-report-sub">Powered by Aura Analytics Engine &bull; Rule-Based AI Model</div>
-        </div>
-        <div class="ai-report-status" id="ai-status">
-          <span class="ai-dot"></span> Analysing…
-        </div>
-      </div>
-      <div class="ai-report-body" id="ai-report-body"></div>
-    </div>
-
-    <!-- What-If Simulation Panel -->
-    <div class="whatif-panel" id="whatif-panel">
-      <div class="whatif-header">
-        <span class="whatif-icon">🔮</span>
-        <div>
-          <div class="whatif-title">What-If Simulation</div>
-          <div class="whatif-sub">Adjust sliders to see how risk changes — updates in real-time</div>
-        </div>
-      </div>
-      <div class="whatif-layout">
-        <div class="whatif-controls">
-          <div class="whatif-group">
-            <label class="whatif-label">If income increases to <span class="whatif-val"
-                id="wi-income-val">60</span>k$</label>
-            <input type="range" id="wi-income" class="range-input" min="15" max="140" value="60"
-              oninput="updateWhatIf()" />
-            <div class="range-labels"><span>$15k</span><span>$140k</span></div>
-          </div>
-          <div class="whatif-group">
-            <label class="whatif-label">If spending changes to <span class="whatif-val"
-                id="wi-spending-val">50</span>/100</label>
-            <input type="range" id="wi-spending" class="range-input" min="1" max="100" value="50"
-              oninput="updateWhatIf()" />
-            <div class="range-labels"><span>1</span><span>100</span></div>
-          </div>
-        </div>
-        <div class="whatif-compare">
-          <div class="wic-card wic-before" id="wic-before">
-            <div class="wic-label">Current</div>
-            <div class="wic-score" id="wi-score-before">—</div>
-            <div class="wic-risk" id="wi-risk-before">—</div>
-          </div>
-          <div class="wic-arrow">→</div>
-          <div class="wic-card wic-after" id="wic-after">
-            <div class="wic-label">After Change</div>
-            <div class="wic-score" id="wi-score-after">—</div>
-            <div class="wic-risk" id="wi-risk-after">—</div>
-          </div>
-        </div>
-      </div>
-      <div class="whatif-chart-wrap">
-        <canvas id="whatifChart"></canvas>
-      </div>
-    </div>
-  </section>
 
   <!-- ===== HERO / DASHBOARD ===== -->
   <section class="hero" id="dashboard">
@@ -920,6 +731,201 @@
           <span class="chart-badge">Horizontal Bar</span>
         </div>
         <canvas id="sectorRiskChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== B2B CLIENT RISK ASSESSMENT ===== -->
+  <section class="predict-section" id="predict">
+    <div class="section-header">
+      <h2 class="section-title">B2B Client Financial Risk Assessment Form</h2>
+      <p class="section-subtitle">Enter corporate audit metrics to instantly calculate their Institutional Risk Segment</p>
+    </div>
+
+    <div class="predict-layout">
+      <div class="predict-form-card" id="predict-form-card">
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">Credit Card Payment Status</label>
+          <div class="payment-status-toggle" style="display:flex; gap:0.5rem; background:rgba(15,23,42,0.4); padding:4px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="regular" checked style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Regular</div>
+            </label>
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="minimum" style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Minimum Only</div>
+            </label>
+            <label style="flex:1; cursor:pointer; position:relative;">
+              <input type="radio" name="payment-status" value="delinquent" style="position:absolute; opacity:0;">
+              <div class="toggle-btn" style="text-align:center; padding:0.65rem; border-radius:6px; font-size:0.9rem; font-weight:500; transition:all 0.2s;">Delinquent</div>
+            </label>
+          </div>
+          <style>
+            input[type="radio"]:checked + .toggle-btn { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+            .toggle-btn { border: 1px solid transparent; color: var(--text-400); }
+            input[type="radio"]:hover + .toggle-btn { background: rgba(255,255,255,0.05); }
+            input[value="delinquent"]:checked + .toggle-btn { background: rgba(239,68,68,0.2) !important; color: #f87171 !important; border-color: rgba(239,68,68,0.3) !important; }
+            input[value="minimum"]:checked + .toggle-btn { background: rgba(245,158,11,0.2) !important; color: #fbbf24 !important; border-color: rgba(245,158,11,0.3) !important; }
+          </style>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-income">Client Annual Income (k$) <span class="form-val"
+              id="income-val">60</span></label>
+          <input type="range" id="p-income" class="range-input" min="15" max="1000" value="60"
+            oninput="updateSlider('income')" />
+          <div class="range-labels"><span>$15k</span><span>$1,000k</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-spending">Client Spending Score <span class="form-val"
+              id="spending-val">50</span></label>
+          <input type="range" id="p-spending" class="range-input" min="1" max="100" value="50"
+            oninput="updateSlider('spending')" />
+          <div class="range-labels"><span>1</span><span>100</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-credit">Client Baseline Credit Score <span class="form-val" id="credit-val">650</span></label>
+          <input type="range" id="p-credit" class="range-input" min="300" max="900" value="650"
+            oninput="updateSlider('credit')" />
+          <div class="range-labels"><span>300</span><span>900</span></div>
+        </div>
+        
+        <!-- Dynamic Sector Specific Fields Container -->
+        <div id="sector-specific-fields-wrapper" class="sector-specific-fields-wrapper" style="margin-bottom: 1.5rem;">
+          <!-- Custom numeric inputs and label tags will be programmatically injected here -->
+        </div>
+
+        <div class="predict-btn-row" style="display:flex;gap:.75rem;flex-wrap:wrap;">
+          <button class="btn-ai" id="btn-ai-analyze" onclick="analyzeCustomer(); getAIAnalysis();">
+            <span class="btn-analyze-icon"><svg class="aura-icon" width="20" height="20" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-btn" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-btn)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-btn)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-btn)" stroke-width="2" opacity=".4"/></svg></span> Get Aura Analysis Report
+          </button>
+          <button class="btn-ai btn-save-email" id="btn-save-email" onclick="addAuditedClientToLedger()" disabled
+            style="opacity:.5;cursor:not-allowed;">
+            <span class="btn-analyze-icon">➕</span> Add to Monitored Client Ledger
+          </button>
+        </div>
+      </div>
+
+      <!-- Result Panel -->
+      <div class="predict-result-card" id="predict-result-card">
+        <div class="result-placeholder" id="result-placeholder">
+          <div class="placeholder-icon">🔍</div>
+          <p>Fill in the form and click <strong>Analyze Customer</strong> to see results</p>
+        </div>
+        <div class="result-content" id="result-content" style="display:none;">
+          <div class="result-risk-badge" id="result-risk-badge">—</div>
+          <div class="result-score-ring" id="result-score-ring">
+            <svg viewBox="0 0 120 120" class="ring-svg">
+              <circle class="ring-bg" cx="60" cy="60" r="50" />
+              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314"
+                stroke-dashoffset="314" />
+            </svg>
+            <div class="ring-label">
+              <div class="ring-score" id="ring-score">0</div>
+              <div class="ring-sub">Credit Score</div>
+            </div>
+          </div>
+          <div class="result-metrics" id="result-metrics">
+            <div class="result-metric">
+              <span class="metric-label">Cluster</span>
+              <span class="metric-val" id="res-cluster">—</span>
+            </div>
+            <div class="result-metric">
+              <span class="metric-label">Profile</span>
+              <span class="metric-val" id="res-profile">—</span>
+            </div>
+            <div class="result-metric">
+              <span class="metric-label">Recommendation</span>
+              <span class="metric-val" id="res-recommend">—</span>
+            </div>
+            <div class="result-metric" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.5rem; grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center;">
+              <span class="metric-label" style="color: #38bdf8;">🏦 Operational Banking Policy</span>
+              <span class="metric-val" id="res-banking-policy" style="font-family: monospace; font-size: 0.85rem; color: #f8fafc;">—</span>
+            </div>
+          </div>
+          <div class="result-breakdown" id="result-breakdown">
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Income Weight (50%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-income" id="bar-income"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-income">—</span>
+            </div>
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Spending Weight (30%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-spending" id="bar-spending"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-spending">—</span>
+            </div>
+            <div class="breakdown-bar">
+              <span class="breakdown-label">Baseline Credit Weight (20%)</span>
+              <div class="bar-track">
+                <div class="bar-fill bar-credit" id="bar-credit"></div>
+              </div>
+              <span class="breakdown-pct" id="pct-credit">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Report Panel -->
+    <div class="ai-report-panel" id="ai-report-panel" style="display:none;">
+      <div class="ai-report-header">
+        <span class="ai-report-icon"><svg class="aura-icon" width="32" height="32" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-rpt" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-rpt)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-rpt)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="22" y1="35" x2="42" y2="47" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/><line x1="58" y1="53" x2="78" y2="65" stroke="url(#aura-g-rpt)" stroke-width="2" opacity=".4"/></svg></span>
+        <div>
+          <div class="ai-report-title">Aura Risk Intelligence</div>
+          <div class="ai-report-sub">Powered by Aura Analytics Engine &bull; Rule-Based AI Model</div>
+        </div>
+        <div class="ai-report-status" id="ai-status">
+          <span class="ai-dot"></span> Analysing…
+        </div>
+      </div>
+      <div class="ai-report-body" id="ai-report-body"></div>
+    </div>
+
+    <!-- What-If Simulation Panel -->
+    <div class="whatif-panel" id="whatif-panel">
+      <div class="whatif-header">
+        <span class="whatif-icon">🔮</span>
+        <div>
+          <div class="whatif-title">What-If Simulation</div>
+          <div class="whatif-sub">Adjust sliders to see how risk changes — updates in real-time</div>
+        </div>
+      </div>
+      <div class="whatif-layout">
+        <div class="whatif-controls">
+          <div class="whatif-group">
+            <label class="whatif-label">If income increases to <span class="whatif-val"
+                id="wi-income-val">60</span>k$</label>
+            <input type="range" id="wi-income" class="range-input" min="15" max="140" value="60"
+              oninput="updateWhatIf()" />
+            <div class="range-labels"><span>$15k</span><span>$140k</span></div>
+          </div>
+          <div class="whatif-group">
+            <label class="whatif-label">If spending changes to <span class="whatif-val"
+                id="wi-spending-val">50</span>/100</label>
+            <input type="range" id="wi-spending" class="range-input" min="1" max="100" value="50"
+              oninput="updateWhatIf()" />
+            <div class="range-labels"><span>1</span><span>100</span></div>
+          </div>
+        </div>
+        <div class="whatif-compare">
+          <div class="wic-card wic-before" id="wic-before">
+            <div class="wic-label">Current</div>
+            <div class="wic-score" id="wi-score-before">—</div>
+            <div class="wic-risk" id="wi-risk-before">—</div>
+          </div>
+          <div class="wic-arrow">→</div>
+          <div class="wic-card wic-after" id="wic-after">
+            <div class="wic-label">After Change</div>
+            <div class="wic-score" id="wi-score-after">—</div>
+            <div class="wic-risk" id="wi-risk-after">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="whatif-chart-wrap">
+        <canvas id="whatifChart"></canvas>
       </div>
     </div>
   </section>

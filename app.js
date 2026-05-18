@@ -1259,7 +1259,7 @@ window.handleCorporateSignup = function (event) {
 
   if (errorEl) errorEl.style.display = 'none';
 
-  window.currentCorporateSector = document.getElementById('signup-sector-select')?.value || 'bank';
+  window.currentCorporateSector = document.getElementById('signup-sector-select').value || 'bank';
   const orgName = institution || 'CORP';
   const cleanComp = orgName.replace(/\s+/g, '').toUpperCase();
   const randomSalt = Math.floor(1000 + Math.random() * 9000);
@@ -1530,72 +1530,25 @@ window.handleCorporateLogin = function (event) {
 };
 
 window.adaptPredictiveFormLabels = function() {
-    const compName = (window.authenticatedCompanyName || '').toLowerCase();
-    
-    // Extract target label DOM elements safely
-    const labelIncome = document.querySelector("label[for='p-income']") || document.querySelector("#p-income").previousElementSibling;
-    const labelSpending = document.querySelector("label[for='p-spending']") || document.querySelector("#p-spending").previousElementSibling;
-    const labelCredit = document.querySelector("label[for='p-credit']") || document.querySelector("#p-credit").previousElementSibling;
-    
-    if (!labelIncome || !labelSpending || !labelCredit) return;
-
-    if (compName.includes('bank') || compName.includes('finans')) {
-        labelIncome.innerHTML = '💵 Annual Institutional Liquidity: <span id="income-val">60</span> (k$)';
-        labelSpending.innerHTML = '📉 Credit Default Probability Weight: <span id="spending-val">50</span> (1-100)';
-        labelCredit.innerHTML = '🛡️ Core Capital Adequacy Ratio (CAR): <span id="credit-val">650</span>';
-    } else if (compName.includes('logistics') || compName.includes('kargo') || compName.includes('dhl')) {
-        labelIncome.innerHTML = '🚛 Active Fleet Carriage Capacity: <span id="income-val">60</span> (Tons)';
-        labelSpending.innerHTML = '⛽ Fuel Price Exposure Sensitivity: <span id="spending-val">50</span> (1-100)';
-        labelCredit.innerHTML = '🗺️ Route Supply Chain Optimization Index: <span id="credit-val">650</span>';
-    } else if (compName.includes('tech') || compName.includes('soft') || compName.includes('ai')) {
-        labelIncome.innerHTML = '💻 Annual Recurring Revenue (ARR): <span id="income-val">60</span> (k$)';
-        labelSpending.innerHTML = '🔥 Net Dollar Retention (NDR) Velocity: <span id="spending-val">50</span> (1-100)';
-        labelCredit.innerHTML = '⚡ Cloud Infrastructure Margin Security: <span id="credit-val">650</span>';
-    } else {
-        // Standard baseline fallback layout parameters
-        labelIncome.innerHTML = 'Annual Income: <span id="income-val">60</span> (k$)';
-        labelSpending.innerHTML = 'Spending Score: <span id="spending-val">50</span> (1-100)';
-        labelCredit.innerHTML = 'Global Credit Score: <span id="credit-val">650</span>';
+    const currentSec = window.currentCorporateSector || 'bank';
+    const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY[currentSec] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
+    const lblInc = document.querySelector("label[for='p-income']") || document.getElementById('p-income')?.previousElementSibling;
+    const lblSpd = document.querySelector("label[for='p-spending']") || document.getElementById('p-spending')?.previousElementSibling;
+    const valInc = document.getElementById('p-income')?.value || 120;
+    const valSpd = document.getElementById('p-spending')?.value || 45;
+    if (lblInc && lblSpd && activeConf) {
+        lblInc.innerHTML = `${activeConf.icon} ${activeConf.metric1}: <span id="income-val">${valInc}</span>`;
+        lblSpd.innerHTML = `📉 ${activeConf.metric2}: <span id="spending-val">${valSpd}</span>`;
     }
 };
 
 window.ENTERPRISE_INDUSTRY_REGISTRY = {
-    bank: {
-        title: "Banking & Financial Services",
-        icon: "🏦",
-        badge: "SECURE TIER 1 CAPITAL CORE",
-        metrics: { kpi1: "Capital Adequacy (CAR)", kpi2: "Liquidity Coverage", kpi3: "Non-Performing Loans (NPL)" }
-    },
-    logistics: {
-        title: "Logistics & Fleet Supply Chain",
-        icon: "🚛",
-        badge: "GLOBAL CARRIER INTEGRITY MATRIX",
-        metrics: { kpi1: "Fleet Load Capacity Optimization", kpi2: "Fuel Price Exposure Index", kpi3: "Route Latency Congestion" }
-    },
-    tech: {
-        title: "Technology & Enterprise SaaS",
-        icon: "💻",
-        badge: "CLOUD ARR GROWTH & RETENTION ENGINE",
-        metrics: { kpi1: "Annual Recurring Revenue", kpi2: "Net Dollar Retention (NDR)", kpi3: "Customer Churn Velocity" }
-    },
-    retail: {
-        title: "Retail & Omnichannel E-Commerce",
-        icon: "🛒",
-        badge: "HIGH-TURNOVER CONSUMER VALUE LAYER",
-        metrics: { kpi1: "Inventory Turnover Speed", kpi2: "Gross Margin Return on Investment", kpi3: "Supply Chain Lead Lag" }
-    },
-    manufacturing: {
-        title: "Manufacturing & Heavy Industry",
-        icon: "🏭",
-        badge: "RAW MATERIAL RESILIENCE DEPLOYMENT",
-        metrics: { kpi1: "Capacity Utilization Rate", kpi2: "Material Shock Inflation Index", kpi3: "Asset Depletion Score" }
-    },
-    telecom: {
-        title: "Telecommunications & Grid Operators",
-        icon: "📡",
-        badge: "HIGH-DENSITY NETWORK INFRASTRUCTURE",
-        metrics: { kpi1: "Average Revenue Per User (ARPU)", kpi2: "Network Bandwidth Stress Factor", kpi3: "Subscriber Attrition Velocity" }
-    }
+    bank: { title: "Banking & Finance", icon: "🏦", badge: "SECURE TIER 1 CORE", kpi: "Capital Adequacy (CAR)", metric1: "Institutional Liquidity", metric2: "Default Prob Weight" },
+    logistics: { title: "Logistics & Carrier", icon: "🚛", badge: "SUPPLY CHAIN RESILIENCE", kpi: "Fleet Capacity (Tons)", metric1: "Active Carriage Vol", metric2: "Fuel Price Exposure" },
+    tech: { title: "Technology & SaaS", icon: "💻", badge: "ARR RECURRING ENGINE", kpi: "Annual Recurring Revenue", metric1: "ARR Recurring Velocity", metric2: "Net Dollar Retention" },
+    retail: { title: "Retail & E-Commerce", icon: "🛒", badge: "OMNICHANNEL MARGIN LAYER", kpi: "Inventory Turnover Speed", metric1: "Omnichannel Margin", metric2: "Inventory Turnover Speed" },
+    manufacturing: { title: "Manufacturing Core", icon: "🏭", badge: "RAW MATERIAL SHOCK AUDIT", kpi: "Capacity Utilization", metric1: "Plant Output Scale", metric2: "Material Inflation Risk" },
+    telecom: { title: "Telecom Grid Controller", icon: "📡", badge: "HIGH-DENSITY GRID NODE", kpi: "Average Revenue Per User", metric1: "Data Infrastructure Bandwidth", metric2: "Subscriber Attrition Rate" }
 };
 
 window.initializeAuthenticatedCorporateSession = function(companyName) {
@@ -1613,20 +1566,29 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     window.corporateCSVUploaded = false;
     window.pendingCorporateUpload = true;
     
-    // Read the selected dropdown identifier value
-    const selectedKey = document.getElementById('signup-sector-select')?.value || window.currentCorporateSector || 'bank';
-    const activeSector = window.ENTERPRISE_INDUSTRY_REGISTRY[selectedKey] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
+    const currentSec = window.currentCorporateSector || 'bank';
+    const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY[currentSec] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
     
     // Update active corporate branding labels dynamically across headers
     const heroBadge = document.querySelector('.hero-badge');
-    if (heroBadge) heroBadge.innerHTML = `${activeSector.icon} ${activeSector.badge} · ${companyName}`;
+    if (heroBadge && activeConf) heroBadge.innerHTML = `${activeConf.icon} ${activeConf.badge} · ${window.authenticatedCompanyName}`;
     
     const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) heroTitle.innerHTML = `${companyName}<br><span class="gradient-text">${activeSector.title} Terminal</span>`;
+    if (heroTitle && activeConf) heroTitle.innerHTML = `${window.authenticatedCompanyName}<br><span class="gradient-text">${activeConf.title} Terminal</span>`;
     
     // Dynamically override core data table column header text strings based on registry configuration map
     const thIncome = document.getElementById('th-income');
-    if (thIncome) thIncome.textContent = activeSector.metrics.kpi1;
+    if (thIncome && activeConf) thIncome.textContent = activeConf.kpi;
+    
+    // Update predictive form labels dynamically to match sector contexts
+    const lblInc = document.querySelector("label[for='p-income']") || document.getElementById('p-income')?.previousElementSibling;
+    const lblSpd = document.querySelector("label[for='p-spending']") || document.getElementById('p-spending')?.previousElementSibling;
+    const valInc = document.getElementById('p-income')?.value || 120;
+    const valSpd = document.getElementById('p-spending')?.value || 45;
+    if (lblInc && lblSpd && activeConf) {
+        lblInc.innerHTML = `${activeConf.icon} ${activeConf.metric1}: <span id="income-val">${valInc}</span>`;
+        lblSpd.innerHTML = `📉 ${activeConf.metric2}: <span id="spending-val">${valSpd}</span>`;
+    }
     
     // Refresh visual pipelines cleanly
     if (typeof window.calculateKPIs === 'function') window.calculateKPIs();
@@ -2795,72 +2757,38 @@ window.analyzeCustomer = function () {
   let score = Math.round(Math.max(300, Math.min(1000, rawScore - sectorPenalty)));
 
   // Extract current enterprise scope context
-  const selectedSector = window.currentCorporateSector || 'bank'; // baseline fallback
-  const valIncome = parseFloat(document.getElementById('p-income')?.value || income);
-  const valSpending = parseFloat(document.getElementById('p-spending')?.value || spending);
-  const valCredit = parseFloat(document.getElementById('p-credit')?.value || baseCredit);
-
+  const currentSec = window.currentCorporateSector || 'bank';
+  const valInc = parseFloat(document.getElementById('p-income')?.value || income);
+  const valSpd = parseFloat(document.getElementById('p-spending')?.value || spending);
+  const valCrd = parseFloat(document.getElementById('p-credit')?.value || baseCredit);
   let computedRisk = "Low Risk";
-  let operationalCluster = "Premium Loyalty";
-  let recommendationText = "Standard Operations";
+  let operationalVerdict = "";
 
-  // Execute calculation formulas targeting the explicit chosen sector directly
-  if (selectedSector === 'bank') {
-      if (valCredit < 500 || valSpending > 70) {
-          computedRisk = "High Risk";
-          operationalCluster = "High Default Threat";
-          recommendationText = "Freeze credit expansion lines, enforce collateral collection.";
-      } else if (valCredit < 720) {
-          computedRisk = "Medium Risk";
-          operationalCluster = "Moderate Volatility";
-          recommendationText = "Restrict maximum credit facility caps, mandate dual officer audits.";
-      } else {
-          computedRisk = "Low Risk";
-          operationalCluster = "Tier 1 Capital Secure";
-          recommendationText = "Execute auto-approve priority credit underwriting instantly.";
-      }
-  } else if (selectedSector === 'logistics') {
-      if (valSpending > 65 || valIncome < 50) {
-          computedRisk = "High Risk";
-          operationalCluster = "Severe Fuel & Route Exposure";
-          recommendationText = "Suspend active carrier manifests, freeze escrow, move client to cash-only payment.";
-      } else if (valSpending > 40) {
-          computedRisk = "Medium Risk";
-          operationalCluster = "Volatile Margin Shock";
-          recommendationText = "Mandate fuel hedge insurance coverage, audit route delivery metrics weekly.";
-      } else {
-          computedRisk = "Low Risk";
-          operationalCluster = "Optimized Fleet Secure";
-          recommendationText = "Approve long-term automated multi-route logistics line expansion.";
-      }
-  } else if (selectedSector === 'tech') {
-      if (valSpending > 75 || valCredit < 450) {
-          computedRisk = "High Risk";
-          operationalCluster = "Critical Churn Velocity";
-          recommendationText = "Trigger immediate automated account executive retention playbooks, audit net retention.";
-      } else if (valSpending > 45) {
-          computedRisk = "Medium Risk";
-          operationalCluster = "Unstable Contract Expansion";
-          recommendationText = "Downgrade premium server capacity limits, restrict automated monthly cloud credit advances.";
-      } else {
-          computedRisk = "Low Risk";
-          operationalCluster = "High Net Retention Stable";
-          recommendationText = "Allocate dedicated enterprise solutions engineers, approve custom API tier expansion.";
-      }
-  } else if (selectedSector === 'retail') {
-      if (valSpending > 60 && valIncome < 40) {
-          computedRisk = "High Risk";
-          operationalCluster = "Severe Inventory Disruption";
-          recommendationText = "Halt supply dispatch chains, demand immediate upfront payment settlement frames.";
-      } else if (valSpending > 35) {
-          computedRisk = "Medium Risk";
-          operationalCluster = "Delayed Supply Velocity";
-          recommendationText = "Restrict automated credit terms, request bi-weekly turnover ledger balances.";
-      } else {
-          computedRisk = "Low Risk";
-          operationalCluster = "High Asset Turnover Stable";
-          recommendationText = "Authorize maximum inventory wholesale dispatch caps, deploy loyalty bonuses.";
-      }
+  if (currentSec === 'bank') {
+      if (valCrd < 500 || valSpd > 70) { computedRisk = "High Risk"; operationalVerdict = "CRITICAL DEBT SHOCK: Freeze asset lines."; }
+      else if (valCrd < 720) { computedRisk = "Medium Risk"; operationalVerdict = "MODERATE VOLATILITY: Request structural audit."; }
+      else { operationalVerdict = "PREMIUM ACCOUNT: Auto-approve expansion credit."; }
+  } else if (currentSec === 'logistics') {
+      if (valSpd > 65 || valInc < 50) { computedRisk = "High Risk"; operationalVerdict = "FUEL EXPOSURE WARNING: Suspend active route manifest."; }
+      else { operationalVerdict = "ROUTE SECURE: Approve fleet deployment pipeline."; }
+  } else if (currentSec === 'tech') {
+      if (valSpd > 75 || valCrd < 500) { computedRisk = "High Risk"; operationalVerdict = "CHURN VELOCITY CRITICAL: Fire core account recovery automated logs."; }
+      else { operationalVerdict = "EXPANSION SECURE: Approve API infrastructure credit lines."; }
+  } else if (currentSec === 'manufacturing') {
+      if (valSpd > 60) { computedRisk = "High Risk"; operationalVerdict = "MATERIAL INFLATION BLOW: Halt assembly line credit allocation."; }
+      else { operationalVerdict = "OUTPUT STABLE: Maintain default operational capacity rules."; }
+  } else if (currentSec === 'telecom') {
+      if (valCrd < 520) { computedRisk = "High Risk"; operationalVerdict = "GRID SUBSCRIBER DROPOUT RISK: Escalate to churn analysis unit."; }
+      else { operationalVerdict = "INFRASTRUCTURE STABLE: Deploy dynamic cell tower updates."; }
+  }
+
+  window.lastCalculatedRiskLevel = computedRisk;
+  const targetRes = document.getElementById('predict-result-card');
+  if (targetRes) {
+      targetRes.innerHTML = `<div style="padding:1rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px; background:rgba(0,0,0,0.2);">
+          <h4 style="color:${computedRisk==='High Risk'?'#ef4444':'#34d399'}; font-weight:bold;">${computedRisk.toUpperCase()}</h4>
+          <p style="font-size:0.85rem; color:#cbd5e1; margin-top:0.4rem;">• ${operationalVerdict}</p>
+      </div>`;
   }
 
   let level = computedRisk;
@@ -2874,8 +2802,8 @@ window.analyzeCustomer = function () {
   }
 
   const { cluster, segment, label } = segmentCustomer(income, spending);
-  let insight = recommendationText;
-  let recommend = recommendationText;
+  let insight = operationalVerdict;
+  let recommend = operationalVerdict;
 
   /* Show panel */
   const phEl = document.getElementById('result-placeholder');
@@ -2907,7 +2835,7 @@ window.analyzeCustomer = function () {
 
   /* Metrics */
   const resCluster = document.getElementById('res-cluster');
-  if (resCluster) resCluster.textContent = `Cluster ${cluster} — ${operationalCluster}`;
+  if (resCluster) resCluster.textContent = `Cluster ${cluster} — ${level}`;
   const resProfile = document.getElementById('res-profile');
   if (resProfile) resProfile.textContent = `${label} · B2B Corporate Client`;
   const resRecommend = document.getElementById('res-recommend');
@@ -2996,9 +2924,9 @@ window.analyzeCustomer = function () {
   }
 
   // Instantly execute the specialized professional UI sheet renderer
-  if (typeof window.renderProfessionalIntelligenceSheet === 'function') {
-    window.renderProfessionalIntelligenceSheet(computedRisk, valIncome, valSpending, valCredit);
-  }
+  // if (typeof window.renderProfessionalIntelligenceSheet === 'function') {
+  //   window.renderProfessionalIntelligenceSheet(computedRisk, valInc, valSpd, valCrd);
+  // }
 };
 
 window.renderProfessionalIntelligenceSheet = function(calculatedRisk, income, spending, credit) {
