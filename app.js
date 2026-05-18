@@ -1726,6 +1726,16 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     if (typeof window.switchEnterpriseRole === 'function') {
         window.switchEnterpriseRole(window.activeUserRole || 'analyst');
     }
+
+    const selectedSectorValue = window.currentCorporateSector || document.getElementById('signup-sector-select')?.value || 'bank';
+    const mainIndustrySelector = document.getElementById('industry-selector');
+    if (mainIndustrySelector) {
+        mainIndustrySelector.value = selectedSectorValue;
+        // Trigger your pre-configured sector UI mutation handler immediately
+        if (typeof window.setIndustry === 'function') {
+            window.setIndustry(selectedSectorValue);
+        }
+    }
 };
 
 window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
@@ -2199,6 +2209,20 @@ window.saveUploadedFileToHistory = function(fileName, recordsArray) {
 
 /* ── KPI cards ────────────────────────────────────────────── */
 function updateKPIs() {
+  const footerMeta = document.getElementById('footer-dynamic-meta');
+  if (footerMeta) {
+      const recordCount = (window.customersData && window.customersData.length > 0) ? window.customersData.length : 1000;
+      const currentSectorName = window.authenticatedCompanyName ? `Active Tenant: ${window.authenticatedCompanyName}` : 'Simulation Showroom Sample';
+      footerMeta.innerHTML = `B2B Risk Analytics Core &bull; ${currentSectorName} &bull; <b>${recordCount.toLocaleString()}</b> active portfolio record(s) parsed.`;
+  }
+
+  // Also synchronize the hero sample display text dynamically
+  const heroBadge = document.querySelector('.hero-badge');
+  if (heroBadge && window.authenticatedCompanyName) {
+      const activeRecordCount = window.customersData ? window.customersData.length : 0;
+      heroBadge.textContent = `Enterprise Customer Segment · ${activeRecordCount} Records Active`;
+  }
+
   if (window.pendingCorporateUpload || allData.length === 0) {
     if (document.getElementById('kpi-val-total')) document.getElementById('kpi-val-total').textContent = '0';
     if (document.getElementById('kpi-val-high')) document.getElementById('kpi-val-high').textContent = '0';
