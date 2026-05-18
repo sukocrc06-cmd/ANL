@@ -6377,3 +6377,28 @@ window.initLiveBloombergTicker = function() {
 // Initialize safely across layout loads
 document.addEventListener('DOMContentLoaded', window.initLiveBloombergTicker);
 if (document.readyState === 'complete' || document.readyState === 'interactive') { window.initLiveBloombergTicker(); }
+
+window.smoothDashboardScroll = function(event, sectionId) {
+    if (event) event.preventDefault();
+    
+    // Forcefully hide both the landing page wrapper and the login overlay completely
+    const landingPage = document.getElementById('anl-landing-page');
+    const loginOverlay = document.getElementById('b2b-login-overlay');
+    
+    if (landingPage) landingPage.style.display = 'none';
+    if (loginOverlay) loginOverlay.style.display = 'none';
+    
+    // Directly target the inside panel section and scroll smoothly
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Toggle active class visually on the top links row
+    document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    if (event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    }
+};
