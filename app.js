@@ -1645,6 +1645,11 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
             }
         }
     }
+    
+    const auraBubble = document.getElementById('chat-bubble');
+    if (auraBubble) {
+        auraBubble.style.setProperty('display', 'flex', 'important');
+    }
 };
 
 window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
