@@ -1183,11 +1183,11 @@
   <script src="app.js"></script>
 
   <!-- ===== AI CHAT ASSISTANT (COPILOT) ===== -->
-  <div id="chat-bubble" class="chat-bubble" onclick="toggleChat()" title="Aura Risk Intelligence">
+  <div id="chat-bubble" class="chat-bubble" onclick="toggleChat()" title="Aura Risk Intelligence" style="position: fixed !important; bottom: 5rem !important; right: 2rem !important; z-index: 999998 !important; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s !important;">
     <span class="chat-bubble-icon" id="chat-bubble-icon"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-bub" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-bub)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-bub)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/></svg></span>
     <span class="chat-unread" id="chat-unread" style="display:none;">1</span>
   </div>
-  <div id="chat-panel" class="chat-panel chat-section copilot-glass" style="display: none !important; position: fixed !important; bottom: 2rem !important; right: 2rem !important; width: 380px !important; max-height: 520px !important; z-index: 99999 !important; margin: 0 !important; box-shadow: 0 20px 50px rgba(0,0,0,0.7) !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 16px !important;">
+  <div id="chat-panel" class="chat-panel chat-section copilot-glass" style="display: none !important; position: fixed !important; bottom: 9rem !important; right: 2rem !important; width: 380px !important; max-height: 520px !important; z-index: 999998 !important; margin: 0 !important; box-shadow: 0 20px 50px rgba(0,0,0,0.7) !important; border: 1px solid rgba(56, 189, 248, 0.4) !important; border-radius: 16px !important; transition: transform 0.3s ease, z-index 0.1s !important;">
     <div class="chat-container" id="chat">
       <div class="chat-header">
         <div class="chat-header-left">

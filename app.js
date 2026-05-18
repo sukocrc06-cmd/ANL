@@ -1546,13 +1546,6 @@ window.initializeAuraSectorContext = function() {
     const sectorKey = window.currentCorporateSector || 'bank';
     const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY[sectorKey] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
     
-    // Trigger the browser's built-in vocal engine to welcome the user
-    if (typeof window.speakAuraResponse === 'function') {
-        window.speakAuraResponse(`Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our AI is ready to audit your ${activeConf.title} risk parameters.`);
-    } else if (typeof window.auraSpeak === 'function') {
-        window.auraSpeak(`Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our AI is ready to audit your ${activeConf.title} risk parameters.`, window.auraActiveLang === 'TR' ? 'tr-TR' : 'en-US');
-    }
-    
     const chatMessages = document.querySelector('.chat-messages');
     if (chatMessages) {
         // Inject the initial enterprise welcome summary bubble
@@ -1638,16 +1631,6 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
         const activeSector = window.ENTERPRISE_INDUSTRY_REGISTRY ? window.ENTERPRISE_INDUSTRY_REGISTRY[sectorKey] : null;
         
         if (activeSector) {
-            const msgText = `Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our system is fully operational and synchronized across your ${activeSector.title} parameters.`;
-            
-            // Fire Speech Synthesis vocal audio loop
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(msgText);
-                utterance.lang = document.getElementById('btn-lang-tr')?.style.background !== 'transparent' ? 'tr-TR' : 'en-US';
-                window.speechSynthesis.speak(utterance);
-            }
-            
             // Inject clean professional UI summary card into chat logs
             const chatBox = document.getElementById('chat-messages');
             if (chatBox) {

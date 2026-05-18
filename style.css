@@ -6188,3 +6188,17 @@ div[style*="display"] {
 @media (max-width: 768px) {
     .chat-section { width: 300px; bottom: 1rem; right: 1rem; max-height: 400px; }
 }
+
+/* Dynamic Aura Interactive Layering Rules */
+.chat-bubble:hover,
+.chat-panel:hover,
+.chat-section:hover {
+    z-index: 99999999 !important; /* Force bring to absolute front when mouse enters */
+    transform: scale(1.02);
+}
+
+/* Ensure parent app containers or grid elements yield layout priority during hover states */
+.chat-panel:hover ~ *,
+.chat-section:hover ~ * {
+    pointer-events: none; /* Avoid accidental background click triggers while interacting with Aura */
+}
