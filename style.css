@@ -6202,3 +6202,53 @@ div[style*="display"] {
 .chat-section:hover ~ * {
     pointer-events: none; /* Avoid accidental background click triggers while interacting with Aura */
 }
+
+/* --- B2B ENTERPRISE SAAS MINIMALIST OVERRIDES --- */
+:root {
+    --bg-main: #0b0f19;
+    --border-premium: rgba(255, 255, 255, 0.06);
+    --text-muted: #64748b;
+    --accent-corporate: #38bdf8;
+}
+
+/* Remove aggressive neon glow matrices and continuous background blurs */
+.orb, .matrix-streak, .landing-bg-glows, .radar-sweep, .firewall-scan-line {
+    display: none !important; /* Flush amateur sci-fi indicators out of production view */
+}
+
+/* Refactor containers to respect professional grid consistency and white-space branding */
+.glass-card, .copilot-glass, .b2b-login-modal, .chart-card, .fin-card {
+    background: #0f172a !important;
+    border: 1px solid var(--border-premium) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: none !important;
+    border-radius: 8px !important;
+    transition: border-color 0.2s ease-in-out !important;
+}
+
+.glass-card:hover, .chart-card:hover, .fin-card:hover {
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+    transform: none !important; /* Avoid non-standard layout bouncing movements */
+}
+
+/* Standardize corporate typography headers */
+h1, h2, h3, .hero-title, .landing-hero-title {
+    font-family: 'Inter', sans-serif !important;
+    letter-spacing: -0.03em !important;
+    font-weight: 700 !important;
+    color: #f8fafc !important;
+}
+
+/* Premium Form Input Select Styling */
+.form-input-premium {
+    width: 100% !important;
+    background: rgba(15,23,42,0.9) !important;
+    border: 1px solid rgba(248, 113, 113, 0.4) !important;
+    color: #f8fafc !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    outline: none !important;
+    cursor: pointer !important;
+}

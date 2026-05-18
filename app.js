@@ -3,6 +3,30 @@
    ============================================================ */
 'use strict';
 
+window.ENTERPRISE_ROLES = {
+    analyst: { name: "Senior Risk Analyst", clearlevel: "L2 Audit", permissions: ["query_ledger", "modify_thresholds"] },
+    compliance: { name: "Compliance Officer", clearlevel: "L3 Regulatory", permissions: ["query_ledger", "escalate_compliance"] },
+    director: { name: "Finance Director", clearlevel: "L4 Executive Access", permissions: ["query_ledger", "modify_thresholds", "approve_credit_caps"] }
+};
+window.activeUserRole = "analyst"; // Baseline fallback deployment initialization
+
+window.switchEnterpriseRole = function(roleKey) {
+    if (!window.ENTERPRISE_ROLES[roleKey]) return;
+    window.activeUserRole = roleKey;
+    const activeProfile = window.ENTERPRISE_ROLES[roleKey];
+    
+    // Update navigation status chips instantly to map to role permissions
+    const rBadge = document.getElementById('corporate-role-badge');
+    if (rBadge) {
+        rBadge.textContent = `${activeProfile.name} [${activeProfile.clearlevel}]`;
+    }
+    
+    // Write automatic activity trace log line directly down the live ledger pipeline
+    if (typeof window.logSystemActivity === 'function') {
+        window.logSystemActivity('IDENTITY_ROLE_SWAP', `Context switched to active role: ${activeProfile.name}`, 'SUCCESS');
+    }
+};
+
 /* ── Corporate Risk Tolerance Settings ─────────────────────── */
 window.RiskSettings = {
   highSpendThresh: 58,
@@ -1683,6 +1707,14 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     const auraBubble = document.getElementById('chat-bubble');
     if (auraBubble) {
         auraBubble.style.setProperty('display', 'flex', 'important');
+    }
+    
+    const roleBadge = document.getElementById('corporate-role-badge');
+    const roleSelector = document.getElementById('enterprise-role-selector');
+    if (roleBadge) roleBadge.style.display = 'block';
+    if (roleSelector) roleSelector.style.display = 'block';
+    if (typeof window.switchEnterpriseRole === 'function') {
+        window.switchEnterpriseRole(window.activeUserRole || 'analyst');
     }
 };
 
