@@ -1259,15 +1259,17 @@ window.handleCorporateSignup = function (event) {
 
   if (errorEl) errorEl.style.display = 'none';
 
-  const cleanName = institution.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const username = `anl_${cleanName || 'corp'}_admin`;
-  const password = 'ANL-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-9X!';
+  const orgName = institution || 'CORP';
+  const cleanComp = orgName.replace(/\s+/g, '').toUpperCase();
+  const randomSalt = Math.floor(1000 + Math.random() * 9000);
+  const generatedUser = `anl_${cleanComp.toLowerCase()}_admin`;
+  const generatedPass = `ANL-${cleanComp}-${randomSalt}X`;
 
   const cardData = {
     company: institution,
-    username: username,
-    password: password,
-    email: `${username}@${cleanName || 'corp'}.com`,
+    username: generatedUser,
+    password: generatedPass,
+    email: `${generatedUser}@${cleanComp.toLowerCase()}.com`,
     institution: institution
   };
 
@@ -1289,8 +1291,8 @@ window.handleCorporateSignup = function (event) {
 
   if (formContainer) formContainer.style.display = 'none';
   if (companyVal) companyVal.textContent = institution;
-  if (usernameVal) usernameVal.textContent = username;
-  if (passwordVal) passwordVal.textContent = password;
+  if (usernameVal) usernameVal.textContent = generatedUser;
+  if (passwordVal) passwordVal.textContent = generatedPass;
   if (cardContainer) cardContainer.style.display = 'block';
 
   if (typeof window.toast === 'function') {
@@ -1464,27 +1466,10 @@ window.handleCorporateLogin = function (event) {
     window.logSystemAudit('SECURE_SESSION_AUTH', `Enterprise tenant (${regCompany} - ${regUsername}) authenticated secure session`, 'SUCCESS');
   }
 
-  window.customerData = [];
-  allData = [];
-  window.allData = [];
-  customers = [];
-  window.ANL_DATA = [];
-  window.corporateCSVUploaded = false;
-  window.pendingCorporateUpload = true;
-
-  if (typeof updateKPIs === 'function') updateKPIs();
-  if (typeof renderCharts === 'function') renderCharts();
-  if (typeof renderBusinessInsights === 'function') renderBusinessInsights();
-  if (typeof checkRiskAlert === 'function') checkRiskAlert();
-  if (typeof renderPersonas === 'function') renderPersonas();
-  if (typeof renderFinancialDashboard === 'function') renderFinancialDashboard();
-  if (typeof renderVIP === 'function') renderVIP();
-  if (typeof renderBudget === 'function') renderBudget();
-  if (typeof updateWhatIf === 'function') updateWhatIf();
-  if (typeof applyFilters === 'function') applyFilters();
-
-  const uploadHub = document.getElementById('corporate-upload-hub');
-  if (uploadHub) uploadHub.style.display = 'block';
+  const orgName = regCompany;
+  if (typeof window.initializeAuthenticatedCorporateSession === 'function') {
+    window.initializeAuthenticatedCorporateSession(orgName);
+  }
 
   // Programmatically trigger active welcoming prompt for Aura AI
   setTimeout(() => {
@@ -1501,6 +1486,48 @@ window.handleCorporateLogin = function (event) {
       window.addMessage(msg, 'bot');
     }
   }, 600);
+};
+
+window.initializeAuthenticatedCorporateSession = function(companyName) {
+    // Set global runtime state to commercial mode
+    window.isCommercialPremiumSession = true;
+    window.authenticatedCompanyName = companyName;
+    
+    // Flush the synthetic demo simulation array completely to provide a clean environment
+    window.customersData = [];
+    window.customerData = [];
+    allData = [];
+    window.allData = [];
+    customers = [];
+    window.ANL_DATA = [];
+    window.corporateCSVUploaded = false;
+    window.pendingCorporateUpload = true;
+    
+    // Dynamically shift the hero dashboard labels to match their premium corporate branding
+    const heroBadge = document.querySelector('.hero-badge');
+    if (heroBadge) heroBadge.innerHTML = `🏢 Secure Enterprise Environment · ${companyName}`;
+    
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle) heroTitle.innerHTML = `${companyName}<br><span class="gradient-text">Risk Core Terminal</span>`;
+    
+    // Automatically trigger visual resets to show clean state (0 records) waiting for their upload
+    if (typeof window.calculateKPIs === 'function') window.calculateKPIs();
+    if (typeof window.renderCharts === 'function') window.renderCharts();
+    if (typeof window.updateTable === 'function') window.updateTable(1);
+    if (typeof updateKPIs === 'function') updateKPIs();
+    if (typeof renderCharts === 'function') renderCharts();
+    if (typeof renderBusinessInsights === 'function') renderBusinessInsights();
+    if (typeof checkRiskAlert === 'function') checkRiskAlert();
+    if (typeof renderPersonas === 'function') renderPersonas();
+    if (typeof renderFinancialDashboard === 'function') renderFinancialDashboard();
+    if (typeof renderVIP === 'function') renderVIP();
+    if (typeof renderBudget === 'function') renderBudget();
+    if (typeof updateWhatIf === 'function') updateWhatIf();
+    if (typeof applyFilters === 'function') applyFilters();
+    
+    // Force reveal the secure Corporate Data Upload Hub instantly
+    const uploadHub = document.getElementById('corporate-upload-hub');
+    if (uploadHub) uploadHub.style.display = 'block';
 };
 
 window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
@@ -1797,6 +1824,24 @@ window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
           untappedPct: clusterStats.filter(c => c.name === 'Careful').reduce((s, c) => s + c.count, 0)
             ? ((clusterStats.find(c => c.name === 'Careful').count / allData.length) * 100).toFixed(1) : '0',
         };
+
+        const compName = (window.authenticatedCompanyName || '').toLowerCase();
+        const targetFormWrapper = document.getElementById('sector-specific-fields-wrapper');
+        let sectorMarkup = '';
+
+        if (compName.includes('bank') || compName.includes('finans')) {
+            sectorMarkup = `<div class="form-group"><label class="form-label">Institutional Asset Leverage Ratio (Tier 1)</label><input type="range" class="range-input" min="1" max="100" value="45"/><div class="range-labels"><span>Stable Capital</span><span>Highly Leveraged Limit</span></div></div>`;
+        } else if (compName.includes('logistics') || compName.includes('kargo') || compName.includes('dhl')) {
+            sectorMarkup = `<div class="form-group"><label class="form-label">Supply Chain Fuel Price Shock Index</label><input type="range" class="range-input" min="1" max="100" value="60"/><div class="range-labels"><span>Baseline Margin</span><span>Volatile Risk Cost</span></div></div>`;
+        } else if (compName.includes('retail') || compName.includes('market') || compName.includes('shop')) {
+            sectorMarkup = `<div class="form-group"><label class="form-label">Inventory Disruption Index</label><input type="range" class="range-input" min="1" max="100" value="50"/><div class="range-labels"><span>Optimized Turnover</span><span>Severe Delay State</span></div></div>`;
+        } else {
+            sectorMarkup = `<div class="form-group"><label class="form-label">Standard Corporate Risk Velocity Margin</label><input type="range" class="range-input" min="1" max="100" value="30"/><div class="range-labels"><span>Conservative</span><span>Aggressive</span></div></div>`;
+        }
+
+        if (targetFormWrapper) {
+            targetFormWrapper.innerHTML = sectorMarkup;
+        }
 
         // Destroy existing Chart.js instances to ensure clean redraw
         const chartIds = ['riskDonutChart', 'scatterChart', 'histogramChart', 'ageRiskChart', 'sectorRiskChart'];
