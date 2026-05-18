@@ -2561,6 +2561,13 @@ function renderTable() {
   }
   renderPagination();
   highlightRiskyRows();
+
+  const footerMeta = document.getElementById('footer-dynamic-meta');
+  if (footerMeta) {
+      const recordCount = (window.customersData && window.customersData.length > 0) ? window.customersData.length : 1000;
+      const currentSectorName = window.authenticatedCompanyName ? `Active Tenant: ${window.authenticatedCompanyName}` : 'Simulation Showroom Sample';
+      footerMeta.innerHTML = `B2B Risk Analytics Core &bull; ${currentSectorName} &bull; <b>${recordCount.toLocaleString()}</b> active portfolio record(s) parsed.`;
+  }
 }
 
 /* ── Audit Modal Logic ──────────────────────────────────── */
