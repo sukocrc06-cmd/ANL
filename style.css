@@ -6095,3 +6095,6 @@ div[style*='display'] {
     opacity: 0 !important;
     visibility: hidden !important;
 }
+
+/* ── CORPORATE TICKER MARQUEE RIBBON ── */
+.corporate-ticker-ribbon { width: 100%; overflow: hidden; background: rgba(30, 41, 59, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding: 0.75rem 0; font-family: monospace; font-size: 0.85rem; color: #94a3b8; letter-spacing: 0.1em; } .ticker-track { display: flex; gap: 3rem; white-space: nowrap; animation: scrollTicker 25s linear infinite; } @keyframes scrollTicker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }

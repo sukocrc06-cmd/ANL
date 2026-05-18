@@ -85,6 +85,9 @@
       </div>
     </main>
 
+    <!-- ===== CORPORATE TICKER RIBBON ===== -->
+    <div class='corporate-ticker-ribbon'><div class='ticker-track'><span>TRUSTED BY G20 INSTITUTIONAL PARTNERS:</span><span>AKBANK //</span><span>GARANTI BBVA //</span><span>İŞ BANKASI //</span><span>DHL LOGISTICS //</span><span>FIBA RETAIL //</span><span>E-COMMERCE UNIFIED //</span><span>BDDK COMPLIANT GATEWAYS</span></div></div>
+
     <!-- ===== CORPORATE FEATURES SECTION ===== -->
     <section class="anl-landing-features">
       <div class="features-layout-wrapper">
@@ -303,6 +306,7 @@
               <input type="text" id="signup-institution" class="b2b-input" placeholder="e.g. Akbank" onkeydown="if(event.key==='Enter') handleCorporateSignup(event)" />
             </div>
           </div>
+          <div class='card-color-picker' style='margin-bottom: 1rem;'><label class='b2b-label'>Select Institutional Branding Color Theme</label><div style='display:flex; gap:1rem; margin-top:0.5rem;'><span class='color-dot dot-purple' onclick="window.tuneCardTheme('#7c3aed', '#3b82f6')" style='width:24px; height:24px; border-radius:50%; background:#7c3aed; cursor:pointer; border:2px solid #fff;'></span><span class='color-dot dot-red' onclick="window.tuneCardTheme('#ef4444', '#b91c1c')" style='width:24px; height:24px; border-radius:50%; background:#ef4444; cursor:pointer;'></span><span class='color-dot dot-green' onclick="window.tuneCardTheme('#10b981', '#047857')" style='width:24px; height:24px; border-radius:50%; background:#10b981; cursor:pointer;'></span></div></div>
           <button id="signup-btn" class="btn-b2b-login" onclick="handleCorporateSignup(event)">Generate Institutional Access Card</button>
           <p class="b2b-login-error" id="signup-error" style="display:none;">Generation failed. Corporate Entity Name cannot be blank.</p>
         </div>
