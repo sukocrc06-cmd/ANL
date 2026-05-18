@@ -1526,10 +1526,41 @@ window.handleCorporateLogin = function (event) {
   }, 600);
 };
 
+window.adaptPredictiveFormLabels = function() {
+    const compName = (window.authenticatedCompanyName || '').toLowerCase();
+    
+    // Extract target label DOM elements safely
+    const labelIncome = document.querySelector("label[for='p-income']") || document.querySelector("#p-income").previousElementSibling;
+    const labelSpending = document.querySelector("label[for='p-spending']") || document.querySelector("#p-spending").previousElementSibling;
+    const labelCredit = document.querySelector("label[for='p-credit']") || document.querySelector("#p-credit").previousElementSibling;
+    
+    if (!labelIncome || !labelSpending || !labelCredit) return;
+
+    if (compName.includes('bank') || compName.includes('finans')) {
+        labelIncome.innerHTML = '💵 Annual Institutional Liquidity: <span id="income-val">60</span> (k$)';
+        labelSpending.innerHTML = '📉 Credit Default Probability Weight: <span id="spending-val">50</span> (1-100)';
+        labelCredit.innerHTML = '🛡️ Core Capital Adequacy Ratio (CAR): <span id="credit-val">650</span>';
+    } else if (compName.includes('logistics') || compName.includes('kargo') || compName.includes('dhl')) {
+        labelIncome.innerHTML = '🚛 Active Fleet Carriage Capacity: <span id="income-val">60</span> (Tons)';
+        labelSpending.innerHTML = '⛽ Fuel Price Exposure Sensitivity: <span id="spending-val">50</span> (1-100)';
+        labelCredit.innerHTML = '🗺️ Route Supply Chain Optimization Index: <span id="credit-val">650</span>';
+    } else if (compName.includes('tech') || compName.includes('soft') || compName.includes('ai')) {
+        labelIncome.innerHTML = '💻 Annual Recurring Revenue (ARR): <span id="income-val">60</span> (k$)';
+        labelSpending.innerHTML = '🔥 Net Dollar Retention (NDR) Velocity: <span id="spending-val">50</span> (1-100)';
+        labelCredit.innerHTML = '⚡ Cloud Infrastructure Margin Security: <span id="credit-val">650</span>';
+    } else {
+        // Standard baseline fallback layout parameters
+        labelIncome.innerHTML = 'Annual Income: <span id="income-val">60</span> (k$)';
+        labelSpending.innerHTML = 'Spending Score: <span id="spending-val">50</span> (1-100)';
+        labelCredit.innerHTML = 'Global Credit Score: <span id="credit-val">650</span>';
+    }
+};
+
 window.initializeAuthenticatedCorporateSession = function(companyName) {
     // Set global runtime state to commercial mode
     window.isCommercialPremiumSession = true;
     window.authenticatedCompanyName = companyName;
+    window.adaptPredictiveFormLabels();
     
     // Flush the synthetic demo simulation array completely to provide a clean environment
     window.customersData = [];
@@ -2749,30 +2780,40 @@ window.analyzeCustomer = function () {
   }
 
   /* Show panel */
-  document.getElementById('result-placeholder').style.display = 'none';
+  const phEl = document.getElementById('result-placeholder');
+  if (phEl) phEl.style.display = 'none';
   const rc = document.getElementById('result-content');
-  rc.style.display = 'block';
+  if (rc) rc.style.display = 'block';
 
   /* Risk badge */
   const badge = document.getElementById('result-risk-badge');
-  badge.className = `result-risk-badge risk-badge ${rClass}`;
-  badge.textContent = `${rIcon} ${level}`;
+  if (badge) {
+    badge.className = `result-risk-badge risk-badge ${rClass}`;
+    badge.textContent = `${rIcon} ${level}`;
+  }
 
   /* Credit score ring */
   const pct = (score - 300) / 700;
   const circ = 2 * Math.PI * 50;
   const fill = document.getElementById('ring-fill');
-  fill.style.strokeDasharray = circ;
-  fill.style.strokeDashoffset = circ * (1 - Math.max(0, Math.min(1, pct)));
-  fill.style.stroke = color;
+  if (fill) {
+    fill.style.strokeDasharray = circ;
+    fill.style.strokeDashoffset = circ * (1 - Math.max(0, Math.min(1, pct)));
+    fill.style.stroke = color;
+  }
   const scoreEl = document.getElementById('ring-score');
   let cur = 300;
-  const iv = setInterval(() => { cur = Math.min(cur + 15, score); scoreEl.textContent = cur; if (cur >= score) clearInterval(iv); }, 16);
+  if (scoreEl) {
+    const iv = setInterval(() => { cur = Math.min(cur + 15, score); if (scoreEl) scoreEl.textContent = cur; if (cur >= score) clearInterval(iv); }, 16);
+  }
 
   /* Metrics */
-  document.getElementById('res-cluster').textContent = `Cluster ${cluster} — ${segment}`;
-  document.getElementById('res-profile').textContent = `${label} · B2B Corporate Client`;
-  document.getElementById('res-recommend').textContent = recommend;
+  const resCluster = document.getElementById('res-cluster');
+  if (resCluster) resCluster.textContent = `Cluster ${cluster} — ${segment}`;
+  const resProfile = document.getElementById('res-profile');
+  if (resProfile) resProfile.textContent = `${label} · B2B Corporate Client`;
+  const resRecommend = document.getElementById('res-recommend');
+  if (resRecommend) resRecommend.textContent = recommend;
 
   const calculatedRiskLevel = level;
   window.lastCalculatedRiskLevel = level;
@@ -2807,25 +2848,31 @@ window.analyzeCustomer = function () {
   const sN = Math.round((100 - spending) / 99 * 100);
   const cN = Math.round((baseCredit - 300) / 600 * 100);
   setTimeout(() => {
-    document.getElementById('bar-income').style.width = iN + '%';
-    document.getElementById('bar-spending').style.width = sN + '%';
+    const barInc = document.getElementById('bar-income');
+    if (barInc) barInc.style.width = iN + '%';
+    const barSp = document.getElementById('bar-spending');
+    if (barSp) barSp.style.width = sN + '%';
     const barCredit = document.getElementById('bar-credit');
-    if(barCredit) barCredit.style.width = cN + '%';
-    document.getElementById('pct-income').textContent = iN + '%';
-    document.getElementById('pct-spending').textContent = sN + '%';
+    if (barCredit) barCredit.style.width = cN + '%';
+    const pctInc = document.getElementById('pct-income');
+    if (pctInc) pctInc.textContent = iN + '%';
+    const pctSp = document.getElementById('pct-spending');
+    if (pctSp) pctSp.textContent = sN + '%';
     const pctCredit = document.getElementById('pct-credit');
-    if(pctCredit) pctCredit.textContent = cN + '%';
+    if (pctCredit) pctCredit.textContent = cN + '%';
   }, 80);
 
   /* Business Insight */
-  let insightEl = document.getElementById('result-insight');
-  if (!insightEl) {
-    insightEl = document.createElement('div');
-    insightEl.id = 'result-insight';
-    rc.appendChild(insightEl);
+  if (rc) {
+    let insightEl = document.getElementById('result-insight');
+    if (!insightEl) {
+      insightEl = document.createElement('div');
+      insightEl.id = 'result-insight';
+      rc.appendChild(insightEl);
+    }
+    insightEl.className = `result-insight-box insight-${rClass}`;
+    insightEl.innerHTML = `<span class="insight-label">📊 Structured Risk Mitigation Summary</span><p>${insight}</p>`;
   }
-  insightEl.className = `result-insight-box insight-${rClass}`;
-  insightEl.innerHTML = `<span class="insight-label">📊 Structured Risk Mitigation Summary</span><p>${insight}</p>`;
 
   /* Store for chat context & update dashboard metrics array */
   window._lastAnalysis = { baseCredit, income, spending, score, level, segment, label, cluster, paymentStatus, finalPd, sectorMetric1, sectorMetric2, sectorDetailsText };
@@ -2849,6 +2896,62 @@ window.analyzeCustomer = function () {
       setTimeout(() => fireConfettiCelebration(), 300);
     }
   }
+
+  // Render the premium corporate Decision Support Sheet exactly when analysis resolves
+  if (typeof window.renderProfessionalIntelligenceSheet === 'function') {
+    window.renderProfessionalIntelligenceSheet(level, income, spending, baseCredit);
+  }
+};
+
+window.renderProfessionalIntelligenceSheet = function(calculatedRisk, income, spending, credit) {
+    const compName = (window.authenticatedCompanyName || 'Corporate').toUpperCase();
+    const cleanComp = compName.replace(/\s+/g, '');
+    const targetDisplay = document.getElementById('predict-result-card'); // ensure mapping to results div node
+    if (!targetDisplay) return;
+    
+    // Read dynamic values allocated from our active credit policy handlers
+    const activePolicy = window.lastAnalyzedClientPolicy || { rate: '22%', limit: '$50k', action: 'Manual Review' };
+    
+    let operationalVerdictHTML = '';
+    
+    if (compName.includes('BANK') || compName.includes('FINANS')) {
+        operationalVerdictHTML = `
+            <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
+                <div style="font-family: monospace; font-size: 0.75rem; color: #38bdf8; margin-bottom: 0.5rem;">[B2B_CREDIT_INTELLIGENCE_LEAF]</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">STATUS: ${calculatedRisk.toUpperCase()}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
+                    <div>• <b>Capital Underwriting Action:</b> <span style="color:#fbbf24">${activePolicy.action}</span></div>
+                    <div>• <b>Assigned Pricing Rate (APR):</b> ${activePolicy.rate}</div>
+                    <div>• <b>Maximum Credit Facility Limit:</b> ${activePolicy.limit}</div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4px; padding-top: 4px; font-size: 0.75rem; color:#64748b;">System Hash Reference: ${cleanComp}-BK-${credit}</div>
+                </div>
+            </div>`;
+    } else if (compName.includes('LOGISTICS') || compName.includes('KARGO') || compName.includes('DHL')) {
+        operationalVerdictHTML = `
+            <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
+                <div style="font-family: monospace; font-size: 0.75rem; color: #60a5fa; margin-bottom: 0.5rem;">[SUPPLY_CHAIN_RISK_MATRIX]</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">ROUTE STATE: ${calculatedRisk === 'High Risk' ? 'CRITICAL DISRUPTION' : 'STABLE MARGIN'}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
+                    <div>• <b>Logistics Allocation Rule:</b> ${calculatedRisk === 'High Risk' ? 'Hold Shipment / Escrow Escalate' : 'Auto-Route Manifest'}</div>
+                    <div>• <b>Route Fuel Shock Factor:</b> ${spending > 60 ? 'Severe Exposure' : 'Nominal Volatility'}</div>
+                    <div>• <b>Operational Fleet Safety Score:</b> ${credit} / 900</div>
+                </div>
+            </div>`;
+    } else {
+        // Standard tech/SaaS core parameters breakdown layout
+        operationalVerdictHTML = `
+            <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
+                <div style="font-family: monospace; font-size: 0.75rem; color: #a855f7; margin-bottom: 0.5rem;">[SaaS_CHURN_PREDICTION_LOG]</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">CHURN RISK: ${calculatedRisk.toUpperCase()}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
+                    <div>• <b>Customer Retention Workflow:</b> ${calculatedRisk === 'High Risk' ? 'Trigger VIP Retention Playbook' : 'Standard Automated Billing'}</div>
+                    <div>• <b>Contract Attrition Velocity:</b> ${spending}% Margin Deflection</div>
+                    <div>• <b>Account Health Score Index:</b> ${credit} Base Points</div>
+                </div>
+            </div>`;
+    }
+    
+    targetDisplay.innerHTML = operationalVerdictHTML;
 };
 
 /* ── Add to Monitored Client Ledger ──────────────────────────── */
