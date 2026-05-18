@@ -651,6 +651,7 @@
         <div style="font-size: 0.85rem; color: var(--text-400);">or click to browse local filesystem (Income, SpendingScore, Age, CreditScore, CompanyType)</div>
         <input type="file" id="corporate-csv-uploader" accept=".csv" style="display:none;" onchange="handleCorporateCSVUpload(event)" />
       </div>
+      <div id='corporate-upload-history-row' style='margin-top: 1.5rem; display: none; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;'><div style='font-family: monospace; font-size: 0.8rem; color: #38bdf8; margin-bottom: 0.5rem;'>📋 RECENT ENTITY UPLOADS / HISTORY LOG:</div><div id='upload-history-chips-pool' style='display: flex; flex-wrap: wrap; gap: 0.5rem;'></div></div>
       <!-- Data Integrity Loading Animation Wrapper -->
       <div id="data-integrity-loader" style="display: none; margin-top: 1rem; border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 3rem 2rem; text-align: center; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(8px);">
         <div class="loader-spinner" style="font-size: 2.5rem; margin-bottom: 1rem; display: inline-block;">🔄</div>
@@ -659,6 +660,7 @@
         <div class="progress-bar-container" style="max-width: 400px; margin: 0 auto; height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.15);">
           <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #7c3aed, #3b82f6); border-radius: 10px; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);"></div>
         </div>
+        <div id='data-integrity-live-logs' style='max-width: 400px; margin: 1rem auto 0 auto; text-align: left; font-family: monospace; font-size: 0.8rem; color: #94a3b8; display: flex; flex-direction: column; gap: 4px;'></div>
       </div>
     </div>
 
