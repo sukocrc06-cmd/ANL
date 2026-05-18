@@ -306,6 +306,15 @@
               <input type="text" id="signup-institution" class="b2b-input" placeholder="e.g. Akbank" onkeydown="if(event.key==='Enter') handleCorporateSignup(event)" />
             </div>
           </div>
+          <div class="form-group" style="margin-top: 1rem; margin-bottom: 1rem;">
+              <label class="form-label" style="display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem;">Select Business Sector</label>
+              <select id="signup-sector-select" class="form-input" style="background: rgba(15, 23, 42, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 0.75rem; border-radius: 8px; width: 100%; font-family: sans-serif;">
+                  <option value="bank">🏦 Banking & Finance</option>
+                  <option value="logistics">🚛 Logistics & Supply Chain</option>
+                  <option value="tech">💻 Technology & SaaS Startups</option>
+                  <option value="retail">🛒 Retail & E-Commerce</option>
+              </select>
+          </div>
           <div class='card-color-picker' style='margin-bottom: 1rem;'><label class='b2b-label'>Select Institutional Branding Color Theme</label><div style='display:flex; gap:1rem; margin-top:0.5rem;'><span class='color-dot dot-purple' onclick="window.tuneCardTheme('#7c3aed', '#3b82f6')" style='width:24px; height:24px; border-radius:50%; background:#7c3aed; cursor:pointer; border:2px solid #fff;'></span><span class='color-dot dot-red' onclick="window.tuneCardTheme('#ef4444', '#b91c1c')" style='width:24px; height:24px; border-radius:50%; background:#ef4444; cursor:pointer;'></span><span class='color-dot dot-green' onclick="window.tuneCardTheme('#10b981', '#047857')" style='width:24px; height:24px; border-radius:50%; background:#10b981; cursor:pointer;'></span></div></div>
           <button id="signup-btn" class="btn-b2b-login" onclick="handleCorporateSignup(event)">Generate Institutional Access Card</button>
           <p class="b2b-login-error" id="signup-error" style="display:none;">Generation failed. Corporate Entity Name cannot be blank.</p>

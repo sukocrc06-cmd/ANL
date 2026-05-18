@@ -1259,6 +1259,7 @@ window.handleCorporateSignup = function (event) {
 
   if (errorEl) errorEl.style.display = 'none';
 
+  window.currentCorporateSector = document.getElementById('signup-sector-select')?.value || 'bank';
   const orgName = institution || 'CORP';
   const cleanComp = orgName.replace(/\s+/g, '').toUpperCase();
   const randomSalt = Math.floor(1000 + Math.random() * 9000);
@@ -1270,7 +1271,8 @@ window.handleCorporateSignup = function (event) {
     username: generatedUser,
     password: generatedPass,
     email: `${generatedUser}@${cleanComp.toLowerCase()}.com`,
-    institution: institution
+    institution: institution,
+    sector: window.currentCorporateSector
   };
 
   window.activeCorporateCard = cardData;
@@ -1344,6 +1346,7 @@ window.proceedToLoginFromCard = function () {
     if (loginUsernameInp) loginUsernameInp.value = card.username || card.email || '';
     if (loginPassInp) loginPassInp.value = card.password || '';
     if (loginCompanyInp) loginCompanyInp.value = card.company || card.institution || '';
+    if (card.sector) window.currentCorporateSector = card.sector;
   }
 
   window.navigateToView('login-modal', true);
@@ -2746,16 +2749,77 @@ window.analyzeCustomer = function () {
   finalPd = parseFloat(Math.max(0.1, Math.min(99.9, finalPd)).toFixed(2));
   let score = Math.round(Math.max(300, Math.min(1000, rawScore - sectorPenalty)));
 
-  // Determine risk category dynamically pushed by final stressed PD
-  let level, color, rClass, rIcon;
-  if (finalPd >= 40) {
-    level = 'High Risk';
-  } else if (finalPd >= 18) {
-    level = 'Medium Risk';
-  } else {
-    level = 'Low Risk';
+  // Extract current enterprise scope context
+  const selectedSector = window.currentCorporateSector || 'bank'; // baseline fallback
+  const valIncome = parseFloat(document.getElementById('p-income')?.value || income);
+  const valSpending = parseFloat(document.getElementById('p-spending')?.value || spending);
+  const valCredit = parseFloat(document.getElementById('p-credit')?.value || baseCredit);
+
+  let computedRisk = "Low Risk";
+  let operationalCluster = "Premium Loyalty";
+  let recommendationText = "Standard Operations";
+
+  // Execute calculation formulas targeting the explicit chosen sector directly
+  if (selectedSector === 'bank') {
+      if (valCredit < 500 || valSpending > 70) {
+          computedRisk = "High Risk";
+          operationalCluster = "High Default Threat";
+          recommendationText = "Freeze credit expansion lines, enforce collateral collection.";
+      } else if (valCredit < 720) {
+          computedRisk = "Medium Risk";
+          operationalCluster = "Moderate Volatility";
+          recommendationText = "Restrict maximum credit facility caps, mandate dual officer audits.";
+      } else {
+          computedRisk = "Low Risk";
+          operationalCluster = "Tier 1 Capital Secure";
+          recommendationText = "Execute auto-approve priority credit underwriting instantly.";
+      }
+  } else if (selectedSector === 'logistics') {
+      if (valSpending > 65 || valIncome < 50) {
+          computedRisk = "High Risk";
+          operationalCluster = "Severe Fuel & Route Exposure";
+          recommendationText = "Suspend active carrier manifests, freeze escrow, move client to cash-only payment.";
+      } else if (valSpending > 40) {
+          computedRisk = "Medium Risk";
+          operationalCluster = "Volatile Margin Shock";
+          recommendationText = "Mandate fuel hedge insurance coverage, audit route delivery metrics weekly.";
+      } else {
+          computedRisk = "Low Risk";
+          operationalCluster = "Optimized Fleet Secure";
+          recommendationText = "Approve long-term automated multi-route logistics line expansion.";
+      }
+  } else if (selectedSector === 'tech') {
+      if (valSpending > 75 || valCredit < 450) {
+          computedRisk = "High Risk";
+          operationalCluster = "Critical Churn Velocity";
+          recommendationText = "Trigger immediate automated account executive retention playbooks, audit net retention.";
+      } else if (valSpending > 45) {
+          computedRisk = "Medium Risk";
+          operationalCluster = "Unstable Contract Expansion";
+          recommendationText = "Downgrade premium server capacity limits, restrict automated monthly cloud credit advances.";
+      } else {
+          computedRisk = "Low Risk";
+          operationalCluster = "High Net Retention Stable";
+          recommendationText = "Allocate dedicated enterprise solutions engineers, approve custom API tier expansion.";
+      }
+  } else if (selectedSector === 'retail') {
+      if (valSpending > 60 && valIncome < 40) {
+          computedRisk = "High Risk";
+          operationalCluster = "Severe Inventory Disruption";
+          recommendationText = "Halt supply dispatch chains, demand immediate upfront payment settlement frames.";
+      } else if (valSpending > 35) {
+          computedRisk = "Medium Risk";
+          operationalCluster = "Delayed Supply Velocity";
+          recommendationText = "Restrict automated credit terms, request bi-weekly turnover ledger balances.";
+      } else {
+          computedRisk = "Low Risk";
+          operationalCluster = "High Asset Turnover Stable";
+          recommendationText = "Authorize maximum inventory wholesale dispatch caps, deploy loyalty bonuses.";
+      }
   }
 
+  let level = computedRisk;
+  let color, rClass, rIcon;
   if (level === 'High Risk') {
     color = '#f87171'; rClass = 'risk-high'; rIcon = '🔴';
   } else if (level === 'Medium Risk') {
@@ -2765,19 +2829,8 @@ window.analyzeCustomer = function () {
   }
 
   const { cluster, segment, label } = segmentCustomer(income, spending);
-  
-  let insight = '';
-  let recommend = '';
-  if (level === 'High Risk') {
-    insight = `Corporate audit indicates severe exposure. Baseline credit of ${baseCredit} and spending score of ${spending} highlight substantial default probability (${finalPd}% PD).`;
-    recommend = '🚨 Enforce stringent credit limits immediately.';
-  } else if (level === 'Medium Risk') {
-    insight = `Audited client shows moderate stability. Balance of $${income}k income versus ${spending} spending requires structured monitoring (${finalPd}% PD).`;
-    recommend = '🔍 Schedule quarterly financial review.';
-  } else {
-    insight = `Prime corporate candidate. High baseline credit (${baseCredit}) paired with strong income ($${income}k) indicates minimal institutional risk (${finalPd}% PD).`;
-    recommend = '💎 Approved for premium B2B tier.';
-  }
+  let insight = recommendationText;
+  let recommend = recommendationText;
 
   /* Show panel */
   const phEl = document.getElementById('result-placeholder');
@@ -2809,14 +2862,14 @@ window.analyzeCustomer = function () {
 
   /* Metrics */
   const resCluster = document.getElementById('res-cluster');
-  if (resCluster) resCluster.textContent = `Cluster ${cluster} — ${segment}`;
+  if (resCluster) resCluster.textContent = `Cluster ${cluster} — ${operationalCluster}`;
   const resProfile = document.getElementById('res-profile');
   if (resProfile) resProfile.textContent = `${label} · B2B Corporate Client`;
   const resRecommend = document.getElementById('res-recommend');
   if (resRecommend) resRecommend.textContent = recommend;
 
   const calculatedRiskLevel = level;
-  window.lastCalculatedRiskLevel = level;
+  window.lastCalculatedRiskLevel = computedRisk;
   let assignedRate = "14%";
   let assignedLimit = "$150k";
   let assignedAction = "Auto-Approve";
@@ -2897,9 +2950,9 @@ window.analyzeCustomer = function () {
     }
   }
 
-  // Render the premium corporate Decision Support Sheet exactly when analysis resolves
+  // Instantly execute the specialized professional UI sheet renderer
   if (typeof window.renderProfessionalIntelligenceSheet === 'function') {
-    window.renderProfessionalIntelligenceSheet(level, income, spending, baseCredit);
+    window.renderProfessionalIntelligenceSheet(computedRisk, valIncome, valSpending, valCredit);
   }
 };
 
@@ -2911,14 +2964,15 @@ window.renderProfessionalIntelligenceSheet = function(calculatedRisk, income, sp
     
     // Read dynamic values allocated from our active credit policy handlers
     const activePolicy = window.lastAnalyzedClientPolicy || { rate: '22%', limit: '$50k', action: 'Manual Review' };
+    const selectedSector = window.currentCorporateSector || 'bank';
     
     let operationalVerdictHTML = '';
     
-    if (compName.includes('BANK') || compName.includes('FINANS')) {
+    if (selectedSector === 'bank' || compName.includes('BANK') || compName.includes('FINANS')) {
         operationalVerdictHTML = `
             <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
                 <div style="font-family: monospace; font-size: 0.75rem; color: #38bdf8; margin-bottom: 0.5rem;">[B2B_CREDIT_INTELLIGENCE_LEAF]</div>
-                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">STATUS: ${calculatedRisk.toUpperCase()}</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d39 '+ '9'}">STATUS: ${calculatedRisk.toUpperCase()}</div>
                 <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
                     <div>• <b>Capital Underwriting Action:</b> <span style="color:#fbbf24">${activePolicy.action}</span></div>
                     <div>• <b>Assigned Pricing Rate (APR):</b> ${activePolicy.rate}</div>
@@ -2926,15 +2980,26 @@ window.renderProfessionalIntelligenceSheet = function(calculatedRisk, income, sp
                     <div style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4px; padding-top: 4px; font-size: 0.75rem; color:#64748b;">System Hash Reference: ${cleanComp}-BK-${credit}</div>
                 </div>
             </div>`;
-    } else if (compName.includes('LOGISTICS') || compName.includes('KARGO') || compName.includes('DHL')) {
+    } else if (selectedSector === 'logistics' || compName.includes('LOGISTICS') || compName.includes('KARGO') || compName.includes('DHL')) {
         operationalVerdictHTML = `
             <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
                 <div style="font-family: monospace; font-size: 0.75rem; color: #60a5fa; margin-bottom: 0.5rem;">[SUPPLY_CHAIN_RISK_MATRIX]</div>
-                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">ROUTE STATE: ${calculatedRisk === 'High Risk' ? 'CRITICAL DISRUPTION' : 'STABLE MARGIN'}</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d39 '+ '9'}">ROUTE STATE: ${calculatedRisk === 'High Risk' ? 'CRITICAL DISRUPTION' : 'STABLE MARGIN'}</div>
                 <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
                     <div>• <b>Logistics Allocation Rule:</b> ${calculatedRisk === 'High Risk' ? 'Hold Shipment / Escrow Escalate' : 'Auto-Route Manifest'}</div>
                     <div>• <b>Route Fuel Shock Factor:</b> ${spending > 60 ? 'Severe Exposure' : 'Nominal Volatility'}</div>
                     <div>• <b>Operational Fleet Safety Score:</b> ${credit} / 900</div>
+                </div>
+            </div>`;
+    } else if (selectedSector === 'retail' || compName.includes('RETAIL') || compName.includes('MARKET') || compName.includes('SHOP')) {
+        operationalVerdictHTML = `
+            <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
+                <div style="font-family: monospace; font-size: 0.75rem; color: #f59e0b; margin-bottom: 0.5rem;">[RETAIL_INVENTORY_DISPATCH_LOG]</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d39 '+ '9'}">INVENTORY STATE: ${calculatedRisk.toUpperCase()}</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
+                    <div>• <b>Retail Allocation Rule:</b> ${calculatedRisk === 'High Risk' ? 'Halt Supply Dispatch Chains' : 'Authorize Maximum Wholesale Caps'}</div>
+                    <div>• <b>Supply Velocity Shock:</b> ${spending > 60 ? 'Severe Exposure' : 'Nominal Volatility'}</div>
+                    <div>• <b>Asset Turnover Index:</b> ${credit} Base Points</div>
                 </div>
             </div>`;
     } else {
@@ -2942,7 +3007,7 @@ window.renderProfessionalIntelligenceSheet = function(calculatedRisk, income, sp
         operationalVerdictHTML = `
             <div style="background: rgba(15,23,42,0.6); border: 1px solid rgba(56,189,248,0.2); padding: 1.25rem; border-radius: 8px; font-family: sans-serif;">
                 <div style="font-family: monospace; font-size: 0.75rem; color: #a855f7; margin-bottom: 0.5rem;">[SaaS_CHURN_PREDICTION_LOG]</div>
-                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d399'}">CHURN RISK: ${calculatedRisk.toUpperCase()}</div>
+                <div style="font-size: 1.1rem; font-weight: bold; margin-bottom: 0.75rem; color: ${calculatedRisk === 'High Risk' ? '#ef4444' : '#34d39 '+ '9'}">CHURN RISK: ${calculatedRisk.toUpperCase()}</div>
                 <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: #cbd5e1;">
                     <div>• <b>Customer Retention Workflow:</b> ${calculatedRisk === 'High Risk' ? 'Trigger VIP Retention Playbook' : 'Standard Automated Billing'}</div>
                     <div>• <b>Contract Attrition Velocity:</b> ${spending}% Margin Deflection</div>
