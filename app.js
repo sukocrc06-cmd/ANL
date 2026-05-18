@@ -1629,8 +1629,38 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     const uploadHub = document.getElementById('corporate-upload-hub');
     if (uploadHub) uploadHub.style.display = 'block';
     
+    // Trigger dynamic Aura welcoming framework synchronized with the authenticated industry registry
     if (typeof window.initializeAuraSectorContext === 'function') {
         window.initializeAuraSectorContext();
+    } else {
+        // Fallback runtime context mapping if independent module isn't declared yet
+        const sectorKey = window.currentCorporateSector || 'bank';
+        const activeSector = window.ENTERPRISE_INDUSTRY_REGISTRY ? window.ENTERPRISE_INDUSTRY_REGISTRY[sectorKey] : null;
+        
+        if (activeSector) {
+            const msgText = `Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our system is fully operational and synchronized across your ${activeSector.title} parameters.`;
+            
+            // Fire Speech Synthesis vocal audio loop
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(msgText);
+                utterance.lang = document.getElementById('btn-lang-tr')?.style.background !== 'transparent' ? 'tr-TR' : 'en-US';
+                window.speechSynthesis.speak(utterance);
+            }
+            
+            // Inject clean professional UI summary card into chat logs
+            const chatBox = document.getElementById('chat-messages');
+            if (chatBox) {
+                chatBox.innerHTML = `
+                    <div style='background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2); padding: 1.25rem; border-radius: 10px; font-family: sans-serif;'>
+                        <div style='color: #38bdf8; font-weight: 700; font-size: 1rem; margin-bottom: 0.4rem;'>🔒 AURA INDUSTRIAL HUB: ACTIVE</div>
+                        <div style='color: #cbd5e1; font-size: 0.85rem; line-height: 1.45;'>
+                            ${activeSector.icon} Core telemetry model calibrated for <b>${window.authenticatedCompanyName}</b>.<br>
+                            Monitoring active data vectors for <b>${activeSector.kpi}</b> and operational risk fluctuations in real-time.
+                        </div>
+                    </div>`;
+            }
+        }
     }
 };
 
