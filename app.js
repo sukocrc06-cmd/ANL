@@ -2774,6 +2774,34 @@ window.analyzeCustomer = function () {
   document.getElementById('res-profile').textContent = `${label} · B2B Corporate Client`;
   document.getElementById('res-recommend').textContent = recommend;
 
+  const calculatedRiskLevel = level;
+  window.lastCalculatedRiskLevel = level;
+  let assignedRate = "14%";
+  let assignedLimit = "$150k";
+  let assignedAction = "Auto-Approve";
+
+  if (calculatedRiskLevel === 'Low Risk') {
+      assignedRate = (document.getElementById('pol-rate-low')?.value || '14') + '%';
+      assignedLimit = '$' + (document.getElementById('pol-limit-low')?.value || '150') + 'k';
+      assignedAction = document.getElementById('pol-action-low')?.value || 'auto_approve';
+  } else if (calculatedRiskLevel === 'Medium Risk') {
+      assignedRate = (document.getElementById('pol-rate-med')?.value || '22') + '%';
+      assignedLimit = '$' + (document.getElementById('pol-limit-med')?.value || '50') + 'k';
+      assignedAction = document.getElementById('pol-action-med')?.value || 'manual_review';
+  } else if (calculatedRiskLevel === 'High Risk') {
+      assignedRate = (document.getElementById('pol-rate-high')?.value || '34') + '%';
+      assignedLimit = '$' + (document.getElementById('pol-limit-high')?.value || '15') + 'k';
+      assignedAction = document.getElementById('pol-action-high')?.value || 'freeze_account';
+  }
+
+  // Inject these corporate compliance variables into the global state so the UI and Aura AI can explicitly read them
+  window.lastAnalyzedClientPolicy = { rate: assignedRate, limit: assignedLimit, action: assignedAction };
+
+  const bankingPolicyEl = document.getElementById('res-banking-policy');
+  if (bankingPolicyEl) {
+      bankingPolicyEl.textContent = `Rate: ${assignedRate} | Limit: ${assignedLimit} | Action: ${assignedAction.toUpperCase()}`;
+  }
+
   /* Breakdown bars */
   const iN = Math.round(Math.min(100, (income / 1000) * 100)); // normalized to 1000 max
   const sN = Math.round((100 - spending) / 99 * 100);
@@ -2825,77 +2853,77 @@ window.analyzeCustomer = function () {
 
 /* ── Add to Monitored Client Ledger ──────────────────────────── */
 window.addAuditedClientToLedger = function() {
-  if (!window._lastAnalysis) return;
-  const { baseCredit, income, spending, score, level, segment, label, cluster, paymentStatus, finalPd, sectorMetric1, sectorMetric2, sectorDetailsText } = window._lastAnalysis;
-  
-  let newId = 1;
-  if (allData.length > 0) {
-    newId = Math.max(...allData.map(c => c.CustomerID || c.id || 0)) + 1;
-  }
-
-  const newClient = {
-    CustomerID: newId,
-    id: newId,
-    Gender: 'Corporate', // Fallback for legacy
-    gender: 'Corporate',
-    companyType: paymentStatus ? `Corporate (${paymentStatus.toUpperCase()})` : 'Corporate (REGULAR)',
-    Age: 35,
-    age: 35,
-    AnnualIncome: income,
-    annualIncome: income,
-    SpendingScore: spending,
-    spendingScore: spending,
-    CreditScore: score,
-    creditScore: score,
-    riskLevel: level,
-    cluster: cluster || 0,
-    clusterLabel: segment || label || 'Unassigned',
-    paymentStatus: paymentStatus || 'regular',
-    probabilityOfDefault: finalPd,
-    financialStress: finalPd >= 40 ? 'Severe' : finalPd >= 18 ? 'Moderate' : 'Minimal',
-    sectorMetric1: sectorMetric1,
-    sectorMetric2: sectorMetric2,
-    sectorDetails: sectorDetailsText
-  };
-
-  allData.unshift(newClient);
-  if (window.ANL_DATA && window.ANL_DATA !== allData) {
-    window.ANL_DATA.unshift(newClient);
-  }
-  
-  // Force sort to id-desc so the new client appears at the top of the table
-  currentSort = 'id-desc';
-  const sortSelect = document.getElementById('sort-select');
-  if (sortSelect) sortSelect.value = 'id-desc';
-  
-  currentPage = 1;
-
-  if (typeof applyFilters === 'function') {
-    applyFilters();
-  } else {
-    customers = [...allData];
+    if (!window.customersData) window.customersData = [];
+    
+    // Generate unique dynamic ID sequential tracker
+    const nextId = window.customersData.length > 0 ? Math.max(...window.customersData.map(c => parseInt(c.id || c.CustomerID || 2000))) + 1 : 2001;
+    const incomeInput = parseFloat(document.getElementById('p-income')?.value || 60);
+    const spendingInput = parseFloat(document.getElementById('p-spending')?.value || 50);
+    const creditInput = parseFloat(document.getElementById('p-credit')?.value || 650);
+    const companyTypeInput = window.authenticatedCompanyName || 'Corporate_Client';
+    
+    // Establish risk segment mapping identical to the analytical engine parameters
+    const calculatedRisk = window.lastCalculatedRiskLevel || 'Low Risk';
+    
+    const newClientObj = {
+        id: nextId,
+        CustomerID: nextId,
+        CompanyType: companyTypeInput,
+        companyType: companyTypeInput,
+        Age: Math.floor(25 + Math.random() * 40),
+        age: Math.floor(25 + Math.random() * 40),
+        income: incomeInput,
+        'Annual Income (k$)': incomeInput,
+        AnnualIncome: incomeInput,
+        annualIncome: incomeInput,
+        spendingScore: spendingInput,
+        'Spending Score (1-100)': spendingInput,
+        SpendingScore: spendingInput,
+        creditScore: creditInput,
+        CreditScore: creditInput,
+        riskLevel: calculatedRisk,
+        clusterLabel: calculatedRisk === 'High Risk' ? 'Careless' : (calculatedRisk === 'Medium Risk' ? 'Sensible' : 'Target'),
+        cluster: calculatedRisk === 'High Risk' ? 0 : (calculatedRisk === 'Medium Risk' ? 2 : 4),
+        Cluster: calculatedRisk === 'High Risk' ? 'High Risk Default' : (calculatedRisk === 'Medium Risk' ? 'Moderate Volatility' : 'Premium Loyalty'),
+        probabilityOfDefault: window._lastAnalysis ? window._lastAnalysis.finalPd : (calculatedRisk === 'High Risk' ? 45 : (calculatedRisk === 'Medium Risk' ? 25 : 10)),
+        financialStress: calculatedRisk === 'High Risk' ? 'Severe' : (calculatedRisk === 'Medium Risk' ? 'Moderate' : 'Minimal')
+    };
+    
+    // Push to the top of our operational client matrix array
+    window.customersData.unshift(newClientObj);
+    if (typeof allData !== 'undefined' && allData !== window.customersData) allData.unshift(newClientObj);
+    if (typeof window.allData !== 'undefined' && window.allData !== window.customersData) window.allData.unshift(newClientObj);
+    if (typeof customers !== 'undefined' && customers !== window.customersData) customers.unshift(newClientObj);
+    if (typeof window.ANL_DATA !== 'undefined' && window.ANL_DATA !== window.customersData) window.ANL_DATA.unshift(newClientObj);
+    if (typeof window.customerData !== 'undefined' && window.customerData !== window.customersData) window.customerData.unshift(newClientObj);
+    
+    // Instantly force fire all system pipeline recalibrations to live update dashboard KPIs and charts
+    if (typeof window.calculateKPIs === 'function') window.calculateKPIs();
+    if (typeof window.renderCharts === 'function') window.renderCharts();
+    if (typeof window.updateTable === 'function') window.updateTable(1);
+    
+    // Also trigger local cascade refresh functions to guarantee 100% UI consistency across pagination
+    currentSort = 'id-desc';
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) sortSelect.value = 'id-desc';
+    currentPage = 1;
+    if (typeof applyFilters === 'function') applyFilters();
+    if (typeof updateKPIs === 'function') updateKPIs();
+    if (typeof renderCharts === 'function') renderCharts();
+    if (typeof renderBusinessInsights === 'function') renderBusinessInsights();
+    if (typeof checkRiskAlert === 'function') checkRiskAlert();
     if (typeof renderTable === 'function') renderTable();
-  }
 
-  if (typeof updateKPIs === 'function') updateKPIs();
-  if (typeof renderCharts === 'function') renderCharts();
-  if (typeof renderBusinessInsights === 'function') renderBusinessInsights();
-  if (typeof checkRiskAlert === 'function') checkRiskAlert();
+    // Safely toggle button states
+    const saveBtn = document.getElementById('btn-save-email');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.style.opacity = '0.5';
+      saveBtn.style.cursor = 'not-allowed';
+    }
 
-  if (typeof toast === 'function') {
-    toast('info', '✅', 'Ledger Updated', `Audited corporate client #${newId} added. Dashboard updated.`);
-  } else if (typeof showToast === 'function') {
-    showToast({ type: 'info', icon: '✅', title: 'Ledger Updated', msg: `Audited client #${newId} successfully added. Dashboard metrics have been updated.` });
-  } else {
-    alert(`Audited client #${newId} successfully added to ledger.`);
-  }
-
-  const saveBtn = document.getElementById('btn-save-email');
-  if (saveBtn) {
-    saveBtn.disabled = true;
-    saveBtn.style.opacity = '0.5';
-    saveBtn.style.cursor = 'not-allowed';
-  }
+    // Provide visual success feedback loop and safely toggle button states
+    alert(`Successfully integrated client #${nextId} directly into the active corporate monitoring ledger!`);
 };
 
 /* ── Macroeconomic Stress Testing ──────────────────────────── */
