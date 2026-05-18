@@ -641,6 +641,14 @@
         <button class="btn-macro" id="btn-macro-down" onclick="applyMacroScenario('downturn')" style="padding: 0.85rem 1.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(30,41,59,0.8); color: #fff; cursor: pointer; transition: all 0.3s; font-weight: 600;">Economic Downturn (-20% Income)</button>
         <button class="btn-macro" id="btn-macro-inf" onclick="applyMacroScenario('inflation')" style="padding: 0.85rem 1.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(30,41,59,0.8); color: #fff; cursor: pointer; transition: all 0.3s; font-weight: 600;">Severe Inflation (+30% Spending Score)</button>
       </div>
+      <div id="macro-stress-impact-report" style="display: none; margin-top: 1.5rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 1.25rem; text-align: left; font-family: monospace;">
+        <div style="color: #f87171; font-weight: bold; font-size: 0.85rem; margin-bottom: 0.75rem;">🚨 SYSTEM STRESS DISPLACEMENT RUNTIME METRICS:</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; font-size: 0.85rem; color: #cbd5e1;">
+          <div>• Estimated Capital Haircut: <span id="stress-loss-val" style="color: #ef4444; font-weight: bold;">$0k</span></div>
+          <div>• Liquidity Default Count: <span id="stress-count-val" style="color: #fbbf24; font-weight: bold;">0 Clients</span></div>
+          <div>• CAR Ratio Margin Variance: <span id="stress-car-val" style="color: #f87171;">0.00%</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- Financial Dashboard -->

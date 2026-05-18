@@ -124,17 +124,51 @@ window.auditLogs = [];
 window.auditLogPage = 1;
 window.AUDIT_PAGE_SIZE = 5;
 
+window.logSystemActivity = function(actionType, detailsText, statusType = 'SUCCESS') {
+    const tbody = document.getElementById('audit-log-tbody');
+    const footer = document.getElementById('audit-log-footer');
+    if (!tbody) return;
+    
+    if (tbody.children.length === 1 && tbody.textContent.includes('No system audit logs')) {
+        tbody.innerHTML = '';
+    }
+
+    const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+    const userId = window.authenticatedCompanyName ? `anl_${window.authenticatedCompanyName.replace(/\s+/g, '').toLowerCase()}_admin` : 'system_anonymous';
+    
+    const row = document.createElement('tr');
+    row.style.borderBottom = '1px solid rgba(255, 255, 255, 0.05)';
+    row.style.fontFamily = 'monospace';
+    row.style.color = '#cbd5e1';
+    
+    row.innerHTML = `
+        <td style="padding: 0.75rem 1rem; color: #94a3b8;">${timestamp}</td>
+        <td style="padding: 0.75rem 1rem; color: #38bdf8;">${userId}</td>
+        <td style="padding: 0.75rem 1rem; font-weight: bold;">${actionType}</td>
+        <td style="padding: 0.75rem 1rem; color: #cbd5e1;">${detailsText}</td>
+        <td style="padding: 0.75rem 1rem; color: ${statusType === 'SUCCESS' ? '#34d39' + '9' : '#ef4444'}">${statusType}</td>
+    `;
+    
+    tbody.insertBefore(row, tbody.firstChild);
+    
+    // Also keep window.auditLogs array in sync so that [CLEAR_LEDGER] and pagination don't break or collide
+    const entryObj = {
+        timestamp: timestamp,
+        userId: userId,
+        actionType: actionType,
+        details: detailsText,
+        status: statusType
+    };
+    if (!window.auditLogs) window.auditLogs = [];
+    window.auditLogs.unshift(entryObj);
+    if (window.auditLogs.length > 500) window.auditLogs.pop();
+
+    const rowCount = tbody.children.length;
+    if (footer) footer.textContent = `Showing ${rowCount} of ${rowCount} secure log entries`;
+};
+
 window.logSystemAudit = function (actionType, details, statusOutcome) {
-  const entry = {
-    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
-    userId: 'CORP_ADMIN_01',
-    actionType: actionType,
-    details: details,
-    status: statusOutcome || 'SUCCESS'
-  };
-  window.auditLogs.unshift(entry);
-  if (window.auditLogs.length > 500) window.auditLogs.pop();
-  if (typeof window.renderSystemAuditLog === 'function') window.renderSystemAuditLog();
+  window.logSystemActivity(actionType, details, statusOutcome);
 };
 
 window.renderSystemAuditLog = function () {
@@ -2024,8 +2058,8 @@ window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
             showToast({ type: 'success', icon: '📥', title: 'Corporate Hub Sync', msg: `Successfully imported ${parsedRecords.length} institutional records and synchronized AI engine.` });
           }
 
-          if (typeof window.logSystemAudit === 'function') {
-            window.logSystemAudit('CORPORATE_CSV_UPLOAD', `Imported ${parsedRecords.length} corporate records via Data Hub`, 'SUCCESS');
+          if (typeof window.logSystemActivity === 'function') {
+            window.logSystemActivity('CORPORATE_CSV_UPLOAD', `Imported ${parsedRecords.length} corporate records via Data Hub`, 'SUCCESS');
           }
 
           if (typeof window.saveUploadedFileToHistory === 'function') {
@@ -3138,6 +3172,10 @@ window.addAuditedClientToLedger = function() {
       saveBtn.style.cursor = 'not-allowed';
     }
 
+    if (typeof window.logSystemActivity === 'function') {
+      window.logSystemActivity('CUSTOMER_REGISTRATION', `Integrated client #${nextId} into active corporate ledger`, 'SUCCESS');
+    }
+
     // Provide visual success feedback loop and safely toggle button states
     alert(`Successfully integrated client #${nextId} directly into the active corporate monitoring ledger!`);
 };
@@ -3214,8 +3252,82 @@ window.applyMacroScenario = function(type) {
   
   if (typeof checkRiskAlert === 'function') checkRiskAlert();
 
-  if (typeof window.logSystemAudit === 'function') {
-    window.logSystemAudit('MACRO_STRESS_TEST', `Triggered macroeconomic scenario: ${type.toUpperCase()}`, 'SUCCESS');
+  if (typeof window.logSystemActivity === 'function') {
+    window.logSystemActivity('METRIC_STRESS_TEST', 'Displaced macro state to: ' + type);
+  }
+
+  // High-Fidelity Management Impact Reporting & Variance Calculation
+  const impactReport = document.getElementById('macro-stress-impact-report');
+  const lossValEl = document.getElementById('stress-loss-val');
+  const countValEl = document.getElementById('stress-count-val');
+  const carValEl = document.getElementById('stress-car-val');
+
+  if (type === 'base') {
+    if (impactReport) impactReport.style.display = 'none';
+  } else {
+    if (impactReport) impactReport.style.display = 'block';
+
+    // Calculate baseline High Risk count vs Stressed High Risk count
+    const baseHighCount = window._originalAllData.filter(c => (c.riskLevel || '').includes('High')).length;
+    const stressedHighCount = modifiedData.filter(c => (c.riskLevel || '').includes('High')).length;
+    const deltaHigh = stressedHighCount - baseHighCount;
+
+    // Calculate baseline expected default loss vs Stressed expected default loss
+    const calcExpectedLoss = (data) => {
+      return data.reduce((sum, c) => {
+        const inc = c.AnnualIncome !== undefined ? c.AnnualIncome : (c.annualIncome || 60);
+        const cr = c.CreditScore !== undefined ? c.CreditScore : (c.creditScore || 650);
+        const isHigh = (c.riskLevel || '').includes('High');
+        const isMed = (c.riskLevel || '').includes('Medium');
+        const prob = isHigh ? 0.35 : (isMed ? 0.08 : 0.02);
+        return sum + (inc * 1000 * prob * (1 - cr / 1000));
+      }, 0);
+    };
+
+    const baseLoss = calcExpectedLoss(window._originalAllData);
+    const stressedLoss = calcExpectedLoss(modifiedData);
+    const capitalHaircut = Math.max(0, stressedLoss - baseLoss);
+
+    // Calculate CAR Ratio Margin Variance (assuming baseline CAR is 18.50%)
+    const baseCAR = 18.50;
+    const carVariance = -(capitalHaircut / (baseLoss || 1) * 3.5).toFixed(2);
+    const estCAR = (baseCAR + parseFloat(carVariance)).toFixed(2);
+
+    if (lossValEl) lossValEl.textContent = `$${(capitalHaircut / 1000).toLocaleString(undefined, {maximumFractionDigits: 1})}k`;
+    if (countValEl) countValEl.textContent = `${stressedHighCount} Clients (${deltaHigh >= 0 ? '+' : ''}${deltaHigh} Default Delta)`;
+    if (carValEl) carValEl.textContent = `${carVariance}% (Est. CAR: ${estCAR}%)`;
+
+    // Trigger Aura AI Alert message in chat
+    try {
+      const chatMessages = document.querySelector('.chat-messages');
+      if (chatMessages) {
+        const currentSec = window.currentCorporateSector || 'bank';
+        const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY ? (window.ENTERPRISE_INDUSTRY_REGISTRY[currentSec] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank) : { title: "Banking & Finance", icon: "🏦" };
+        const alertMsg = document.createElement('div');
+        alertMsg.className = 'message system-message';
+        alertMsg.innerHTML = `
+          <div class='ai-message-content' style='background:rgba(239, 68, 68, 0.15); border:1px solid rgba(239, 68, 68, 0.3); padding:1rem; border-radius:8px; margin-top:0.5rem;'>
+            <div style='color:#ef4444; font-weight:bold; font-size:1.05rem;'>⚠️ Aura Intelligence Alert: Macroeconomic Stress Displacement</div>
+            <div style='color:#f8fafc; font-size:0.85rem; margin-top:0.4rem; line-height:1.4;'>
+              ${activeConf.icon} <strong>${activeConf.title} Portfolio Stress Test (${type.toUpperCase()}):</strong>
+              <br><span style='color:#fca5a5;'>Estimated Capital Haircut: $${(capitalHaircut / 1000).toLocaleString(undefined, {maximumFractionDigits: 1})}k</span>
+              <br><span style='color:#cbd5e1;'>Liquidity Default Count: ${stressedHighCount} Clients (${deltaHigh >= 0 ? '+' : ''}${deltaHigh} Delta)</span>
+              <br><span style='color:#f87171;'>CAR Ratio Variance: ${carVariance}% (Est. CAR: ${estCAR}%)</span>
+              <br>Our AI engine recommends immediate credit tightening across all Tier 1 exposure lines.
+            </div>
+          </div>`;
+        chatMessages.appendChild(alertMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        if (typeof window.speakAuraResponse === 'function') {
+          window.speakAuraResponse(`Aura Alert. Macroeconomic stress scenario ${type} applied. Estimated capital haircut is ${(capitalHaircut / 1000).toFixed(1)} thousand dollars.`);
+        } else if (typeof window.auraSpeak === 'function') {
+          window.auraSpeak(`Aura Alert. Macroeconomic stress scenario ${type} applied. Estimated capital haircut is ${(capitalHaircut / 1000).toFixed(1)} thousand dollars.`, window.auraActiveLang === 'TR' ? 'tr-TR' : 'en-US');
+        }
+      }
+    } catch (alertErr) {
+      console.error('Aura Macro Alert injection error:', alertErr);
+    }
   }
 
   // Toast notification
