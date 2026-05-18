@@ -6402,3 +6402,27 @@ window.smoothDashboardScroll = function(event, sectionId) {
         event.currentTarget.classList.add('active');
     }
 };
+
+window.toggleMobileNavMenu = function(event) {
+    if (event) event.stopPropagation();
+    const navLinks = document.querySelector('.nav-links');
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    if (navLinks && toggleBtn) {
+        navLinks.classList.toggle('mobile-open');
+        toggleBtn.classList.toggle('active');
+    }
+};
+
+// Ensure clicking any nav link closes the mobile menu drawer instantly
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const navLinks = document.querySelector('.nav-links');
+            const toggleBtn = document.getElementById('mobile-menu-toggle');
+            if (navLinks && navLinks.classList.contains('mobile-open')) {
+                navLinks.classList.remove('mobile-open');
+                if (toggleBtn) toggleBtn.classList.remove('active');
+            }
+        });
+    });
+});
