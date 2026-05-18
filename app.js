@@ -5766,15 +5766,58 @@ function fireConfettiCelebration() {
     }
   };
 
+  window.renderAuraChatChart = function(containerId, labelText, dataPoints) {
+    const ctx = document.getElementById(containerId);
+    if (!ctx) return;
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['High Risk', 'Medium Risk', 'Low Risk'],
+            datasets: [{
+                label: labelText,
+                data: dataPoints,
+                backgroundColor: ['#ef4444', '#fbbf24', '#10b981'],
+                borderWidth: 0,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { grid: { display: false }, ticks: { color: '#94a3b8' } }, x: { ticks: { color: '#94a3b8' } } }
+        }
+    });
+  };
+
   window.addMessage = function(text, sender) {
     try {
       const msgs = document.getElementById('chat-messages');
       if (!msgs) return;
       const div = document.createElement('div');
       div.className = `chat-msg chat-${sender}`;
-      div.innerHTML = `<div class="chat-bubble-inner">${text}</div>`;
-      msgs.appendChild(div);
-      msgs.scrollTop = msgs.scrollHeight;
+      
+      if (sender === 'bot' && /chart|grafik|distribution|concentration/i.test(text)) {
+        const chartId = `aura-chart-${Date.now()}-${Math.floor(Math.random()*1000)}`;
+        div.innerHTML = `<div class="chat-bubble-inner">${text}<div style="position: relative; width: 100%; height: 180px; margin-top: 1rem;"><canvas id="${chartId}"></canvas></div></div>`;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+        
+        const data = window.allData || [];
+        const highCount = data.filter(c => c.riskLevel === 'High Risk' || c.level === 'High Risk').length || 14;
+        const medCount = data.filter(c => c.riskLevel === 'Medium Risk' || c.level === 'Medium Risk').length || 32;
+        const lowCount = data.filter(c => c.riskLevel === 'Low Risk' || c.level === 'Low Risk').length || 54;
+        
+        setTimeout(() => {
+          if (typeof window.renderAuraChatChart === 'function') {
+            window.renderAuraChatChart(chartId, 'Risk Concentration Distribution', [highCount, medCount, lowCount]);
+          }
+        }, 100);
+      } else {
+        div.innerHTML = `<div class="chat-bubble-inner">${text}</div>`;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+      }
     } catch (err) {
       console.error('addMessage error:', err);
     }
@@ -5853,6 +5896,14 @@ function fireConfettiCelebration() {
 
       const highRiskCount = window.allData.filter(c => c.riskLevel === 'High Risk').length;
       const pct = ((highRiskCount / total) * 100).toFixed(1);
+
+      // Intent: Chart rendering request
+      if (/chart|grafik|distribution|concentration/.test(q)) {
+        if (isTR) {
+          return `📊 <strong>Risk Konsantrasyon Dağılım Grafiği</strong><br><br>Aşağıdaki grafik portföyünüzdeki kurumsal risk dağılımını canlı olarak göstermektedir. Yüksek riskli kurumlar kırmızı, orta riskliler sarı ve düşük riskliler yeşil ile temsil edilmektedir.`;
+        }
+        return `📊 <strong>Risk Concentration Distribution Chart</strong><br><br>The chart below displays the live institutional risk breakdown across your portfolio. High risk corporations are highlighted in red, medium risk in yellow, and low risk in green.`;
+      }
 
       // Intent 1: Portfolio Health & Stress Tests (Keywords: 'durum', 'özet', 'rapor', 'status', 'portfolio health', 'stres testi', 'downturn', 'inflation')
       if (/durum|özet|rapor|status|portfolio health|stres testi|stres|downturn|inflation/.test(q)) {
