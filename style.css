@@ -6158,3 +6158,33 @@ div[style*="display"] {
         display: none !important;
     }
 }
+
+/* Repositioning Aura as a Fixed Enterprise Hub */
+.chat-section {
+    position: fixed !important;
+    bottom: 2rem;
+    right: 2rem;
+    width: 360px;
+    max-height: 500px;
+    z-index: 999;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important; /* initially visible but controlled by JS on login */
+    flex-direction: column;
+}
+.chat-container {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    background: rgba(15, 23, 42, 0.98) !important;
+    backdrop-filter: blur(20px);
+}
+/* Initial clean UI inside chat log */
+.chat-messages {
+    max-height: 380px !important;
+}
+@media (max-width: 768px) {
+    .chat-section { width: 300px; bottom: 1rem; right: 1rem; max-height: 400px; }
+}

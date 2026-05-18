@@ -408,6 +408,7 @@
       <!-- <a href="#predict" class="nav-link" id="nav-predict" onclick="window.smoothDashboardScroll(event, 'predict')">Predict</a> -->
       <a href="#vip" class="nav-link" id="nav-vip" onclick="window.smoothDashboardScroll(event, 'vip')">💎 VIP</a>
       <a href="#budget" class="nav-link" id="nav-budget" onclick="window.smoothDashboardScroll(event, 'budget')">🏷️ Budget</a>
+      <a href="#chat-panel" class="nav-link" id="nav-chat" onclick="if(typeof window.toggleChat === 'function') { window.toggleChat(); if(event) event.preventDefault(); }">Aura Intel</a>
       <select id="industry-selector" class="industry-selector" title="Select Industry Domain" onchange="window.setIndustry(this.value)">
         <option value="bank">🏦 Banking & Finance</option>
         <option value="logistics">🚛 Logistics & Supply Chain</option>
@@ -1186,71 +1187,73 @@
     <span class="chat-bubble-icon" id="chat-bubble-icon"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-bub" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-bub)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-bub)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-bub)" stroke-width="2" opacity=".4"/></svg></span>
     <span class="chat-unread" id="chat-unread" style="display:none;">1</span>
   </div>
-  <div id="chat-panel" class="chat-panel copilot-glass" style="display:none;">
-    <div class="chat-header">
-      <div class="chat-header-left">
-        <span class="chat-avatar"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-chat" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-chat)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-chat)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/></svg></span>
-        <div>
-          <div class="chat-name">Aura Risk Intelligence</div>
-          <div class="chat-status"><span class="chat-online-dot"></span> Generative AI Analytics</div>
+  <div id="chat-panel" class="chat-panel chat-section copilot-glass" style="display: none !important;">
+    <div class="chat-container" id="chat">
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <span class="chat-avatar"><svg class="aura-icon" width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="aura-g-chat" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><polygon points="50,2 93,27 93,73 50,98 7,73 7,27" stroke="url(#aura-g-chat)" stroke-width="4" fill="none"/><circle class="aura-core" cx="50" cy="50" r="5" fill="url(#aura-g-chat)"/><line x1="50" y1="20" x2="50" y2="42" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/><line x1="50" y1="58" x2="50" y2="80" stroke="url(#aura-g-chat)" stroke-width="2" opacity=".4"/></svg></span>
+          <div>
+            <div class="chat-name">Aura Risk Intelligence</div>
+            <div class="chat-status"><span class="chat-online-dot"></span> Generative AI Analytics</div>
+          </div>
+        </div>
+        <div class='aura-lang-selector' style='display:flex; gap:4px; margin-left:auto; background:rgba(255,255,255,0.05); padding:2px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);'><button id='btn-lang-tr' style='background:rgba(124,58,237,0.3); color:#c084fc; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer; font-weight:600;'>TR</button><button id='btn-lang-en' style='background:transparent; color:#94a3b8; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer;'>EN</button></div>
+        <button class="chat-close-btn" onclick="requestCloseChat()" style="margin-left:8px;">✕</button>
+      </div>
+      <!-- Bilingual Close Confirmation Overlay -->
+      <div id="aura-confirm-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); backdrop-filter:blur(12px); z-index:100; flex-direction:column; justify-content:center; align-items:center; padding:2rem; text-align:center; border-radius:inherit; border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 30px rgba(0,0,0,0.5);">
+        <p id="aura-confirm-text" style="color:#f8fafc; font-size:1.1rem; font-weight:600; margin-bottom:1.5rem;"></p>
+        <div style="display:flex; gap:1rem;">
+          <button id="aura-confirm-yes" onclick="confirmCloseChat(true)" style="background:rgba(248,113,113,0.2); border:1px solid rgba(248,113,113,0.4); color:#f87171; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
+          <button id="aura-confirm-no" onclick="confirmCloseChat(false)" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
         </div>
       </div>
-      <div class='aura-lang-selector' style='display:flex; gap:4px; margin-left:auto; background:rgba(255,255,255,0.05); padding:2px; border-radius:4px; border:1px solid rgba(255,255,255,0.1);'><button id='btn-lang-tr' style='background:rgba(124,58,237,0.3); color:#c084fc; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer; font-weight:600;'>TR</button><button id='btn-lang-en' style='background:transparent; color:#94a3b8; border:none; padding:2px 6px; font-size:0.75rem; border-radius:3px; cursor:pointer;'>EN</button></div>
-      <button class="chat-close-btn" onclick="requestCloseChat()" style="margin-left:8px;">✕</button>
-    </div>
-    <!-- Bilingual Close Confirmation Overlay -->
-    <div id="aura-confirm-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.85); backdrop-filter:blur(12px); z-index:100; flex-direction:column; justify-content:center; align-items:center; padding:2rem; text-align:center; border-radius:inherit; border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 30px rgba(0,0,0,0.5);">
-      <p id="aura-confirm-text" style="color:#f8fafc; font-size:1.1rem; font-weight:600; margin-bottom:1.5rem;"></p>
-      <div style="display:flex; gap:1rem;">
-        <button id="aura-confirm-yes" onclick="confirmCloseChat(true)" style="background:rgba(248,113,113,0.2); border:1px solid rgba(248,113,113,0.4); color:#f87171; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
-        <button id="aura-confirm-no" onclick="confirmCloseChat(false)" style="background:rgba(59,130,246,0.2); border:1px solid rgba(59,130,246,0.4); color:#60a5fa; padding:0.5rem 1.5rem; border-radius:6px; font-weight:600; cursor:pointer; transition:all 0.2s;"></button>
+      <div class="chat-messages" id="chat-messages">
+        <!-- initial welcome message will be injected by JS -->
       </div>
-    </div>
-    <div class="chat-messages" id="chat-messages">
-      <!-- initial welcome message will be injected by JS -->
-    </div>
-    <div class="chat-suggestions" id="chat-suggestions">
-      <!-- dynamic suggestions -->
-    </div>
-    <div class="aura-quick-actions">
-      <button id="btn-audit-concentration">📊 Risk Konsantrasyonu / Risk Concentration</button>
-      <button id="btn-audit-toxic">⚠️ Toksik Varlık Listesi / Toxic Asset List</button>
-      <button id="btn-audit-policy">📜 Politika Uyumluluğu / Policy Compliance</button>
-      <button id="btn-audit-stresstest">💥 Stres Testi Analizi / Stress Test Impact</button>
-    </div>
-    <div class="chat-input-row">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Ask Aura about your data…"
-        onkeydown="if(event.key==='Enter') sendChat()" />
-      <!-- Animated Voice Visualizer Equalizer -->
-      <div id="voice-visualizer" style="display: none; align-items: center; gap: 3px; padding: 0 8px; height: 36px; background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.4); border-radius: 18px; box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);">
-        <span class="eq-bar" style="width: 3px; height: 12px; background: #c084fc; border-radius: 2px; animation: eqPulse 0.6s infinite ease-in-out alternate;"></span>
-        <span class="eq-bar" style="width: 3px; height: 22px; background: #a855f7; border-radius: 2px; animation: eqPulse 0.4s infinite ease-in-out alternate; animation-delay: 0.1s;"></span>
-        <span class="eq-bar" style="width: 3px; height: 16px; background: #38bdf8; border-radius: 2px; animation: eqPulse 0.5s infinite ease-in-out alternate; animation-delay: 0.2s;"></span>
-        <span class="eq-bar" style="width: 3px; height: 26px; background: #818cf8; border-radius: 2px; animation: eqPulse 0.3s infinite ease-in-out alternate; animation-delay: 0.15s;"></span>
-        <span class="eq-bar" style="width: 3px; height: 14px; background: #34d399; border-radius: 2px; animation: eqPulse 0.55s infinite ease-in-out alternate; animation-delay: 0.05s;"></span>
-        <style>
-          @keyframes eqPulse {
-            0% { transform: scaleY(0.4); opacity: 0.6; }
-            100% { transform: scaleY(1.1); opacity: 1; box-shadow: 0 0 8px currentColor; }
-          }
-        </style>
+      <div class="chat-suggestions" id="chat-suggestions">
+        <!-- dynamic suggestions -->
       </div>
-      <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleVoiceInput()" title="Voice Command">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-          <line x1="12" y1="19" x2="12" y2="23"/>
-          <line x1="8" y1="23" x2="16" y2="23"/>
-        </svg>
-      </button>
-      <button class="chat-send-btn" id="chat-send-btn" onclick="sendChat()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
+      <div class="aura-quick-actions">
+        <button id="btn-audit-concentration">📊 Risk Konsantrasyonu / Risk Concentration</button>
+        <button id="btn-audit-toxic">⚠️ Toksik Varlık Listesi / Toxic Asset List</button>
+        <button id="btn-audit-policy">📜 Politika Uyumluluğu / Policy Compliance</button>
+        <button id="btn-audit-stresstest">💥 Stres Testi Analizi / Stress Test Impact</button>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" class="chat-input" placeholder="Ask Aura about your data…"
+          onkeydown="if(event.key==='Enter') sendChat()" />
+        <!-- Animated Voice Visualizer Equalizer -->
+        <div id="voice-visualizer" style="display: none; align-items: center; gap: 3px; padding: 0 8px; height: 36px; background: rgba(124, 58, 237, 0.15); border: 1px solid rgba(124, 58, 237, 0.4); border-radius: 18px; box-shadow: 0 0 12px rgba(124, 58, 237, 0.3);">
+          <span class="eq-bar" style="width: 3px; height: 12px; background: #c084fc; border-radius: 2px; animation: eqPulse 0.6s infinite ease-in-out alternate;"></span>
+          <span class="eq-bar" style="width: 3px; height: 22px; background: #a855f7; border-radius: 2px; animation: eqPulse 0.4s infinite ease-in-out alternate; animation-delay: 0.1s;"></span>
+          <span class="eq-bar" style="width: 3px; height: 16px; background: #38bdf8; border-radius: 2px; animation: eqPulse 0.5s infinite ease-in-out alternate; animation-delay: 0.2s;"></span>
+          <span class="eq-bar" style="width: 3px; height: 26px; background: #818cf8; border-radius: 2px; animation: eqPulse 0.3s infinite ease-in-out alternate; animation-delay: 0.15s;"></span>
+          <span class="eq-bar" style="width: 3px; height: 14px; background: #34d399; border-radius: 2px; animation: eqPulse 0.55s infinite ease-in-out alternate; animation-delay: 0.05s;"></span>
+          <style>
+            @keyframes eqPulse {
+              0% { transform: scaleY(0.4); opacity: 0.6; }
+              100% { transform: scaleY(1.1); opacity: 1; box-shadow: 0 0 8px currentColor; }
+            }
+          </style>
+        </div>
+        <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleVoiceInput()" title="Voice Command">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+        <button class="chat-send-btn" id="chat-send-btn" onclick="sendChat()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
   

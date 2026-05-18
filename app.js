@@ -1514,17 +1514,8 @@ window.handleCorporateLogin = function (event) {
 
   // Programmatically trigger active welcoming prompt for Aura AI
   setTimeout(() => {
-    const isTR = window.auraActiveLang === 'TR' || window.currentLang === 'TR';
-    const msg = isTR 
-      ? 'Giriş başarılı. Sistem güvenli boş modda başlatıldı. Analizleri tetiklemek için lütfen yukarıdaki merkezden kurumsal müşteri CSV dosyanızı yükleyin.'
-      : 'Authentication successful. System initialized in secure empty state. Please upload your corporate client CSV file from the hub above to trigger analysis.';
-    
-    if (typeof window.auraSpeak === 'function') {
-      window.auraSpeak(msg, isTR ? 'tr-TR' : 'en-US');
-    }
-    
-    if (typeof window.addMessage === 'function') {
-      window.addMessage(msg, 'bot');
+    if (typeof window.initializeAuraSectorContext === 'function') {
+      window.initializeAuraSectorContext();
     }
   }, 600);
 };
@@ -1543,12 +1534,42 @@ window.adaptPredictiveFormLabels = function() {
 };
 
 window.ENTERPRISE_INDUSTRY_REGISTRY = {
-    bank: { title: "Banking & Finance", icon: "🏦", badge: "SECURE TIER 1 CORE", kpi: "Capital Adequacy (CAR)", metric1: "Institutional Liquidity", metric2: "Default Prob Weight" },
-    logistics: { title: "Logistics & Carrier", icon: "🚛", badge: "SUPPLY CHAIN RESILIENCE", kpi: "Fleet Capacity (Tons)", metric1: "Active Carriage Vol", metric2: "Fuel Price Exposure" },
-    tech: { title: "Technology & SaaS", icon: "💻", badge: "ARR RECURRING ENGINE", kpi: "Annual Recurring Revenue", metric1: "ARR Recurring Velocity", metric2: "Net Dollar Retention" },
-    retail: { title: "Retail & E-Commerce", icon: "🛒", badge: "OMNICHANNEL MARGIN LAYER", kpi: "Inventory Turnover Speed", metric1: "Omnichannel Margin", metric2: "Inventory Turnover Speed" },
-    manufacturing: { title: "Manufacturing Core", icon: "🏭", badge: "RAW MATERIAL SHOCK AUDIT", kpi: "Capacity Utilization", metric1: "Plant Output Scale", metric2: "Material Inflation Risk" },
-    telecom: { title: "Telecom Grid Controller", icon: "📡", badge: "HIGH-DENSITY GRID NODE", kpi: "Average Revenue Per User", metric1: "Data Infrastructure Bandwidth", metric2: "Subscriber Attrition Rate" }
+    bank: { title: "Banking & Finance", icon: "🏦", badge: "SECURE TIER 1 CORE", kpi: "Capital Adequacy (CAR)", metric1: "Institutional Liquidity", metric2: "Default Prob Weight", metrics: { kpi1: "Capital Adequacy (CAR)", kpi2: "Liquidity Coverage", kpi3: "Non-Performing Loans (NPL)" } },
+    logistics: { title: "Logistics & Carrier", icon: "🚛", badge: "SUPPLY CHAIN RESILIENCE", kpi: "Fleet Capacity (Tons)", metric1: "Active Carriage Vol", metric2: "Fuel Price Exposure", metrics: { kpi1: "Fleet Load Capacity", kpi2: "Fuel Price Exposure", kpi3: "Route Latency Congestion" } },
+    tech: { title: "Technology & SaaS", icon: "💻", badge: "ARR RECURRING ENGINE", kpi: "Annual Recurring Revenue", metric1: "ARR Recurring Velocity", metric2: "Net Dollar Retention", metrics: { kpi1: "Annual Recurring Revenue", kpi2: "Net Dollar Retention", kpi3: "Customer Churn Rate" } },
+    retail: { title: "Retail & E-Commerce", icon: "🛒", badge: "OMNICHANNEL MARGIN LAYER", kpi: "Inventory Turnover Speed", metric1: "Omnichannel Margin", metric2: "Inventory Turnover Speed", metrics: { kpi1: "Inventory Turnover Speed", kpi2: "Omnichannel Margin", kpi3: "Return/Refund Rate" } },
+    manufacturing: { title: "Manufacturing Core", icon: "🏭", badge: "RAW MATERIAL SHOCK AUDIT", kpi: "Capacity Utilization", metric1: "Plant Output Scale", metric2: "Material Inflation Risk", metrics: { kpi1: "Capacity Utilization", kpi2: "Plant Output Scale", kpi3: "Raw Material Inflation Risk" } },
+    telecom: { title: "Telecom Grid Controller", icon: "📡", badge: "HIGH-DENSITY GRID NODE", kpi: "Average Revenue Per User", metric1: "Data Infrastructure Bandwidth", metric2: "Subscriber Attrition Rate", metrics: { kpi1: "Average Revenue Per User", kpi2: "Data Infrastructure Bandwidth", kpi3: "Subscriber Attrition Rate" } }
+};
+
+window.initializeAuraSectorContext = function() {
+    const sectorKey = window.currentCorporateSector || 'bank';
+    const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY[sectorKey] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
+    
+    // Trigger the browser's built-in vocal engine to welcome the user
+    if (typeof window.speakAuraResponse === 'function') {
+        window.speakAuraResponse(`Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our AI is ready to audit your ${activeConf.title} risk parameters.`);
+    } else if (typeof window.auraSpeak === 'function') {
+        window.auraSpeak(`Aura Intelligence Engine activated for ${window.authenticatedCompanyName}. Our AI is ready to audit your ${activeConf.title} risk parameters.`, window.auraActiveLang === 'TR' ? 'tr-TR' : 'en-US');
+    }
+    
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages) {
+        // Inject the initial enterprise welcome summary bubble
+        const initialMsg = document.createElement('div');
+        initialMsg.className = 'message system-message';
+        initialMsg.innerHTML = `
+            <div class='ai-message-content' style='background:rgba(56, 189, 248, 0.1); border:1px solid rgba(56, 189, 248, 0.2); padding:1rem; border-radius:8px;'>
+                <div style='color:#38bdf8; font-weight:bold; font-size:1.1rem;'>Greetings, ${window.authenticatedCompanyName}.</div>
+                <div style='color:#cbd5e1; font-size:0.85rem; margin-top:0.4rem; line-height:1.4;'>
+                    ${activeConf.icon} Our Aura AI Intelligence Hub is now operational and integrated across your entire B2B ledger ecosystem. 
+                    We are actively auditing for ${activeConf.kpi} exposure and ${activeConf.metrics.kpi3} alerts. 
+                    You can explicitly ask me to query for high-risk flags, assigned institutional APR rates, or sector-specific default thresholds.
+                </div>
+            </div>`;
+        chatMessages.appendChild(initialMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 };
 
 window.initializeAuthenticatedCorporateSession = function(companyName) {
@@ -1607,6 +1628,10 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
     
     const uploadHub = document.getElementById('corporate-upload-hub');
     if (uploadHub) uploadHub.style.display = 'block';
+    
+    if (typeof window.initializeAuraSectorContext === 'function') {
+        window.initializeAuraSectorContext();
+    }
 };
 
 window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
@@ -2867,6 +2892,38 @@ window.analyzeCustomer = function () {
   const bankingPolicyEl = document.getElementById('res-banking-policy');
   if (bankingPolicyEl) {
       bankingPolicyEl.textContent = `Rate: ${assignedRate} | Limit: ${assignedLimit} | Action: ${assignedAction.toUpperCase()}`;
+  }
+
+  // Aura Intelligence Alert Hook
+  if (computedRisk === 'High Risk') {
+      try {
+          const chatMessages = document.querySelector('.chat-messages');
+          if (chatMessages) {
+              const activeConf = window.ENTERPRISE_INDUSTRY_REGISTRY[currentSec] || window.ENTERPRISE_INDUSTRY_REGISTRY.bank;
+              const alertMsg = document.createElement('div');
+              alertMsg.className = 'message system-message';
+              alertMsg.innerHTML = `
+                  <div class='ai-message-content' style='background:rgba(239, 68, 68, 0.15); border:1px solid rgba(239, 68, 68, 0.3); padding:1rem; border-radius:8px; margin-top:0.5rem;'>
+                      <div style='color:#ef4444; font-weight:bold; font-size:1.05rem;'>⚠️ Aura Intelligence Alert: High Risk Assessment</div>
+                      <div style='color:#f8fafc; font-size:0.85rem; margin-top:0.4rem; line-height:1.4;'>
+                          ${activeConf.icon} <strong>${activeConf.title} Audit Flag:</strong> An entity assessment has resolved with <strong>HIGH RISK</strong> status.
+                          <br><span style='color:#fca5a5;'>Verdict: ${operationalVerdict}</span>
+                          <br><span style='color:#cbd5e1;'>Assigned Terms: APR ${assignedRate} | Cap ${assignedLimit} (${assignedAction.toUpperCase()})</span>
+                          <br>Our AI engine recommends immediate asset line review and policy cap enforcement.
+                      </div>
+                  </div>`;
+              chatMessages.appendChild(alertMsg);
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+              
+              if (typeof window.speakAuraResponse === 'function') {
+                  window.speakAuraResponse(`Aura Alert. High risk assessment detected for ${activeConf.title}. ${operationalVerdict}`);
+              } else if (typeof window.auraSpeak === 'function') {
+                  window.auraSpeak(`Aura Alert. High risk assessment detected for ${activeConf.title}. ${operationalVerdict}`, window.auraActiveLang === 'TR' ? 'tr-TR' : 'en-US');
+              }
+          }
+      } catch (alertErr) {
+          console.error('Aura Alert injection error:', alertErr);
+      }
   }
 
   /* Breakdown bars */
@@ -5750,6 +5807,7 @@ function fireConfettiCelebration() {
     }
   }
   window.auraSpeak = auraSpeak;
+  window.speakAuraResponse = auraSpeak;
 
   function showSpeakingIndicator(isTR) {
     removeSpeakingIndicator();
@@ -6052,7 +6110,10 @@ function fireConfettiCelebration() {
         
         const panel = document.getElementById('chat-panel');
         const bubble = document.getElementById('chat-bubble');
-        if (panel) panel.style.display = 'none';
+        if (panel) {
+          panel.style.display = 'none';
+          panel.style.setProperty('display', 'none', 'important');
+        }
         if (bubble) bubble.classList.remove('chat-active');
 
         const msgs = document.getElementById('chat-messages');
@@ -6079,6 +6140,7 @@ function fireConfettiCelebration() {
       
       if (panel.style.display === 'none' || panel.style.display === '') {
         panel.style.display = 'flex';
+        panel.style.setProperty('display', 'flex', 'important');
         if (bubble) bubble.classList.add('chat-active');
         if (unread) unread.style.display = 'none';
         if (panel.querySelectorAll('.chat-msg').length === 0) {
@@ -6090,6 +6152,7 @@ function fireConfettiCelebration() {
         setTimeout(() => document.getElementById('chat-input')?.focus(), 100);
       } else {
         panel.style.display = 'none';
+        panel.style.setProperty('display', 'none', 'important');
         if (bubble) bubble.classList.remove('chat-active');
       }
     } catch (err) {
