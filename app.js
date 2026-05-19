@@ -6583,11 +6583,27 @@ function fireConfettiCelebration() {
       const userText = (typeof optText === 'string' ? optText : (chatInput ? chatInput.value.trim() : ''));
       if (!chatMessages || userText === '') return;
 
-      const activeLang = (window.currentAuraLanguage || window.auraActiveLang || 'tr').toLowerCase(); // Read layout language state
+      const activeLang = (window.currentAuraLanguage || window.auraActiveLang || 'tr').toLowerCase(); 
       const activeSector = document.getElementById('industry-selector')?.value || 'bank';
       const recordCount = window.customersData ? window.customersData.length : 1000;
 
-      // Append user message node to layout
+      // Extract professional dynamic corporate client identifier from input channel
+      const emailInput = document.getElementById('signup-email')?.value || '';
+      let corporateClientName = activeLang.includes('tr') ? 'Sayın Yöneticim' : 'Chief';
+      
+      if (emailInput && emailInput.includes('@')) {
+          try {
+              const emailPrefix = emailInput.split('@')[0];
+              corporateClientName = emailPrefix.split(/[\._-]+/)
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ');
+              if (activeLang.includes('tr')) corporateClientName += ' Bey / Hanım';
+          } catch(e) {
+              corporateClientName = activeLang.includes('tr') ? 'Sayın Yöneticim' : 'Chief';
+          }
+      }
+
+      // Append user message bubble cleanly to layout node
       const userBubble = document.createElement('div');
       userBubble.className = 'chat-message user-message';
       userBubble.style.cssText = 'align-self: flex-end; background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); color: #f8fafc; padding: 0.6rem 0.9rem; border-radius: 12px 12px 0 12px; margin-bottom: 0.75rem; max-width: 85%; font-size: 0.85rem; text-align: left;';
@@ -6596,7 +6612,7 @@ function fireConfettiCelebration() {
       if (chatInput && typeof optText !== 'string') chatInput.value = '';
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
-      // Trigger simulated systemic typing/thinking indicator
+      // Invoke asynchronous processing indicator state
       const systemLoading = document.createElement('div');
       systemLoading.style.cssText = 'align-self: flex-start; color: #64748b; font-family: monospace; font-size: 0.8rem; margin-bottom: 0.75rem;';
       systemLoading.textContent = activeLang.includes('tr') ? 'Aura düşünüyor...' : 'Aura thinking...';
@@ -6615,34 +6631,30 @@ function fireConfettiCelebration() {
 
           if (activeLang.includes('tr')) {
               if (lowerText.includes('selam') || lowerText.includes('merhaba')) {
-                  reply = `Harika bir gün Şükrü! Canlı terminalimizde şu an <b>${recordCount} adet</b> kayıt inceleniyor. Seçtiğin <b>${activeSector}</b> sektörü üzerinden risk analizine tamamen hazırım. Ne istiyorsun, portföyü duman edecek bir anomali araması başlatalım mı? 🚀`;
+                  reply = `Hoş geldiniz <b>${corporateClientName}</b>. Sistem merkez ağı üzerinde anlık <b>${recordCount} veri kaydı</b> kalibre edildi. Aktif <b>${activeSector.toUpperCase()}</b> risk parametreleri doğrultusunda siber telemetri analizlerine başlamaya hazırım. Raporlamayı tetikleyelim mi? 🚀`;
               } else if (lowerText.includes('güzellik') || lowerText.includes('özet')) {
-                  reply = `Tabii Şükrü, işte günün <b>güzelliği</b> ve yönetim özeti: Şu an sistemde <b>${recordCount} kayıt</b> var. <b>${activeSector}</b> sektörü genelinde volatilite normal sınırlar içinde seyrediyor, ancak riskli segmentlerde kredi limitlerinin izlenmesi gerekiyor.`;
-              } else if (lowerText.includes('tutarmı') || lowerText.includes('yatırım')) {
-                  reply = `Şükrü, <b>${activeSector}</b> dikeyindeki bu iş modeli rasyoları kesinlikle <b>tutar</b>! K-Means kümeleme ve risk puanlama algoritmalarımız, hedef segmentteki müşteri sadakatinin ve risk dağılımının ölçeklenebilir olduğunu doğruluyor.`;
-              } else if (lowerText.includes('hoca') || lowerText.includes('nasıl')) {
-                  reply = `Sistem akademik olarak kusursuz çalışıyor <b>hoca</b>! Sektörel risk parametrelerimiz ve BDDK uyumluluk rasyolarımız, gelişmiş veri analitiği metodolojileri üzerine kurulmuştur. Her şey yüksek standartlarda doğrulanmıştır.`;
-              } else if (lowerText.includes('yolunda') || lowerText.includes('patlar')) {
-                  reply = `Her şey <b>yolunda</b>, patlama riski sıfır! Tüm veri iletişim katmanı ve token yönetim süreçleri, en üst düzey <b>FIPS 140-3</b> güvenlik mimarisi standartlarında şifrelenmiş ve güvence altına alınmıştır.`;
+                  reply = `Anlaşıldı <b>${corporateClientName}</b>. Sizi büyük veri yığınlarıyla yormadan yönetim kurulu özetini (Executive Summary) derledim. Taradığımız veri setinde harcama gücü tavan yapmış fakat kredi skorlaması kritik seviyede olan bir anomali kümesi saptandı. Finansal stabiliteyi korumak adına risk eşik limitlerini daraltmanızı öneririm.`;
+              } else if (lowerText.includes('onay') || lowerText.includes('uyum') || lowerText.includes('nasıl') || lowerText.includes('beğen')) {
+                  reply = `Platform mimarimiz tamamen <b>BDDK regülasyonları, ISO-27001 Bilgi Güvenliği Standartları</b> ve kurumsal denetim (Audit Logs) kurallarına %100 uyumlu olarak kurgulanmıştır. Sektörel dikey geçiş modüllerimiz, kurumsal risk komitelerinin en sıkı denetimlerinden dahi tam onay alacak şekilde tasarlanmıştır.`;
               } else if (lowerText.includes('risk') || lowerText.includes('analiz') || lowerText.includes('ne durumdayız')) {
                   if (activeSector === 'bank') {
-                      reply = `Açık konuşalım canım; BDDK rasyoları sınırda duruyor. Yüklediğin verilerde harcama skoru yüksek ama kredi notu taban yapmış bazı kritik 'High Risk' odaklar yakaladım. İstersen yukarıdaki risk politikasından kredi tavanını $15k sınırına çekip paneli anında kilitleyebiliriz!`;
+                      reply = `Finansal risk matrisini çıkardım <b>${corporateClientName}</b>. Kredi yoğunlaşma rasyolarında bölgesel sapmalar göze çarpıyor. Portföy güvenliğini korumak için üst yönetim paneli üzerinden acil olarak risk tolerans tavan sınırlandırmasını devreye alabilirsiniz.`;
                   } else if (activeSector === 'logistics') {
-                      reply = `Lojistik portföyü için yakıt ve rota gecikme endeksleri alarm veriyor Şükrü. Tedarik zincirindeki bu dalgalanma nakit akışını sıkıştırabilir. Riskli filoları uyum görevlisine (Compliance) yönlendirmemi ister misin?`;
+                      reply = `Tedarik zinciri risk haritası güncellendi <b>${corporateClientName}</b>. Küresel hatlardaki yakıt oynaklığı ve teslimat rötarları nakit akış tablolarını zorlayabilir. İlgili lojistik rotalarını anlık izlemeye almanızı öneririm.`;
                   } else {
-                      reply = `Aktif platform verilerini taradım. Şirket risk dağılımı stabil görünse de makro stres testlerini (Downturn/Inflation) tetiklemeden son kararı vermemizi önermem. Grafikleri bir kez daha süzebilirsin.`;
+                      reply = `Aktif platform telemetry verilerini süzdüm <b>${corporateClientName}</b>. Genel dağılım parametreler dahilinde stabil görünse de makroekonomik stres testlerini tetiklemeden nihai kararı vermemenizi öneririm.`;
                   }
               } else {
-                  reply = `Bu nokta çok akıllıca! <b>${activeSector}</b> dikeyinde verileri arka planda işliyorum. B2B analiz terminalinde bu segmenti izole edip makro senaryoları simüle edebiliriz. Başka neyi kontrol etmemi istersin? ✨`;
+                  reply = `İletişiminiz sisteme işlendi <b>${corporateClientName}</b>. <b>${activeSector.toUpperCase()}</b> segmentine ait kurumsal algoritmalarımız verileri arka planda doğrulamaya devam ediyor. Analitik terminal üzerinden operasyonel süreci kontrol edebilirsiniz.`;
               }
           } else {
-              // English Fallback Conversations Matrix
+              // Clean professional English state execution
               if (lowerText.includes('hello') || lowerText.includes('hi')) {
-                  reply = `Hello chief! System core is up with <b>${recordCount} active records</b>. I am fully synchronized under the <b>${activeSector}</b> domain parameters. Ready to dive into the telemetry anomalies? 🚀`;
+                  reply = `Welcome <b>${corporateClientName}</b>. System telemetry is live with <b>${recordCount} active records</b>. Standing by for <b>${activeSector.toUpperCase()}</b> domain queries.🚀`;
               } else if (lowerText.includes('risk') || lowerText.includes('analysis')) {
-                  reply = `Let's talk business: The <b>${activeSector}</b> portfolio exposure matrix shows dynamic migration. I recommend reviewing our active Risk Tolerance Settings to protect institutional margins.`;
+                  reply = `Dear <b>${corporateClientName}</b>, the <b>${activeSector}</b> exposure data matrices flag localized volatility. We recommend enforcing strict internal threshold policies to protect institutional capital margins.`;
               } else {
-                  reply = `Intriguing perspective. Processing your query against our active K-Means parameters inside the <b>${activeSector}</b> domain. What executive directive should we push down the pipeline?`;
+                  reply = `Acknowledged, <b>${corporateClientName}</b>. Processing query patterns inside the active <b>${activeSector}</b> infrastructure model. Feel free to explore the main dashboard terminal.`;
               }
           }
 
@@ -6651,7 +6663,7 @@ function fireConfettiCelebration() {
           chatMessages.scrollTop = chatMessages.scrollHeight;
           
           if (typeof window.logSystemActivity === 'function') {
-              window.logSystemActivity('AURA_CONVERSATION', `AI processed custom conversational query for context: [${activeSector}]`, 'SUCCESS');
+              window.logSystemActivity('AURA_COMPLIANT_CHAT', `AI routed enterprise response for client segment: [${activeSector}]`, 'SUCCESS');
           }
       }, 900);
   };
