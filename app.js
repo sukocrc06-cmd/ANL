@@ -1330,17 +1330,21 @@ window.handleCorporateSignup = function (event) {
   window.currentCorporateSector = document.getElementById('signup-sector-select').value || 'bank';
   const orgName = institution || 'CORP';
   const cleanComp = orgName.replace(/\s+/g, '').toUpperCase();
+  const cleanDomain = orgName.replace(/\s+/g, '').toLowerCase();
   const randomSalt = Math.floor(1000 + Math.random() * 9000);
-  const generatedUser = `anl_${cleanComp.toLowerCase()}_admin`;
+  const generatedUser = `admin@${cleanDomain}.com`;
   const generatedPass = `ANL-${cleanComp}-${randomSalt}X`;
+
+  const apiScope = document.getElementById('signup-api-scope')?.value || 'READ_ONLY';
 
   const cardData = {
     company: institution,
     username: generatedUser,
     password: generatedPass,
-    email: `${generatedUser}@${cleanComp.toLowerCase()}.com`,
+    email: generatedUser,
     institution: institution,
-    sector: window.currentCorporateSector
+    sector: window.currentCorporateSector,
+    apiScope: apiScope
   };
 
   window.activeCorporateCard = cardData;
@@ -1358,11 +1362,32 @@ window.handleCorporateSignup = function (event) {
   const companyVal = document.getElementById('card-company-val');
   const usernameVal = document.getElementById('card-username-val');
   const passwordVal = document.getElementById('card-password-val');
+  const apiScopeVal = document.getElementById('card-api-scope-val');
 
   if (formContainer) formContainer.style.display = 'none';
-  if (companyVal) companyVal.textContent = institution;
-  if (usernameVal) usernameVal.textContent = generatedUser;
+
+  const instName = document.getElementById('signup-institution').value;
+  if (!instName) return;
+
+  const chosenScope = document.getElementById('signup-api-scope').value;
+  const complianceChecked = document.getElementById('signup-compliance-lock').checked;
+
+  // Populate the generated access card visualization nodes instantly
+  if (companyVal) companyVal.textContent = instName;
+  if (usernameVal) usernameVal.textContent = `admin@${cleanDomain}.com`;
   if (passwordVal) passwordVal.textContent = generatedPass;
+  if (apiScopeVal) {
+      apiScopeVal.textContent = chosenScope;
+  }
+
+  // Cache these values into global session configurations for later dashboard synchronization
+  window.activeSaaSLease = {
+      company: instName,
+      username: `admin@${cleanDomain}.com`,
+      scope: chosenScope,
+      compliance: complianceChecked ? 'FIPS 140-3 Enforced' : 'Standard Protection'
+  };
+
   if (cardContainer) cardContainer.style.display = 'block';
 
   if (typeof window.startCardExpirationTimer === 'function') {
@@ -1734,6 +1759,17 @@ window.initializeAuthenticatedCorporateSession = function(companyName) {
         // Trigger your pre-configured sector UI mutation handler immediately
         if (typeof window.setIndustry === 'function') {
             window.setIndustry(selectedSectorValue);
+        }
+    }
+
+    if (window.activeSaaSLease) {
+        const cyberHub = document.querySelector('.cyber-security-hub');
+        if (cyberHub) {
+            const metaValues = cyberHub.querySelectorAll('.cyber-meta-item');
+            if (metaValues.length >= 2) {
+                metaValues[0].innerHTML = `Data Encryption State: <span class="cyber-meta-val-green">${window.activeSaaSLease.compliance}</span>`;
+                metaValues[1].innerHTML = `Active Identity Layer: <span class="cyber-meta-val">${window.activeSaaSLease.scope} Authorization Enforced</span>`;
+            }
         }
     }
 };
