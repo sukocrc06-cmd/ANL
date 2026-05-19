@@ -1368,7 +1368,13 @@
                     <p style="color: #64748b; margin: 0.15rem 0 0 0; font-size: 0.8rem; font-family: monospace;">[DATA_INGESTION_COMPLIANCE_RUN]</p>
                 </div>
             </div>
-            <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s;">✕</button>
+            <div style="display: flex; align-items: center;">
+                <div class="aura-report-lang-tabs" style="display: flex; gap: 4px; margin-right: 12px; background: rgba(255,255,255,0.04); padding: 3px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+                    <button id="aura-rpt-lang-tr" onclick="window.switchAuraReportLanguage('tr')" style="background: transparent; color: #94a3b8; border: none; padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s;">TR</button>
+                    <button id="aura-rpt-lang-en" onclick="window.switchAuraReportLanguage('en')" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: none; padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s;">EN</button>
+                </div>
+                <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s;">✕</button>
+            </div>
         </div>
         <div style="padding: 2rem; max-height: 70vh; overflow-y: auto;">
             <div id="aura-dynamic-report-content" style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; text-align: left;">

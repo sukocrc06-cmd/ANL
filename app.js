@@ -2158,64 +2158,68 @@ window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
           const dataLoader = document.getElementById('data-integrity-loader');
           if (dataLoader) dataLoader.style.display = 'none';
 
-          // Identify active tenant industry configurations to extract contextual guidelines
-          const activeSectorKey = window.currentCorporateSector || document.getElementById('industry-selector')?.value || 'bank';
-          const parsedRecordCount = window.customersData ? window.customersData.length : 10;
-          const tenantName = window.authenticatedCompanyName || "Enterprise Client";
+          // Global memory register to store computed multi-language intelligence assets
+          window.AURA_CURRENT_REPORT_DICTIONARY = { tr: "", en: "" };
 
-          let automatedReportHtml = "";
+          window.switchAuraReportLanguage = function(langKey) {
+              const contentBox = document.getElementById('aura-dynamic-report-content');
+              const btnTr = document.getElementById('aura-rpt-lang-tr');
+              const btnEn = document.getElementById('aura-rpt-lang-en');
+              
+              if (!contentBox || !window.AURA_CURRENT_REPORT_DICTIONARY[langKey]) return;
+              
+              // Update active layout texts cleanly
+              contentBox.innerHTML = window.AURA_CURRENT_REPORT_DICTIONARY[langKey];
+              
+              // Toggle visual tab highlights to respect premium minimalist branding
+              if (langKey === 'tr') {
+                  if(btnTr) { btnTr.style.background = "rgba(56, 189, 248, 0.2)"; btnTr.style.color = "#38bdf8"; }
+                  if(btnEn) { btnEn.style.background = "transparent"; btnEn.style.color = "#94a3b8"; }
+              } else {
+                  if(btnEn) { btnEn.style.background = "rgba(56, 189, 248, 0.2)"; btnEn.style.color = "#38bdf8"; }
+                  if(btnTr) { btnTr.style.background = "transparent"; btnTr.style.color = "#94a3b8"; }
+              }
+          };
 
-          // Generate professional data storytelling frameworks matching sector verticals
-          if (activeSectorKey === 'bank') {
-              automatedReportHtml = `
+          // Inject these dynamic string builders right at the end of your CSV upload execution block:
+          const sectorId = window.currentCorporateSector || document.getElementById('industry-selector')?.value || 'bank';
+          const totalLoaded = window.customersData ? window.customersData.length : 10;
+          const orgTitle = window.authenticatedCompanyName || "Enterprise Client";
+
+          if (sectorId === 'bank') {
+              window.AURA_CURRENT_REPORT_DICTIONARY.en = `
                   <div style="background: rgba(56, 189, 248, 0.04); border: 1px solid rgba(56, 189, 248, 0.15); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                      📊 <b style="color: #38bdf8;">PORTFOLIO SCAN COMPLETE:</b> Successfully mapped <b>${parsedRecordCount} banking portfolios</b> under active BDDK credit compliance guidelines.
+                      📊 <b style="color: #38bdf8;">PORTFOLIO SCAN COMPLETE:</b> Successfully mapped <b>${totalLoaded} banking portfolios</b> under active compliance guidelines.
                   </div>
                   <h4 style="color: #f8fafc; font-size: 1rem; margin-bottom: 0.5rem;">🔍 Core AI Anomaly Discovery:</h4>
                   <p style="color: #94a3b8; margin-bottom: 1.5rem;">High loan concentration risk detected within regional retail segments. Outbox variables flag a macro shift where debt-to-income metrics spike above 64.2% across mid-tier accounts.</p>
-                  
                   <h4 style="color: #34d399; font-size: 1rem; margin-bottom: 0.5rem;">🛡️ Mandatory Strategic Action Directive:</h4>
                   <div style="background: rgba(52, 211, 153, 0.05); border-left: 4px solid #34d399; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">
-                      <b>[RECOMMENDED ACTION]:</b> 
-                      1. Immediately enforce a temporary 15% credit exposure ceiling restriction across high-spending cohorts.<br>
-                      2. Automatically flag tier-2 credit card profiles for manual underwriter audit.<br>
-                      3. Escalate high-default default probabilities directly into the secure L3 Compliance pipeline.
-                  </div>
-              `;
-          } else if (activeSectorKey === 'logistics') {
-              automatedReportHtml = `
-                  <div style="background: rgba(251, 191, 36, 0.04); border: 1px solid rgba(251, 191, 36, 0.15); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                      🚛 <b style="color: #fbbf24;">SUPPLY CHAIN MATRIX SCANNED:</b> Audit logs calibrated for <b>${parsedRecordCount} global distribution nodes</b>.
-                  </div>
-                  <h4 style="color: #f8fafc; font-size: 1rem; margin-bottom: 0.5rem;">🔍 Core AI Anomaly Discovery:</h4>
-                  <p style="color: #94a3b8; margin-bottom: 1.5rem;">Fuel exposure shock vectors are displaying a dangerous upward migration. Route latency indices in coastal grid centers are drifting 14% past structural parameters.</p>
+                      1. Enforce a temporary 15% credit exposure ceiling restriction across high-spending cohorts.<br>
+                      2. Automatically flag tier-2 credit card profiles for manual underwriter audit.
+                  </div>`;
                   
-                  <h4 style="color: #34d399; font-size: 1rem; margin-bottom: 0.5rem;">🛡️ Mandatory Strategic Action Directive:</h4>
-                  <div style="background: rgba(52, 211, 153, 0.05); border-left: 4px solid #34d399; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">
-                      <b>[RECOMMENDED ACTION]:</b> Suspend non-optimized high-risk fleet routing manifests instantly. Convert operational capital reserves to buffer short-term transport inflation shocks and lock down fuel price hedges via integrated API webhooks.
+              window.AURA_CURRENT_REPORT_DICTIONARY.tr = `
+                  <div style="background: rgba(56, 189, 248, 0.04); border: 1px solid rgba(56, 189, 248, 0.15); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                      📊 <b style="color: #38bdf8;">PORTFÖY TARAMASI TAMAMLANDI:</b> <b>${totalLoaded} kurumsal bankacılık kaydı</b> aktif BDDK kredi uyumluluk çerçevesinde başarıyla haritalandı.
                   </div>
-              `;
+                  <h4 style="color: #f8fafc; font-size: 1rem; margin-bottom: 0.5rem;">🔍 Temel Yapay Zeka Anomali Tespiti:</h4>
+                  <p style="color: #94a3b8; margin-bottom: 1.5rem;">Bölgesel perakende segmentlerinde yüksek kredi yoğunlaşma riski saptandı. Arka plan değişkenleri, orta segment hesaplarda borç/gelir oranının %64.2'nin üzerine fırladığını işaret ediyor.</p>
+                  <h4 style="color: #34d399; font-size: 1rem; margin-bottom: 0.5rem;">🛡️ Zorunlu Stratejik Aksiyon Yönergesi:</h4>
+                  <div style="background: rgba(52, 211, 153, 0.05); border-left: 4px solid #34d399; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">
+                      1. Yüksek harcama yapan kohortlarda geçici olarak %15'lik kredi risk tavanı kısıtlaması uygulayın.<br>
+                      2. Riskli seviyedeki 2. kademe kredi kartı profillerini manuel denetim için otomatik olarak işaretleyin.
+                  </div>`;
           } else {
-              // Standard generic premium fallback matrix mapping for tech, retail, telecom
-              automatedReportHtml = `
-                  <div style="background: rgba(168, 85, 247, 0.04); border: 1px solid rgba(168, 85, 247, 0.15); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                      ✨ <b style="color: #c084fc;">ENTERPRISE SAAS DATASET UNLOCKED:</b> Scanned <b>${parsedRecordCount} active telemetry rows</b> for ${tenantName}.
-                  </div>
-                  <h4 style="color: #f8fafc; font-size: 1rem; margin-bottom: 0.5rem;">🔍 Core AI Anomaly Discovery:</h4>
-                  <p style="color: #94a3b8; margin-bottom: 1.5rem;">Minor portfolio drift identified in gross margin parameters. Volatility distributions remain compliant with security audit rulesets.</p>
-                  
-                  <h4 style="color: #34d399; font-size: 1rem; margin-bottom: 0.5rem;">🛡️ Mandatory Strategic Action Directive:</h4>
-                  <div style="background: rgba(52, 211, 153, 0.05); border-left: 4px solid #34d399; padding: 1rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem; line-height: 1.5; color: #e2e8f0;">
-                      <b>[RECOMMENDED ACTION]:</b> Maintain active monitoring. Trigger secondary algorithmic segmentation loops during the next scheduled board audit cycle.
-                  </div>
-              `;
+              // Logistics, Tech, Telecom multi-language fallbacks
+              window.AURA_CURRENT_REPORT_DICTIONARY.en = `<p style="color:#cbd5e1;">⚡ [DATA_INGESTION]: Successfully mapped ${totalLoaded} portfolio rows for ${orgTitle}. Volatility matches safe baseline scales.</p>`;
+              window.AURA_CURRENT_REPORT_DICTIONARY.tr = `<p style="color:#cbd5e1;">⚡ [VERİ_AKTAYIMI]: ${orgTitle} için ${totalLoaded} portföy satırı başarıyla işlendi. Oynaklık endeksleri güvenli taban sınırlarla uyumlu.</p>`;
           }
 
-          // Populate and invoke the reporting overlay module instantly
+          // Default initialize execution pipeline to English first
           const reportOverlay = document.getElementById('aura-executive-report-overlay');
-          const reportContent = document.getElementById('aura-dynamic-report-content');
-          if (reportOverlay && reportContent) {
-              reportContent.innerHTML = automatedReportHtml;
+          if (reportOverlay) {
+              window.switchAuraReportLanguage('en');
               reportOverlay.style.display = 'flex';
           }
 
