@@ -1356,6 +1356,29 @@
       </div>
     </div>
   </div>
+
+  <!-- ===== AURA EXECUTIVE REPORT OVERLAY ===== -->
+  <div id="aura-executive-report-overlay" style="display: none; position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(11, 15, 25, 0.85) !important; backdrop-filter: blur(20px) !important; z-index: 99999999 !important; align-items: center !important; justify-content: center !important; padding: 2rem !important;">
+    <div style="background: #0f172a !important; border: 1px solid rgba(56, 189, 248, 0.25) !important; max-width: 650px; width: 100%; border-radius: 12px; box-shadow: 0 25px 70px rgba(0,0,0,0.8); overflow: hidden; position: relative; animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.5); padding: 1.25rem 1.75rem; border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.5rem;">✨</span>
+                <div>
+                    <h3 style="color: #f8fafc; margin: 0; font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;">Aura AI Strategic Board-Ready Summary</h3>
+                    <p style="color: #64748b; margin: 0.15rem 0 0 0; font-size: 0.8rem; font-family: monospace;">[DATA_INGESTION_COMPLIANCE_RUN]</p>
+                </div>
+            </div>
+            <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s;">✕</button>
+        </div>
+        <div style="padding: 2rem; max-height: 70vh; overflow-y: auto;">
+            <div id="aura-dynamic-report-content" style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; text-align: left;">
+            </div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.9); padding: 1.25rem 2rem; border-top: 1px solid rgba(255,255,255,0.05); text-align: right;">
+            <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; border: none; padding: 0.65rem 1.5rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);">✕ Close & Open Operational Terminal</button>
+        </div>
+    </div>
+  </div>
 </body>
 
 </html>
