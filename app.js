@@ -2231,6 +2231,7 @@ window.handleCSVUpload = window.handleCorporateCSVUpload = function (event) {
           if (reportOverlay) {
               window.switchAuraReportLanguage('en');
               reportOverlay.style.display = 'flex';
+              document.body.style.overflow = 'hidden';
           }
 
           suppressAllErrorHeaders();
@@ -2770,6 +2771,7 @@ window.openAuditModal = function (customerId) {
     const overlay = document.getElementById('audit-modal-overlay');
     if (overlay) {
       overlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
       void overlay.offsetWidth; // Trigger reflow
       overlay.classList.add('show');
     }
@@ -2792,6 +2794,7 @@ window.closeAuditModal = function () {
   const overlay = document.getElementById('audit-modal-overlay');
   if (overlay) {
     overlay.classList.remove('show');
+    document.body.style.overflow = '';
     setTimeout(() => {
       const el = document.getElementById('audit-modal-overlay');
       if (el) el.style.display = 'none';
@@ -7200,6 +7203,8 @@ window.smoothDashboardScroll = function(event, sectionId) {
     
     if (landingPage) landingPage.style.display = 'none';
     if (loginOverlay) loginOverlay.style.display = 'none';
+    
+    document.body.style.overflow = '';
     
     // Directly target the inside panel section and scroll smoothly
     const targetSection = document.getElementById(sectionId);

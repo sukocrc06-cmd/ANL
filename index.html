@@ -15,8 +15,11 @@
   <link rel="stylesheet" href="style.css" />
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const overlay = document.getElementById('b2b-login-overlay');
-      if (overlay && overlay.style.display !== 'none') {
+      const loginOverlay = document.getElementById('b2b-login-overlay');
+      const signupOverlay = document.getElementById('b2b-signup-overlay');
+      const isOverlayVisible = (loginOverlay && loginOverlay.style.display !== 'none') || 
+                               (signupOverlay && signupOverlay.style.display !== 'none');
+      if (isOverlayVisible) {
         document.body.style.overflow = 'hidden';
       }
     });
@@ -1373,7 +1376,7 @@
                     <button id="aura-rpt-lang-tr" onclick="window.switchAuraReportLanguage('tr')" style="background: transparent; color: #94a3b8; border: none; padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s;">TR</button>
                     <button id="aura-rpt-lang-en" onclick="window.switchAuraReportLanguage('en')" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: none; padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; font-weight: 600; transition: all 0.2s;">EN</button>
                 </div>
-                <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s;">✕</button>
+                <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'; document.body.style.overflow='';" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; width: 32px; height: 32px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s;">✕</button>
             </div>
         </div>
         <div style="padding: 2rem; max-height: 70vh; overflow-y: auto;">
@@ -1381,7 +1384,7 @@
             </div>
         </div>
         <div style="background: rgba(15, 23, 42, 0.9); padding: 1.25rem 2rem; border-top: 1px solid rgba(255,255,255,0.05); text-align: right;">
-            <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; border: none; padding: 0.65rem 1.5rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);">✕ Close & Open Operational Terminal</button>
+            <button onclick="document.getElementById('aura-executive-report-overlay').style.display='none'; document.body.style.overflow='';" style="background: linear-gradient(135deg, #38bdf8, #0284c7); color: #fff; border: none; padding: 0.65rem 1.5rem; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);">✕ Close & Open Operational Terminal</button>
         </div>
     </div>
   </div>
