@@ -1219,15 +1219,25 @@ window.triggerLandingAuraSpeak = function () {
     bubbleStatusEl.textContent = isTR ? 'Aktif' : 'Active';
   }
 
+  // Clear any existing typewriter timeout/interval to prevent concurrent animations
+  if (window.auraTypewriterTimeout) {
+    clearTimeout(window.auraTypewriterTimeout);
+    window.auraTypewriterTimeout = null;
+  }
+
   if (bubbleTextEl) {
-    bubbleTextEl.innerHTML = '';
+    // Clear previous content completely before injecting new text
+    bubbleTextEl.textContent = '';
     let i = 0;
     const speed = 35;
     function typeWriter() {
       if (i < textToType.length) {
-        bubbleTextEl.innerHTML += textToType.charAt(i);
+        // Use textContent to ensure correct character representation and safety
+        bubbleTextEl.textContent += textToType.charAt(i);
         i++;
-        setTimeout(typeWriter, speed);
+        window.auraTypewriterTimeout = setTimeout(typeWriter, speed);
+      } else {
+        window.auraTypewriterTimeout = null;
       }
     }
     typeWriter();
