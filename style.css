@@ -5354,13 +5354,14 @@ canvas {
   align-items: center;
   justify-content: center;
   transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow-y: auto;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  overflow: hidden;
+  height: 100vh;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .b2b-login-overlay::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
 }
 
 .b2b-matrix-streams {
@@ -5417,6 +5418,14 @@ canvas {
   transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 1;
   margin: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.b2b-login-modal::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .b2b-login-overlay.hidden .b2b-login-modal {

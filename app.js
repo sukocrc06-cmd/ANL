@@ -1271,7 +1271,7 @@ window.navigateToView = function (viewName, push = true) {
     if (landing) { landing.style.display = 'flex'; landing.style.opacity = '1'; landing.style.visibility = 'visible'; }
     if (loginOverlay) { loginOverlay.style.opacity = '0'; loginOverlay.style.visibility = 'hidden'; setTimeout(() => { loginOverlay.style.display = 'none'; }, 400); }
     if (signupOverlay) { signupOverlay.style.opacity = '0'; signupOverlay.style.visibility = 'hidden'; setTimeout(() => { signupOverlay.style.display = 'none'; }, 400); }
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = '';
   } else if (viewName === 'signup-modal') {
     if (landing) { landing.style.display = 'none'; }
     if (loginOverlay) { loginOverlay.style.display = 'none'; loginOverlay.style.opacity = '0'; loginOverlay.style.visibility = 'hidden'; }
@@ -1308,11 +1308,13 @@ window.addEventListener('popstate', function (event) {
 
 window.showLoginModal = function () {
   if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
+  document.body.style.overflow = 'hidden';
   window.navigateToView('login-modal', true);
 };
 
 window.showSignupModal = function () {
   if (window.speechSynthesis && typeof window.speechSynthesis.cancel === 'function') window.speechSynthesis.cancel();
+  document.body.style.overflow = 'hidden';
   window.navigateToView('signup-modal', true);
 };
 
